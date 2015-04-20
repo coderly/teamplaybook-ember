@@ -1,9 +1,5 @@
 <h2 id="title">Team Playbook</h2>
 
-{{#if session.isAuthenticated}}
-  <a {{action 'logout'}}>Logout</a>
-{{else}}
-  {{#link-to 'login'}}Login{{/link-to}}
-{{/if}}
+{{partial 'header-nav'}}
 
-{{outlet}}
+<div>{{outlet}}</div>
