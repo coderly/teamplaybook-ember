@@ -8,7 +8,7 @@ export default BaseAuthenticator.extend({
       if (Ember.isPresent(properties.token)) {
         resolve(properties);
       } else {
-        reject ();
+        reject();
       }
     });
   },
