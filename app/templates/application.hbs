@@ -2,4 +2,8 @@
 
 {{partial 'header-nav'}}
 
-<div>{{outlet}}</div>
+{{#if isOrganizationBeingAccessed}}
+  {{render 'organization' model}}
+{{else}}
+  {{render 'general'}}
+{{/if}}
