@@ -12,11 +12,14 @@ export default Ember.Controller.extend({
       var controller = this,
           username = controller.get('username'),
           password = controller.get('password');
-      this.get('session').authenticate('authenticator:fixture', username, password).then(function () {
+      this.get('session').authenticate('authenticator:fixture', {
+        username: username,
+        password: password
+      }).then(function () {
         controller.transitionToRoute('application');
-      }, function () {
+      }, function (error) {
         controller.set('showError', true);
-        controller.set('errorMessage', 'Test error');
+        controller.set('errorMessage', error.message);
       });
     }
   }

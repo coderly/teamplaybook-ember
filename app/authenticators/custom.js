@@ -1,13 +1,18 @@
+import Ember from 'ember';
 import BaseAuthenticator from 'simple-auth/authenticators/base';
+import teamPlaybookAuth from 'teamplaybook-ember/lib/teamplaybook-auth';
 
 export default BaseAuthenticator.extend({
-  restore: function(data) {
-    return this._super(data);
+  restore: function(properties) {
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+      if (Ember.isPresent(properties.token)) {
+        resolve(properties);
+      } else {
+        reject ();
+      }
+    });
   },
-  authenticate: function (options) {
-    return this._super(options);
-  },
-  invalidate: function (data) {
-    return this._super(data);
+  authenticate: function (credentials) {
+    return teamPlaybookAuth.login(credentials);
   }
 });
