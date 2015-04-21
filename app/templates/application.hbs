@@ -2,8 +2,4 @@
 
 {{partial 'header-nav'}}
 
-{{#if isOrganizationBeingAccessed}}
-  {{render 'organization' model}}
-{{else}}
-  {{render 'general'}}
-{{/if}}
+{{outlet}}
