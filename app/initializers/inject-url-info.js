@@ -7,5 +7,5 @@ export default {
     application.inject('adapter', 'urlInfo', 'url-info:main');
     application.inject('route', 'urlInfo', 'url-info:main');
     application.inject('controller', 'urlInfo', 'url-info:main');
-  }
+  },
 };
