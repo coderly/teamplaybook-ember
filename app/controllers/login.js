@@ -16,7 +16,7 @@ export default Ember.Controller.extend({
         username: username,
         password: password
       }).then(function () {
-        controller.transitionToRoute('application');
+        controller.transitionToRoute('/');
       }, function (error) {
         controller.set('showError', true);
         controller.set('errorMessage', error.message);

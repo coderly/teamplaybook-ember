@@ -26,8 +26,12 @@ module.exports = function(environment) {
       'img-src': "'self'",
       'style-src': "'self'",
       'media-src': "'self'"
-    }
+    },
     /*jshint quotmark: true*/
+    subdomainMapping: {
+      '': 'default',
+      'www': 'default'
+    }
   };
 
   if (environment === 'development') {
