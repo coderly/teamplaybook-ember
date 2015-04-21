@@ -5,7 +5,7 @@ import JsonApiAdapter from 'ember-json-api/json-api-adapter';
 var ApplicationAdapter = JsonApiAdapter.extend({
   host: function () {
     var hostname = this.get('urlInfo.hostname');
-    return 'https://' + hostname + ':5000';
+    return 'http://' + hostname + ':3000';
   }.property('urlInfo.hostname')
 });
 
