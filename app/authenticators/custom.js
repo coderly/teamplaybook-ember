@@ -5,7 +5,7 @@ import teamPlaybookAuth from 'teamplaybook-ember/lib/teamplaybook-auth';
 export default BaseAuthenticator.extend({
   restore: function(properties) {
     return new Ember.RSVP.Promise(function (resolve, reject) {
-      if (Ember.isPresent(properties.token)) {
+      if (Ember.isPresent(properties.data.authentication_token)) {
         resolve(properties);
       } else {
         reject();

@@ -33,7 +33,9 @@ module.exports = function(environment) {
       'www': 'default'
     },
     'simple-auth': {
-      routeAfterAuthentication: '/'
+      routeAfterAuthentication: '/',
+      authorizer: 'authorizer:custom',
+      crossOriginWhitelist: ['*']
     }
   };
 
