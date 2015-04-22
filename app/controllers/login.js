@@ -12,7 +12,7 @@ export default Ember.Controller.extend({
       var controller = this,
           username = controller.get('username'),
           password = controller.get('password');
-      this.get('session').authenticate('authenticator:fixture', {
+      this.get('session').authenticate('authenticator:custom', {
         username: username,
         password: password
       }).then(function () {

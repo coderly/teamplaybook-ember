@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 
-let Organization = DS.Model.extend({
+var Organization = DS.Model.extend({
   name: DS.attr('string'),
   subdomain: DS.attr('string'),
   members: DS.hasMany('user')
