@@ -27,7 +27,7 @@ var urlInfo = Ember.Object.extend({
 
     var subdomain = '';
 
-    if(baseUrl) {
+    if(Ember.isPresent(baseUrl)) {
       var subdomainWithDot = this._applySubdomainMapping(hostname.replace(baseUrl,''));
       subdomain = subdomainWithDot.slice(0, -1);
     }
