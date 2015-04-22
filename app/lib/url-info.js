@@ -28,11 +28,11 @@ var urlInfo = Ember.Object.extend({
     var subdomain = '';
 
     if(Ember.isPresent(baseUrl)) {
-      var subdomainWithTrailingDot = this._applySubdomainMapping(hostname.replace(baseUrl,''));
+      var subdomainWithTrailingDot = hostname.replace(baseUrl,'');
       subdomain = subdomainWithTrailingDot.slice(0, -1);
     }
 
-    return subdomain;
+    return this._applySubdomainMapping(subdomain);
   },
 
   _applySubdomainMapping: function (subdomain) {
