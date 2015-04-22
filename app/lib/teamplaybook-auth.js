@@ -1,14 +1,17 @@
 import Ember from 'ember';
+import UrlInfo from 'teamplaybook-ember/lib/url-info';
 import ajax from 'ic-ajax';
 
-export default Ember.create({
+var TeamPlaybookAuth = Ember.Object.extend({
 
-  urlInfo: Ember.inject.service(),
+  urlInfo: function () {
+    return UrlInfo.create();
+  }.property(),
 
   login: function (credentials) {
     return ajax({
       type: 'POST',
-      url: this._url('tokens'),
+      url: this._url('users/tokens'),
       data: {
         user: {
           email: credentials.email,
@@ -27,7 +30,7 @@ export default Ember.create({
         user: {
           email: credentials.email,
           password: credentials.password,
-          pssword_confirmation: credentials.passwordConfirmation
+          password_confirmation: credentials.passwordConfirmation
         }
       }
     });
@@ -38,3 +41,5 @@ export default Ember.create({
     return apiUrl + '/' + path;
   }
 });
+
+export default TeamPlaybookAuth.create();

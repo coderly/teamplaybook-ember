@@ -31,6 +31,9 @@ module.exports = function(environment) {
     subdomainMapping: {
       '': 'default',
       'www': 'default'
+    },
+    'simple-auth': {
+      routeAfterAuthentication: '/'
     }
   };
 
