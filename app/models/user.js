@@ -2,7 +2,7 @@ import DS from 'ember-data';
 
 var User = DS.Model.extend({
   username: DS.attr('string'),
-  organizations: DS.hasMany('organization')
+  organizations: DS.hasMany('organization', { async: true })
 });
 
 User.reopenClass({

@@ -20,7 +20,7 @@ export default Router.map(function() {
     });
   } else if (shouldMapGeneralRoutes) {
     this.route('general', { path: '/' }, function () {
-      this.route('home');
+      this.route('create-organization');
     });
   }
 });

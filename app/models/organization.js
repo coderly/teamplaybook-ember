@@ -3,7 +3,7 @@ import DS from 'ember-data';
 var Organization = DS.Model.extend({
   name: DS.attr('string'),
   subdomain: DS.attr('string'),
-  members: DS.hasMany('user')
+  members: DS.hasMany('user', { async: true })
 });
 
 Organization.reopenClass({

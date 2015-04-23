@@ -1,10 +1,10 @@
 <div>
-  {{#if session.isAuthenticated}}
-    <a {{action 'logout'}}>Logout</a>
-  {{else}}
   <ul>
-    <li>{{#link-to 'login'}}Login{{/link-to}}</li>
-    <li>{{#link-to 'register'}}Register{{/link-to}}</li>
+    {{#if session.isAuthenticated}}
+      <li><a href="#" {{action 'logout'}}>Logout</a></li>
+    {{else}}
+      <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+      <li>{{#link-to 'register'}}Register{{/link-to}}</li>
+    {{/if}}
   </ul>
-  {{/if}}
 </div>
