@@ -21,21 +21,6 @@ var TeamPlaybookAuth = Ember.Object.extend({
     });
   },
 
-  register: function (credentials) {
-    return ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: this._buildURL('users'),
-      data: {
-        user: {
-          email: credentials.email,
-          password: credentials.password,
-          password_confirmation: credentials.passwordConfirmation
-        }
-      }
-    });
-  },
-
   _buildURL: function (path) {
     var apiUrl = this.get('urlInfo.apiUrl');
     return apiUrl + '/' + path;
