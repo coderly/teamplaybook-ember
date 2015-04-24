@@ -12,3 +12,7 @@
     {{input disabled=registrationNotAllowed type="submit" value="Register"}}
   </form>
 {{/if}}
+
+{{#if showError}}
+  <p>{{errorMessage}}</p>
+{{/if}}
