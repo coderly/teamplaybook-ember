@@ -4,15 +4,14 @@ import ENV from '../config/environment';
 
 var urlInfo = Ember.Object.extend({
 
-
   hostname: function(){
     return window.location.hostname;
   }.property(),
 
   subdomain: function(){
-    var hostname = this.get('hostname'),
-        subdomain = extractSubdomainFromHostname(hostname),
-        mappedSubdomain = this._applySubdomainMapping(subdomain);
+    var hostname = this.get('hostname');
+    var subdomain = extractSubdomainFromHostname(hostname);
+    var mappedSubdomain = this._applySubdomainMapping(subdomain);
 
     return mappedSubdomain;
   }.property('hostname'),
