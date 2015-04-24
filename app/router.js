@@ -11,16 +11,16 @@ export default Router.map(function() {
   this.route('register');
 
   var urlInfo = UrlInfo.create(),
-      shouldMapOrganizationRoutes = urlInfo.get('isOnOrganizationSubdomain'),
+      shouldMapTeamRoutes = urlInfo.get('isOnTeamSubdomain'),
       shouldMapGeneralRoutes = urlInfo.get('isOnRegularSubdomain');
 
-  if (shouldMapOrganizationRoutes) {
-    this.route('organization', { path: '/' }, function () {
+  if (shouldMapTeamRoutes) {
+    this.route('team', { path: '/' }, function () {
       this.route('home');
     });
   } else if (shouldMapGeneralRoutes) {
     this.route('general', { path: '/' }, function () {
-      this.route('create-organization');
+      this.route('create-team');
     });
   }
 });

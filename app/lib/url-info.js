@@ -21,7 +21,7 @@ var urlInfo = Ember.Object.extend({
   }.property('hostname'),
 
   isOnRegularSubdomain: Ember.computed.equal('subdomain', 'default'),
-  isOnOrganizationSubdomain: Ember.computed.not('isOnRegularSubdomain'),
+  isOnTeamSubdomain: Ember.computed.not('isOnRegularSubdomain'),
 
   _applySubdomainMapping: function (subdomain) {
     return ENV.subdomainMapping[subdomain] || subdomain;
