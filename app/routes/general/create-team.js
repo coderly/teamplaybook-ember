@@ -3,9 +3,6 @@ import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixi
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   model: function () {
-    var store = this.get('store');
-    return this.get('session.user').then(function () {
-      return store.createRecord('team');
-    });
+    return this.store.createRecord('team');
   }
 });

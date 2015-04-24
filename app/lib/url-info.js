@@ -4,13 +4,19 @@ import ENV from '../config/environment';
 
 var urlInfo = Ember.Object.extend({
 
+  apiProtocol: ENV.apiProtocol,
+  apiPort: ENV.apiPort,
+
+  clientProtocol: ENV.clientProtocol,
+  clientPort: ENV.clientPort,
+
   hostname: function(){
     return window.location.hostname;
   }.property(),
 
   apiUrl: function () {
-    return 'http://' + this.get('hostname') + ':3000';
-  }.property('hostname'),
+    return  this.get('apiProtocol') + '://' + this.get('hostname') + ':' + this.get('apiPort');
+  }.property('apiProtocol', 'hostname', 'apiPort'),
 
   subdomain: function(){
     var hostname = this.get('hostname');
@@ -26,6 +32,10 @@ var urlInfo = Ember.Object.extend({
   _applySubdomainMapping: function (subdomain) {
     return ENV.subdomainMapping[subdomain] || subdomain;
   },
+
+  urlForTeam: function (team) {
+    return this.get('clientProtocol') + '://' + team.get('subdomain') + '.' + this.get('hostname') + ':' + this.get('clientPort');
+  }
 });
 
 export default urlInfo;

@@ -7,6 +7,7 @@ export default Ember.Controller.extend({
   message: null,
   showError: false,
   errorMessage: null,
+  createdTeamURL: null,
 
   actions: {
     create: function () {
@@ -18,6 +19,7 @@ export default Ember.Controller.extend({
           showError: false,
           showMessage: true,
           message: 'Team ' + team.get('name') + ' created successfully',
+          createdTeamURL: controller.get('urlInfo').urlForTeam(team)
         });
       };
 

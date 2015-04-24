@@ -48,6 +48,15 @@ module.exports = function(environment) {
     ENV.contentSecurityPolicy['script-src'] += ' http://*.localhost:35729';
     ENV.contentSecurityPolicy['connect-src'] += ' ws://*.localhost:35729';
     ENV.contentSecurityPolicy['connect-src'] += ' http://*.localhost:3000';
+
+    ENV.contentSecurityPolicy['script-src'] += ' http://*.playbook.com:35729';
+    ENV.contentSecurityPolicy['connect-src'] += ' ws://*.playbook.com:35729';
+    ENV.contentSecurityPolicy['connect-src'] += ' http://*.playbook.com:3000';
+
+    ENV.clientProtocol = 'http';
+    ENV.clientPort = 4200;
+    ENV.apiProtocol = 'http';
+    ENV.apiPort = 3000;
   }
 
   if (environment === 'test') {
