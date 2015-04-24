@@ -2,6 +2,9 @@
   {{#if session.isAuthenticated}}
     <a {{action 'logout'}}>Logout</a>
   {{else}}
-    {{#link-to 'login'}}Login{{/link-to}}
+  <ul>
+    <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+    <li>{{#link-to 'register'}}Register{{/link-to}}</li>
+  </ul>
   {{/if}}
 </div>

@@ -31,6 +31,11 @@ module.exports = function(environment) {
     subdomainMapping: {
       '': 'default',
       'www': 'default'
+    },
+    'simple-auth': {
+      routeAfterAuthentication: '/',
+      authorizer: 'authorizer:custom',
+      crossOriginWhitelist: ['*']
     }
   };
 
@@ -42,7 +47,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.contentSecurityPolicy['script-src'] += ' http://*.localhost:35729';
     ENV.contentSecurityPolicy['connect-src'] += ' ws://*.localhost:35729';
-    ENV.contentSecurityPolicy['connect-src'] += ' https://*.localhost:5000';
+    ENV.contentSecurityPolicy['connect-src'] += ' http://*.localhost:3000';
   }
 
   if (environment === 'test') {

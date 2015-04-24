@@ -8,6 +8,10 @@ var urlInfo = Ember.Object.extend({
     return window.location.hostname;
   }.property(),
 
+  apiUrl: function () {
+    return 'http://' + this.get('hostname') + ':3000';
+  }.property('hostname'),
+
   subdomain: function(){
     var hostname = this.get('hostname');
     var subdomain = extractSubdomainFromHostname(hostname);

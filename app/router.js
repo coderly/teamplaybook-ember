@@ -8,6 +8,7 @@ var Router = Ember.Router.extend({
 
 export default Router.map(function() {
   this.route('login');
+  this.route('register');
 
   var urlInfo = UrlInfo.create(),
       shouldMapOrganizationRoutes = urlInfo.get('isOnOrganizationSubdomain'),
