@@ -1,0 +1,18 @@
+<form {{action 'create' on='submit'}}>
+  <label for="name">Name</label>
+  {{input id='name' name='name' value=model.name}}
+
+  <label for="subdomain">Subdomain</label>
+  {{input id='subdomain' name='subdomain' value=model.subdomain}}
+
+  <input type="submit" value="Create" />
+</form>
+
+{{#if showMessage}}
+  <p>{{message}}</p>
+  <p>Click <a href={{createdTeamURL}}>here</a> to visit team site</p>
+{{/if}}
+
+{{#if showError}}
+  <p>{{errorMessage}}</p>
+{{/if}}

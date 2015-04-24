@@ -26,8 +26,17 @@ module.exports = function(environment) {
       'img-src': "'self'",
       'style-src': "'self'",
       'media-src': "'self'"
-    }
+    },
     /*jshint quotmark: true*/
+    subdomainMapping: {
+      '': 'default',
+      'www': 'default'
+    },
+    'simple-auth': {
+      routeAfterAuthentication: '/',
+      authorizer: 'authorizer:custom',
+      crossOriginWhitelist: ['*']
+    }
   };
 
   if (environment === 'development') {
@@ -38,7 +47,16 @@ module.exports = function(environment) {
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.contentSecurityPolicy['script-src'] += ' http://*.localhost:35729';
     ENV.contentSecurityPolicy['connect-src'] += ' ws://*.localhost:35729';
-    ENV.contentSecurityPolicy['connect-src'] += ' https://*.localhost:5000';
+    ENV.contentSecurityPolicy['connect-src'] += ' http://*.localhost:3000';
+
+    ENV.contentSecurityPolicy['script-src'] += ' http://*.playbook.com:35729';
+    ENV.contentSecurityPolicy['connect-src'] += ' ws://*.playbook.com:35729';
+    ENV.contentSecurityPolicy['connect-src'] += ' http://*.playbook.com:3000';
+
+    ENV.clientProtocol = 'http';
+    ENV.clientPort = 4200;
+    ENV.apiProtocol = 'http';
+    ENV.apiPort = 3000;
   }
 
   if (environment === 'test') {
