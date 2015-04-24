@@ -5,7 +5,7 @@ var extractErrorMessage = function (response) {
     return response.errorThrown;
   } else if (Ember.isPresent(response.message)) {
     return response.message;
-  }else {
+  } else {
     return 'Uknown error.';
   }
 };

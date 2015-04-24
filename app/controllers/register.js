@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import teamPlaybookAuth from 'teamplaybook-ember/lib/teamplaybook-auth';
 import extractError from 'teamplaybook-ember/lib/extract-error';
 
 export default Ember.Controller.extend({
@@ -57,7 +56,9 @@ export default Ember.Controller.extend({
         });
       };
 
-      teamPlaybookAuth.register(credentials).then(success, failure);
+      var user = this.store.createRecord('current-user', credentials);
+
+      user.save().then(success, failure);
     }
   }
 });
