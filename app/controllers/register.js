@@ -42,7 +42,7 @@ export default Ember.Controller.extend({
         controller.transitionToRoute('/');
       };
 
-      var success = function() {
+      var success = function () {
         session.authenticate('authenticator:custom', {
           email: credentials.email,
           password: credentials.password

@@ -10,7 +10,7 @@ var urlInfo = Ember.Object.extend({
   clientProtocol: ENV.clientProtocol,
   clientPort: ENV.clientPort,
 
-  hostname: function(){
+  hostname: function (){
     return window.location.hostname;
   }.property(),
 
@@ -18,7 +18,7 @@ var urlInfo = Ember.Object.extend({
     return  this.get('apiProtocol') + '://' + this.get('hostname') + ':' + this.get('apiPort');
   }.property('apiProtocol', 'hostname', 'apiPort'),
 
-  subdomain: function(){
+  subdomain: function (){
     var hostname = this.get('hostname');
     var subdomain = extractSubdomainFromHostname(hostname);
     var mappedSubdomain = this._applySubdomainMapping(subdomain);
