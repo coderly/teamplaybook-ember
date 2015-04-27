@@ -1,4 +1,20 @@
-<ul>
-  <li>{{#link-to 'general.index'}}Home{{/link-to}}</li>
-  <li>{{#link-to 'general.create-team'}}Create a team{{/link-to}}</li>
-</ul>
+<nav class="top-bar" role="navigation">
+  <ul class="title-area">
+    <li class="name"><h1>{{#link-to 'general.index'}}Team Playbook{{/link-to}}</h1></li>
+  </ul>
+  <section class="top-bar-section">
+    <ul class="left">
+      <li>{{#link-to 'general.create-team'}}Create a team{{/link-to}}</li>
+    </ul>
+  </section>
+  <section class="top-bar-section">
+    <ul class="right">
+      {{#if session.isAuthenticated}}
+        <li><a href="#" {{action 'logout'}}>Logout</a></li>
+      {{else}}
+        <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+        <li>{{#link-to 'register'}}Register{{/link-to}}</li>
+      {{/if}}
+    </ul>
+  </section>
+</nav>
