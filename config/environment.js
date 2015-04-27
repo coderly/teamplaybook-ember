@@ -49,9 +49,9 @@ module.exports = function(environment) {
     ENV.contentSecurityPolicy['connect-src'] += ' ws://*.localhost:35729';
     ENV.contentSecurityPolicy['connect-src'] += ' http://*.localhost:3000';
 
-    ENV.contentSecurityPolicy['script-src'] += ' http://*.playbook.com:35729';
-    ENV.contentSecurityPolicy['connect-src'] += ' ws://*.playbook.com:35729';
-    ENV.contentSecurityPolicy['connect-src'] += ' http://*.playbook.com:3000';
+    ENV.contentSecurityPolicy['script-src'] += ' http://*.teamplaybook.dev:35729';
+    ENV.contentSecurityPolicy['connect-src'] += ' ws://*.teamplaybook.dev:35729';
+    ENV.contentSecurityPolicy['connect-src'] += ' http://*.teamplaybook.dev:3000';
 
     ENV.clientProtocol = 'http';
     ENV.clientPort = 4200;
