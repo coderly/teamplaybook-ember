@@ -15,13 +15,13 @@ export default Router.map(function() {
   var shouldMapGeneralRoutes = urlInfo.get('isOnRegularSubdomain');
 
   if (shouldMapTeamRoutes) {
-    this.route('team', { path: '/' }, function () {
-      this.route('team-memberships', { path: 'members' }, function () {
+    this.route('team', { path: '/' }, function() {
+      this.route('team-memberships', { path: 'members' }, function() {
         this.route('index', { path: '/'});
       });
     });
   } else if (shouldMapGeneralRoutes) {
-    this.route('general', { path: '/' }, function () {
+    this.route('general', { path: '/' }, function() {
       this.route('create-team');
     });
   }

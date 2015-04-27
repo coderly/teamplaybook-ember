@@ -3,7 +3,7 @@ import { extractBaseUrlFromHostname, extractSubdomainFromHostname } from 'teampl
 
 module('Library: URL utils');
 
-test('extractBaseUrlFromHostname', function (assert) {
+test('extractBaseUrlFromHostname', function(assert) {
   assert.expect(6);
 
   assert.equal(extractBaseUrlFromHostname(''), null, 'Returns null for empty string as hostname');
@@ -14,7 +14,7 @@ test('extractBaseUrlFromHostname', function (assert) {
   assert.equal(extractBaseUrlFromHostname('www.goo-gle.com'), 'goo-gle.com', 'Is not affected by dashes');
 });
 
-test('extractSubdomainFromHostname', function (assert) {
+test('extractSubdomainFromHostname', function(assert) {
   assert.expect(8);
 
   assert.equal(extractSubdomainFromHostname(''), '', 'Returns empty string for empty string as hostname');

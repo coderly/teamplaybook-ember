@@ -10,15 +10,15 @@ export default Ember.Controller.extend({
 
   actions: {
 
-    login: function () {
+    login: function() {
       var controller = this,
           credentials = controller.getProperties('email', 'password');
 
-      var onSuccess = function () {
+      var onSuccess = function() {
         controller.transitionToRoute('/');
       };
 
-      var onFailure = function (response) {
+      var onFailure = function(response) {
         controller.setProperties({
           showError: true,
           errorMessage: extractError(response)

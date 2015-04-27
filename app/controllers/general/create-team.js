@@ -10,11 +10,11 @@ export default Ember.Controller.extend({
   createdTeamURL: null,
 
   actions: {
-    create: function () {
+    create: function() {
 
       var controller = this;
 
-      var onSaveSuccess = function (team) {
+      var onSaveSuccess = function(team) {
         controller.setProperties({
           showError: false,
           showMessage: true,
@@ -23,7 +23,7 @@ export default Ember.Controller.extend({
         });
       };
 
-      var onSaveFailure = function (response) {
+      var onSaveFailure = function(response) {
         controller.setProperties({
           showMessage: false,
           showError: true,

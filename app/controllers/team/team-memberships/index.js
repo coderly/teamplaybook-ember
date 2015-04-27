@@ -13,12 +13,12 @@ export default Ember.Controller.extend({
   createInviteActionDisabled: Ember.computed.empty('newInviteEmail'),
 
   actions: {
-    createInvite: function () {
+    createInvite: function() {
       var controller = this;
       var email = this.get('newInviteEmail');
       var teamMembership = this.store.createRecord('teamMembership', { email: email });
 
-      var onSuccess = function (teamMembership) {
+      var onSuccess = function(teamMembership) {
         var email = teamMembership.get('email');
 
         controller.setProperties({
@@ -30,7 +30,7 @@ export default Ember.Controller.extend({
         });
       };
 
-      var onFailure = function (response) {
+      var onFailure = function(response) {
         controller.setProperties({
           showMessage: false,
           message: null,

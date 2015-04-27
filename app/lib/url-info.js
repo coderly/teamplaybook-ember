@@ -10,15 +10,15 @@ var urlInfo = Ember.Object.extend({
   clientProtocol: ENV.clientProtocol,
   clientPort: ENV.clientPort,
 
-  hostname: function (){
+  hostname: function(){
     return window.location.hostname;
   }.property(),
 
-  apiUrl: function () {
+  apiUrl: function() {
     return  this.get('apiProtocol') + '://' + this.get('hostname') + ':' + this.get('apiPort');
   }.property('apiProtocol', 'hostname', 'apiPort'),
 
-  subdomain: function (){
+  subdomain: function(){
     var hostname = this.get('hostname');
     var subdomain = extractSubdomainFromHostname(hostname);
     var mappedSubdomain = this._applySubdomainMapping(subdomain);
@@ -29,11 +29,11 @@ var urlInfo = Ember.Object.extend({
   isOnRegularSubdomain: Ember.computed.equal('subdomain', 'default'),
   isOnTeamSubdomain: Ember.computed.not('isOnRegularSubdomain'),
 
-  _applySubdomainMapping: function (subdomain) {
+  _applySubdomainMapping: function(subdomain) {
     return ENV.subdomainMapping[subdomain] || subdomain;
   },
 
-  urlForTeam: function (team) {
+  urlForTeam: function(team) {
     return this.get('clientProtocol') + '://' + team.get('subdomain') + '.' + this.get('hostname') + ':' + this.get('clientPort');
   }
 });
