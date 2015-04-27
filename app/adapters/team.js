@@ -1,22 +1,22 @@
-import Ember from 'ember';
 import ApplicationAdapter from 'teamplaybook-ember/adapters/application';
 
 export default ApplicationAdapter.extend({
-  buildURL: function (type, id) {
+  buildURL: function (typeName, id) {
     var url = [];
 
     url.push(this.get('host'));
 
-    if (Ember.isPresent(id)) {
-      url.push('team');
+    var isFetchingCurrentTeam = (id === 'current');
+    var apiEndpoint = '';
+
+    if (isFetchingCurrentTeam) {
+      apiEndpoint = 'team';
     } else {
-      url.push('teams');
+      apiEndpoint = 'teams';
     }
 
-    return url.join('/');
-  },
+    url.push(apiEndpoint);
 
-  find: function (store, type, id) {
-    return this.ajax(this.buildURL(type, id), 'GET');
+    return url.join('/');
   }
 });
