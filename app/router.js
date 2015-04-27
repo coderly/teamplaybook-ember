@@ -10,9 +10,9 @@ export default Router.map(function() {
   this.route('login');
   this.route('register');
 
-  var urlInfo = UrlInfo.create(),
-      shouldMapTeamRoutes = urlInfo.get('isOnTeamSubdomain'),
-      shouldMapGeneralRoutes = urlInfo.get('isOnRegularSubdomain');
+  var urlInfo = UrlInfo.create();
+  var shouldMapTeamRoutes = urlInfo.get('isOnTeamSubdomain');
+  var shouldMapGeneralRoutes = urlInfo.get('isOnRegularSubdomain');
 
   if (shouldMapTeamRoutes) {
     this.route('team', { path: '/' }, function () {
