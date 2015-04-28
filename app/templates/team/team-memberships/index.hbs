@@ -1,0 +1,17 @@
+<h3>Team members</h3>
+
+<em>We will have a list of members here soon.</em>
+
+<form {{action 'createInvite' on='submit'}}>
+  <label for="email">E-mail</label>
+  {{input type='text' id='email' name='email' value=newInviteEmail}}
+  {{input type='submit' value='Send invite' disabled=createInviteActionDisabled}}
+</form>
+
+{{#if showMessage}}
+  <p>{{message}}</p>
+{{/if}}
+
+{{#if showError}}
+  <p>{{errorMessage}}</p>
+{{/if}}

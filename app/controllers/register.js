@@ -9,11 +9,11 @@ export default Ember.Controller.extend({
   showError: false,
   errorMessage: null,
 
-  passwordsMatch : function () {
+  passwordsMatch : function() {
     return this.get('password') === this.get('passwordConfirmation');
   }.property('password', 'passwordConfirmation'),
 
-  canRegister: function () {
+  canRegister: function() {
 
     var email = this.get('email'),
         password = this.get('password'),
@@ -26,7 +26,7 @@ export default Ember.Controller.extend({
   registrationNotAllowed: Ember.computed.not('canRegister'),
 
   actions: {
-    register: function () {
+    register: function() {
 
       var credentials = {
         email: this.get('email'),
@@ -38,7 +38,7 @@ export default Ember.Controller.extend({
           controller = this;
 
 
-      var redirectToBaseRoute = function () {
+      var redirectToBaseRoute = function() {
         controller.transitionToRoute('/');
       };
 
@@ -49,7 +49,7 @@ export default Ember.Controller.extend({
         }).then(redirectToBaseRoute);
       };
 
-      var failure = function (response) {
+      var failure = function(response) {
         controller.setProperties({
           showError: true,
           errorMessage: extractError(response)

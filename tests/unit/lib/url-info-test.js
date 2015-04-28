@@ -3,7 +3,7 @@ import UrlInfo from 'teamplaybook-ember/lib/url-info';
 
 module('Library: URL info');
 
-test('subdomain', function (assert) {
+test('subdomain', function(assert) {
   assert.expect(4);
 
   UrlInfo.reopenClass({ hostname: null });
@@ -23,7 +23,7 @@ test('subdomain', function (assert) {
 });
 
 
-test('isOnRegularSubdomain', function (assert) {
+test('isOnRegularSubdomain', function(assert) {
   assert.expect(4);
 
   UrlInfo.reopenClass({ hostname: null });
@@ -43,23 +43,23 @@ test('isOnRegularSubdomain', function (assert) {
 
 });
 
-test('isOnOrganizationSubdomain', function (assert) {
+test('isOnTeamSubdomain', function(assert) {
   assert.expect(4);
 
   UrlInfo.reopenClass({ hostname: null });
   var urlInfo = UrlInfo.create();
 
   urlInfo.set('hostname', 'localhost');
-  assert.equal(urlInfo.get('isOnOrganizationSubdomain'), false, 'Returns false for no subdomain');
+  assert.equal(urlInfo.get('isOnTeamSubdomain'), false, 'Returns false for no subdomain');
 
   urlInfo.set('hostname', 'www.example.com');
-  assert.equal(urlInfo.get('isOnOrganizationSubdomain'), false, 'Returns false for "www"');
+  assert.equal(urlInfo.get('isOnTeamSubdomain'), false, 'Returns false for "www"');
 
   urlInfo.set('hostname', 'test1.localhost');
-  assert.equal(urlInfo.get('isOnOrganizationSubdomain'), true, 'Returns true for format "subdomain.localhost"');
+  assert.equal(urlInfo.get('isOnTeamSubdomain'), true, 'Returns true for format "subdomain.localhost"');
 
   urlInfo.set('hostname', 'test1.example.com');
-  assert.equal(urlInfo.get('isOnOrganizationSubdomain'), true, 'Returns true for format "subdomain.example.com"');
+  assert.equal(urlInfo.get('isOnTeamSubdomain'), true, 'Returns true for format "subdomain.example.com"');
 
 });
 

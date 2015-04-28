@@ -4,7 +4,7 @@ import teamPlaybookAuth from 'teamplaybook-ember/lib/teamplaybook-auth';
 
 export default BaseAuthenticator.extend({
   restore: function(properties) {
-    return new Ember.RSVP.Promise(function (resolve, reject) {
+    return new Ember.RSVP.Promise(function(resolve, reject) {
       if (Ember.isPresent(properties.data.authentication_token)) {
         resolve(properties);
       } else {
@@ -12,7 +12,7 @@ export default BaseAuthenticator.extend({
       }
     });
   },
-  authenticate: function (credentials) {
+  authenticate: function(credentials) {
     return teamPlaybookAuth.login(credentials);
   }
 });

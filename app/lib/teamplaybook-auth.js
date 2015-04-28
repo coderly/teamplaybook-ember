@@ -4,11 +4,11 @@ import ajax from 'ic-ajax';
 
 var TeamPlaybookAuth = Ember.Object.extend({
 
-  urlInfo: function () {
+  urlInfo: function() {
     return UrlInfo.create();
   }.property(),
 
-  login: function (credentials) {
+  login: function(credentials) {
     return ajax({
       type: 'POST',
       url: this._buildURL('users/tokens'),
@@ -21,7 +21,7 @@ var TeamPlaybookAuth = Ember.Object.extend({
     });
   },
 
-  _buildURL: function (path) {
+  _buildURL: function(path) {
     var apiUrl = this.get('urlInfo.apiUrl');
     return apiUrl + '/' + path;
   }

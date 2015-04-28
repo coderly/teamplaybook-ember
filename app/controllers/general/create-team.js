@@ -7,21 +7,23 @@ export default Ember.Controller.extend({
   message: null,
   showError: false,
   errorMessage: null,
+  createdTeamURL: null,
 
   actions: {
-    create: function () {
+    create: function() {
 
       var controller = this;
 
-      var onSaveSuccess = function (organization) {
+      var onSaveSuccess = function(team) {
         controller.setProperties({
           showError: false,
           showMessage: true,
-          message: 'Organization ' + organization.get('name') + ' created successfully',
+          message: 'Team ' + team.get('name') + ' created successfully',
+          createdTeamURL: controller.get('urlInfo').urlForTeam(team)
         });
       };
 
-      var onSaveFailure = function (response) {
+      var onSaveFailure = function(response) {
         controller.setProperties({
           showMessage: false,
           showError: true,
@@ -29,8 +31,8 @@ export default Ember.Controller.extend({
         });
       };
 
-      var organization = this.get('model');
-      organization.save().then(onSaveSuccess, onSaveFailure);
+      var team = this.get('model');
+      team.save().then(onSaveSuccess, onSaveFailure);
     }
   }
 });
