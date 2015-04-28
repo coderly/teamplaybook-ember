@@ -12,6 +12,6 @@ export default ApplicationAdapter.extend({
   createRecord: function(store, type, snapshot) {
     var data = this._serializeData(store, type, snapshot);
 
-    return this.ajax(this.buildURL('users'), 'POST', { data: data });
+    return this.ajax(this.buildURL('accounts'), 'POST', { data: data });
   }
 });
