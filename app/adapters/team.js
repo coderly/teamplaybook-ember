@@ -1,7 +1,7 @@
 import ApplicationAdapter from 'teamplaybook-ember/adapters/application';
 
 export default ApplicationAdapter.extend({
-  buildURL: function (typeName, id) {
+  buildURL: function(typeName, id) {
     var url = [];
 
     url.push(this.get('host'));

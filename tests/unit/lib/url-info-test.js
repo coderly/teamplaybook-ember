@@ -3,7 +3,7 @@ import UrlInfo from 'teamplaybook-ember/lib/url-info';
 
 module('Library: URL info');
 
-test('subdomain', function (assert) {
+test('subdomain', function(assert) {
   assert.expect(4);
 
   UrlInfo.reopenClass({ hostname: null });
@@ -23,7 +23,7 @@ test('subdomain', function (assert) {
 });
 
 
-test('isOnRegularSubdomain', function (assert) {
+test('isOnRegularSubdomain', function(assert) {
   assert.expect(4);
 
   UrlInfo.reopenClass({ hostname: null });
@@ -43,7 +43,7 @@ test('isOnRegularSubdomain', function (assert) {
 
 });
 
-test('isOnTeamSubdomain', function (assert) {
+test('isOnTeamSubdomain', function(assert) {
   assert.expect(4);
 
   UrlInfo.reopenClass({ hostname: null });
