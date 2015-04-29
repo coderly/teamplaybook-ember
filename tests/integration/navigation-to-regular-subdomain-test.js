@@ -1,11 +1,19 @@
 import { test, module } from 'qunit';
 import startApp from '../helpers/start-app';
+import { response } from '../helpers/response';
+import mockServer from '../helpers/mock-server';
 import Ember from 'ember';
 
-var App;
+import { loginSuccessResponse } from '../mocks/login';
+
+var server, App;
 
 module('Navigation to regular subdomain', {
   beforeEach: function() {
+    server = mockServer(function () {
+      this.post('accounts/tokens', response(200, loginSuccessResponse));
+    });
+
     App = startApp();
   },
 
@@ -14,6 +22,7 @@ module('Navigation to regular subdomain', {
     // see https://github.com/emberjs/ember.js/issues/10310#issuecomment-95685137
     App.registry = App.buildRegistry();
     App.reset();
+    server.shutdown();
     Ember.run(App, 'destroy');
   }
 });
@@ -25,5 +34,19 @@ test('Navigating to root', function(assert) {
 
   andThen(function() {
     assert.equal(currentRouteName(), 'general.index', 'Actually navigates to general.index');
+  });
+});
+
+test('Logging in', function(assert) {
+  assert.expect(1);
+
+  visit('login');
+
+  fillIn('#email', 'test@example.com');
+  fillIn('#password', '123456');
+  click('#login');
+
+  andThen(function() {
+    assert.equal(currentRouteName(), 'general.index', 'Redirects to general.index');
   });
 });
