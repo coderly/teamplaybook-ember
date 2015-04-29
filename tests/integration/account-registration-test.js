@@ -40,12 +40,12 @@ test('Succesful registration', function(assert) {
       return buildResponse(200, loginSuccessResponse);
     });
   });
-  andThen(function(){
-    fillIn('#email', 'test@example.com');
-    fillIn('#password', '123456');
-    fillIn('#password-confirmation', '123456');
-    click('#register');
-  });
+
+  fillIn('#email', 'test@example.com');
+  fillIn('#password', '123456');
+  fillIn('#password-confirmation', '123456');
+  click('#register');
+
 
   andThen(function() {
     assert.equal(currentRouteName(), 'general.index', 'Redirects to general.index');
@@ -94,7 +94,7 @@ test('Failed registration', function(assert) {
 
   andThen(function () {
     server.post('accounts', function() {
-      return buildResponse(404, { error: 'Lorem ipsum...' });
+      return buildResponse(404, {});
     });
   });
 

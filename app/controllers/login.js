@@ -8,6 +8,15 @@ export default Ember.Controller.extend({
   showError: false,
   errorMessage: null,
 
+  canLogin: function() {
+    var email = this.get('email');
+    var password = this.get('password');
+
+    return Ember.isPresent(email) && Ember.isPresent(password);
+  }.property('email', 'password'),
+
+  loggingInNotAllowed: Ember.computed.not('canLogin'),
+
   actions: {
 
     login: function() {

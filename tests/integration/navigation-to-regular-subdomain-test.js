@@ -36,17 +36,3 @@ test('Navigating to root', function(assert) {
     assert.equal(currentRouteName(), 'general.index', 'Actually navigates to general.index');
   });
 });
-
-test('Logging in', function(assert) {
-  assert.expect(1);
-
-  visit('login');
-
-  fillIn('#email', 'test@example.com');
-  fillIn('#password', '123456');
-  click('#login');
-
-  andThen(function() {
-    assert.equal(currentRouteName(), 'general.index', 'Redirects to general.index');
-  });
-});
