@@ -4,19 +4,29 @@ import ENV from '../config/environment';
 
 var urlInfo = Ember.Object.extend({
 
-  apiProtocol: ENV.apiProtocol,
-  apiPort: ENV.apiPort,
+  protocol: function() {
+    return window.location.protocol;
+  }.property(),
 
-  clientProtocol: ENV.clientProtocol,
-  clientPort: ENV.clientPort,
+  port: function () {
+    return window.location.port;
+  }.property(),
 
   hostname: function(){
     return window.location.hostname;
   }.property(),
 
+  apiUrlSetting: function() {
+    return this.get('isOnRegularSubdomain') ? ENV.API_REGULAR_URL : ENV.API_TEAM_URL;
+  }.property('isOnRegularSubdomain'),
+
   apiUrl: function() {
-    return this._buildApiUrl();
-  }.property('apiProtocol', 'subdomain', 'hostname', 'apiPort'),
+    var apiUrlSetting = this.get('apiUrlSetting');
+    var subdomain = this.get('subdomain');
+    var apiUrl = this.get('isOnRegularSubdomain') ? apiUrlSetting : apiUrlSetting.replace('subdomain', subdomain);
+
+    return apiUrl;
+  }.property('apiUrlSetting', 'isOnRegularSubdomain'),
 
   subdomain: function(){
     return this._computeSubdomain();
@@ -44,15 +54,6 @@ var urlInfo = Ember.Object.extend({
     var mappedSubdomain = this._applySubdomainMapping(subdomain);
 
     return mappedSubdomain;
-  },
-
-  _buildApiUrl: function() {
-    var protocol = this.get('apiProtocol');
-    var subdomain = this.get('subdomain');
-    var hostname = this.get('hostname');
-    var port = this.get('apiPort');
-
-    return  this._buildUrl(protocol, subdomain, hostname, port);
   },
 
   _buildUrl: function(protocol, subdomain, hostname, port) {

@@ -5,8 +5,7 @@ import UrlInfo from 'teamplaybook-ember/lib/url-info';
 
 function setUrlInfoMockSubdomain(subdomain) {
   UrlInfo.reopen({
-    subdomain: subdomain,
-    apiUrl: ''
+    subdomain: subdomain
   });
 }
 
@@ -14,10 +13,7 @@ function resetUrlInfo() {
   UrlInfo.reopen({
     subdomain: function(){
       return this._computeSubdomain();
-    }.property('hostname'),
-    apiUrl: function() {
-      return this._buildApiURL();
-    }.property('apiProtocol', 'subdomain', 'hostname', 'apiPort'),
+    }.property('hostname')
   });
 }
 

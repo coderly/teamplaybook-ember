@@ -53,10 +53,8 @@ module.exports = function(environment) {
     ENV.contentSecurityPolicy['connect-src'] += ' ws://*.teamplaybook.dev:35729';
     ENV.contentSecurityPolicy['connect-src'] += ' http://*.teamplaybook.dev:3000';
 
-    ENV.clientProtocol = 'http';
-    ENV.clientPort = 4200;
-    ENV.apiProtocol = 'http';
-    ENV.apiPort = 3000;
+    ENV.API_REGULAR_URL = 'http://teamplaybook.dev:3000';
+    ENV.API_TEAM_URL = 'http://subdomain.teamplaybook.dev:3000';
   }
 
   if (environment === 'test') {
@@ -69,6 +67,9 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+
+    ENV.API_REGULAR_URL = '';
+    ENV.API_TEAM_URL = '';
   }
 
   if (environment === 'production') {
