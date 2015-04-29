@@ -8,7 +8,7 @@ var urlInfo = Ember.Object.extend({
     return window.location.protocol;
   }.property(),
 
-  port: function () {
+  port: function() {
     return window.location.port;
   }.property(),
 
