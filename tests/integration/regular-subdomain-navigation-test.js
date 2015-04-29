@@ -10,7 +10,7 @@ module('Regular subdomain navigation', {
   },
 
   afterEach: function() {
-    // Todo - REmove this when we update Ember from 1.11.1
+    // Todo - Remove this when we update Ember from 1.11.1
     // see https://github.com/emberjs/ember.js/issues/10310#issuecomment-95685137
     App.registry = App.buildRegistry();
     App.reset();
