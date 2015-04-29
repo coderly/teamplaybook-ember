@@ -1,4 +1,21 @@
-<em>We will have a list of members here soon.</em>
+<h1>Active invites</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>E-mail</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each teamMembership in model}}
+      <tr>
+        <td>{{teamMembership.email}}</td>
+        <td>N/A</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
 
 <h2>Send an invite</h2>
 

@@ -3,5 +3,6 @@ import DS from 'ember-data';
 export default DS.Model.extend({
   name: DS.attr('string'),
   subdomain: DS.attr('string'),
-  owner: DS.belongsTo('user', { async: true })
+  owner: DS.belongsTo('user', { async: true }),
+  members: DS.hasMany('user')
 });

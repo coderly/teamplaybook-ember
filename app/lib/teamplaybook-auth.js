@@ -11,7 +11,7 @@ var TeamPlaybookAuth = Ember.Object.extend({
   login: function(credentials) {
     return ajax({
       type: 'POST',
-      url: this._buildURL('users/tokens'),
+      url: this._buildURL('accounts/tokens'),
       data: {
         user: {
           email: credentials.email,
