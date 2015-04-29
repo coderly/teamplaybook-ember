@@ -82,3 +82,25 @@ test('Registration form', function(assert) {
     assert.equal(find('#register[disabled]').length, 0, 'Is enabled when all fields are filled in and passwords match.');
   });
 });
+
+test('Failed registration', function(assert) {
+  assert.expect(1);
+
+  visit('register');
+
+  fillIn('#email', 'test@example.com');
+  fillIn('#password', '12345');
+  fillIn('#password-confirmation', '12345');
+
+  andThen(function () {
+    server.post('accounts', function() {
+      return buildResponse(404, { error: 'Lorem ipsum...' });
+    });
+  });
+
+  click('#register');
+
+  andThen(function() {
+    assert.equal(find('.error').length, 1, 'Shows an error message.');
+  });
+});
