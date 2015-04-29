@@ -1,11 +1,19 @@
-<h3>Team members</h3>
-
 <em>We will have a list of members here soon.</em>
 
+<h2>Send an invite</h2>
+
 <form {{action 'createInvite' on='submit'}}>
-  <label for="email">E-mail</label>
-  {{input type='text' id='email' name='email' value=newInviteEmail}}
-  {{input type='submit' value='Send invite' disabled=createInviteActionDisabled}}
+  <div class="row collapse">
+    <div class="large-12 columns">
+      <label for="email">E-mail</label>
+      {{input type='text' id='email' name='email' value=newInviteEmail}}
+    </div>
+  </div>
+  <div class="row collapse">
+    <div class="large-12 columns">
+      {{input class='button' type='submit' value='Send invite' disabled=createInviteActionDisabled}}
+    </div>
+  </div>
 </form>
 
 {{#if showMessage}}

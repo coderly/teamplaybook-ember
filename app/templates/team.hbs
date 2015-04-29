@@ -1,6 +1,10 @@
-{{partial 'team-nav'}}
-
-<h2>{{model.name}}</h2>
-<p>Subdomain: {{model.subdomain}}</p>
-
-{{outlet}}
+<section role="main" class="team-container">
+  <div class="team-sidebar">
+    <h5>{{model.name}}</h5>
+    <h6 class="subheader">Subdomain: {{model.subdomain}}</h6>
+    {{partial 'team-nav'}}
+  </div>
+  <div class="team-main">
+    {{outlet}}
+  </div>
+</section>

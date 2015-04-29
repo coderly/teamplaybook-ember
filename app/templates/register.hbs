@@ -1,18 +1,44 @@
-{{#if session.isAuthenticated}}
-  Logged in as {{session.user.username}} <button {{action 'logout'}}>Logout</button>
-{{else}}
-  <form {{action 'register' on='submit'}}>
-    <label for='email'>E-mail</label>
-    {{input id='email' name='email' value=email}}
-    <label for='password'>Password</label>
-    {{input type='password' id='password' name='password' value=password}}
-    <label for='password-confirmation'>Confirm password</label>
-    {{input type='password' id='password-confirmation' name='password-confirmation' value=passwordConfirmation }}
+{{partial 'general-nav'}}
 
-    {{input disabled=registrationNotAllowed type="submit" value="Register"}}
-  </form>
-{{/if}}
+<div class="row">
+  <div class="large-12 columns">
+    <h1>Register a new account</h1>
+    {{#if session.isAuthenticated}}
+      Logged in as {{session.user.username}} <button {{action 'logout'}}>Logout</button>
+    {{else}}
+      <form {{action 'register' on='submit'}}>
+        <div class="row">
+          <div class="large-12 columns">
+            <label for='email'>E-mail</label>
+            {{input id='email' name='email' value=email}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-12 columns">
+            <label for='password'>Password</label>
+            {{input type='password' id='password' name='password' value=password}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-12 columns">
+            <label for='password-confirmation'>Confirm password</label>
+            {{input type='password' id='password-confirmation' name='password-confirmation' value=passwordConfirmation }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-12 columns">
+            {{input class='button' disabled=registrationNotAllowed type="submit" value="Register"}}
+          </div>
+        </div>
+      </form>
+    {{/if}}
+  </div>
+</div>
 
 {{#if showError}}
-  <p>{{errorMessage}}</p>
+  <div class="row">
+    <div class="large-12 columns">
+      <p>{{errorMessage}}</p>
+    </div>
+  </div>
 {{/if}}

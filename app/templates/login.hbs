@@ -1,10 +1,39 @@
-<h3>Please log in</h3>
+{{partial 'general-nav'}}
 
-<form {{action 'login' on='submit'}}>
-  {{input type='text' value=email placeholder='Your e-mail'}}
-  {{input type='password' value=password placeholder='Your password'}}
-  <input type="submit" value="Login"/>
-</form>
+<div class="row">
+  <div class="large-12 columns">
+    <h1>Please log in</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <form {{action 'login' on='submit'}}>
+      <div class="row">
+        <div class="large-12 columns">
+          <label for="email">E-mail</label>
+          {{input id='email' name='email' type='text' value=email}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-12 columns">
+          <label for="password">Password</label>
+          {{input id='password' name='password' type='password' value=password}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-12 columns">
+          <input class="button" type="submit" value="Login"/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 {{#if showError}}
-  <p>{{errorMessage}}</p>
+  <div class="row">
+    <div class="large-12 columns">
+      <p>{{errorMessage}}</p>
+    </div>
+  </div>
 {{/if}}
