@@ -70,6 +70,8 @@ module.exports = function(environment) {
 
     ENV.API_REGULAR_URL = '';
     ENV.API_TEAM_URL = '';
+
+    ENV['simple-auth'].store = 'simple-auth-session-store:ephemeral';
   }
 
   if (environment === 'production') {

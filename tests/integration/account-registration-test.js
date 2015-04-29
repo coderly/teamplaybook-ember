@@ -51,3 +51,34 @@ test('Succesful registration', function(assert) {
     assert.equal(currentRouteName(), 'general.index', 'Redirects to general.index');
   });
 });
+
+test('Registration form', function(assert) {
+  assert.expect(5);
+
+  visit('register');
+
+
+  andThen(function() {
+    assert.equal(find('#register[disabled]').length, 1, 'Is disabled when all fields are blank.');
+  });
+
+  fillIn('#email', 'test@example.com');
+  andThen(function() {
+    assert.equal(find('#register[disabled]').length, 1, 'Is disabled when only email is filled in.');
+  });
+
+  fillIn('#password', '12345');
+  andThen(function() {
+    assert.equal(find('#register[disabled]').length, 1, 'Is disabled when email and password are filled in.');
+  });
+
+  fillIn('#password-confirmation', '1234');
+  andThen(function() {
+    assert.equal(find('#register[disabled]').length, 1, 'Is disabled when all fields are filled in, but password and password confirmation do not match.');
+  });
+
+  fillIn('#password-confirmation', '12345');
+  andThen(function() {
+    assert.equal(find('#register[disabled]').length, 0, 'Is enabled when all fields are filled in and passwords match.');
+  });
+});
