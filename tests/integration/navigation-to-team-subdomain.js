@@ -4,31 +4,16 @@ import { response } from '../helpers/response';
 import mockServer from '../helpers/mock-server';
 import Ember from 'ember';
 
+import { loginSuccessResponse } from '../mocks/login';
+import { basicTeamResponse } from '../mocks/team';
+
 var App, server;
 
-var mockJSONTeam = {
-  data: {
-    type: 'teams',
-    id: 1,
-    name: 'Test',
-    subdomain: 'test'
-  }
-};
-
-var mockJSONLoginSuccess = {
-  data: {
-    type: 'users',
-    id: 1,
-    email: 'test@example.com',
-    authentication_token: 'test_token'
-  }
-};
-
-module('Team subdomain navigation', {
+module('Navigation to team subdomain', {
   beforeEach: function() {
     server = mockServer(function () {
-      this.get('team', response(200, mockJSONTeam));
-      this.post('accounts/tokens', response(200, mockJSONLoginSuccess));
+      this.get('team', response(200, basicTeamResponse));
+      this.post('accounts/tokens', response(200, loginSuccessResponse));
     });
 
     App = startApp({ subdomain: 'test' });

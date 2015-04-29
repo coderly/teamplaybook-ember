@@ -4,7 +4,7 @@ import Ember from 'ember';
 
 var App;
 
-module('Regular subdomain navigation', {
+module('Navigation to regular subdomain', {
   beforeEach: function() {
     App = startApp();
   },
