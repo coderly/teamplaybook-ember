@@ -4,7 +4,7 @@ import { response } from '../helpers/response';
 import mockServer from '../helpers/mock-server';
 import Ember from 'ember';
 
-import { loginSuccessResponse } from '../mocks/login';
+import { loginSuccessResponse } from '../mocks/account';
 
 var server, App;
 

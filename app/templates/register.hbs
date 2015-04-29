@@ -27,7 +27,7 @@
         </div>
         <div class="row">
           <div class="large-12 columns">
-            {{input class='button' disabled=registrationNotAllowed type="submit" value="Register"}}
+            {{input id='register' class='button' disabled=registrationNotAllowed type="submit" value="Register"}}
           </div>
         </div>
       </form>
@@ -38,7 +38,7 @@
 {{#if showError}}
   <div class="row">
     <div class="large-12 columns">
-      <p>{{errorMessage}}</p>
+      <p class="error">{{errorMessage}}</p>
     </div>
   </div>
 {{/if}}

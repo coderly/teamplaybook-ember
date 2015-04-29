@@ -1,0 +1,53 @@
+import { test, module } from 'qunit';
+import startApp from '../helpers/start-app';
+import { buildResponse } from '../helpers/response';
+import mockServer from '../helpers/mock-server';
+import Ember from 'ember';
+
+import { loginSuccessResponse, registrationSuccessResponse } from '../mocks/account';
+
+var server, App;
+
+module('Account registration', {
+  beforeEach: function() {
+    server = mockServer(function() {});
+    App = startApp();
+  },
+
+  afterEach: function() {
+    // Todo - Remove this when we update Ember from 1.11.1
+    // see https://github.com/emberjs/ember.js/issues/10310#issuecomment-95685137
+    App.registry = App.buildRegistry();
+    App.reset();
+    server.shutdown();
+    Ember.run(App, 'destroy');
+  }
+});
+
+test('Succesful registration', function(assert) {
+  assert.expect(3);
+
+  visit('register');
+
+  andThen(function() {
+    server.post('accounts/', function() {
+      assert.ok(true, 'Posts to API');
+      return buildResponse(200, registrationSuccessResponse);
+    });
+
+    server.post('accounts/tokens', function() {
+      assert.ok(true, 'Attempts to log in');
+      return buildResponse(200, loginSuccessResponse);
+    });
+  });
+  andThen(function(){
+    fillIn('#email', 'test@example.com');
+    fillIn('#password', '123456');
+    fillIn('#password-confirmation', '123456');
+    click('#register');
+  });
+
+  andThen(function() {
+    assert.equal(currentRouteName(), 'general.index', 'Redirects to general.index');
+  });
+});

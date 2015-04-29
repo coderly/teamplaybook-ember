@@ -4,14 +4,14 @@ import { response } from '../helpers/response';
 import mockServer from '../helpers/mock-server';
 import Ember from 'ember';
 
-import { loginSuccessResponse } from '../mocks/login';
+import { loginSuccessResponse } from '../mocks/account';
 import { basicTeamResponse } from '../mocks/team';
 
 var App, server;
 
 module('Navigation to team subdomain', {
   beforeEach: function() {
-    server = mockServer(function () {
+    server = mockServer(function() {
       this.get('team', response(200, basicTeamResponse));
       this.post('accounts/tokens', response(200, loginSuccessResponse));
     });
