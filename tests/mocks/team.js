@@ -1,13 +1,12 @@
 var basicTeamResponse = {
   data: {
-    type: 'users',
+    type: 'teams',
     id: 1,
-    email: 'test@example.com',
-    authentication_token: 'test_token'
+    subdomain: 'test',
+    name: 'test'
   }
 };
 
 export {
   basicTeamResponse
 };
-

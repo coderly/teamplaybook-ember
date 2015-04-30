@@ -42,10 +42,7 @@ test('Navigation to "/create-team"', function(assert) {
     assert.equal(currentRouteName(), 'login', 'Requires authentication.');
   });
 
-  andThen(function() {
-    login();
-  });
-
+  login();
   visit('/create-team');
 
   andThen(function(){
