@@ -66,6 +66,19 @@ test('Failed login', function(assert) {
 });
 
 test('Login form', function(assert) {
+  assert.expect(4);
+
+  visit('login');
+
+  andThen(function(){
+    assert.equal(find('#email').length, 1, 'Contains field for email');
+    assert.equal(find('#password').length, 1, 'Contains field for password');
+    assert.equal(find('#login').length, 1, 'Contains button to submit form');
+    assert.equal(find('input').length, 3, 'Contains a total of 3 controls');
+  });
+});
+
+test('Login form submission', function(assert) {
   assert.expect(3);
 
   visit('login');

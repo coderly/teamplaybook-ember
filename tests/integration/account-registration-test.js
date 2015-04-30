@@ -57,6 +57,20 @@ test('Registration form', function(assert) {
 
   visit('register');
 
+  andThen(function(){
+    assert.equal(find('#email').length, 1, 'Contains field for email');
+    assert.equal(find('#password').length, 1, 'Contains field for password');
+    assert.equal(find('#password-confirmation').length, 1, 'Contains field for password');
+    assert.equal(find('#register').length, 1, 'Contains button to submit form');
+    assert.equal(find('input').length, 4, 'Contains a total of 4 controls');
+  });
+});
+
+test('Registration form submission', function(assert) {
+  assert.expect(5);
+
+  visit('register');
+
 
   andThen(function() {
     assert.equal(find('#register[disabled]').length, 1, 'Is disabled when all fields are blank.');
