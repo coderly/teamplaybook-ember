@@ -9,6 +9,15 @@ export default Ember.Controller.extend({
   errorMessage: null,
   createdTeamURL: null,
 
+  canCreateTeam: function() {
+    var name = this.get('model.name');
+    var subdomain = this.get('model.subdomain');
+
+    return Ember.isPresent(name) && Ember.isPresent(subdomain);
+  }.property('model.name', 'model.subdomain'),
+
+  teamCreationNotAllowed: Ember.computed.not('canCreateTeam'),
+
   actions: {
     create: function() {
 
