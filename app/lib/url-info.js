@@ -35,11 +35,10 @@ var urlInfo = Ember.Object.extend({
   isOnRegularSubdomain: Ember.computed.equal('subdomain', 'default'),
   isOnTeamSubdomain: Ember.computed.not('isOnRegularSubdomain'),
 
-  urlForTeam: function(team) {
-    var protocol = this.get('clientProtocol');
-    var subdomain = team.get('subdomain');
+  urlForSubdomain: function(subdomain) {
+    var protocol = this.get('protocol');
     var hostname = this.get('hostname');
-    var port = this.get('clientPort');
+    var port = this.get('port');
 
     return this._buildUrl(protocol, subdomain, hostname, port);
   },
@@ -57,7 +56,7 @@ var urlInfo = Ember.Object.extend({
   },
 
   _buildUrl: function(protocol, subdomain, hostname, port) {
-    return `${protocol}://${subdomain}.${hostname}:${port}`;
+    return `${protocol}//${subdomain}.${hostname}:${port}`;
   }
 
 });

@@ -28,7 +28,7 @@ export default Ember.Controller.extend({
           showError: false,
           showMessage: true,
           message: 'Team ' + team.get('name') + ' created successfully',
-          createdTeamURL: controller.get('urlInfo').urlForTeam(team)
+          createdTeamURL: controller.get('urlInfo').urlForSubdomain(team.get('subdomain'))
         });
       };
 
