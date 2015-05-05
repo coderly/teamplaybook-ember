@@ -10,46 +10,27 @@ export default Ember.Component.extend({
   isEditable: Ember.computed.any('isAdmin', 'isMember'),
 
   actions: {
-    setRole: function(role) {
-      var membership = this.get('membership');
-      var component = this;
-
-      membership.set('role', role);
-      membership.save().then(function () {
-        component.sendAction('message', 'Succesfuly updated');
-      }).catch(function(response) {
-        var errorMessage = extractError(response);
-        membership.rollback();
-        component.sendAction('error', errorMessage);
-      });
+    setRoleToAdmin: function() {
+      this.setRole('admin');
     },
 
-    promote: function() {
-      var membership = this.get('membership');
-      var component = this;
-
-      membership.set('role', 'admin');
-      membership.save().then(function () {
-        component.sendAction('message', 'Succesfuly updated');
-      }).catch(function(response) {
-        var errorMessage = extractError(response);
-        membership.rollback();
-        component.sendAction('error', errorMessage);
-      });
+    setRoleToMember: function() {
+      this.setRole('member');
     },
 
-    demote: function() {
-      var membership = this.get('membership');
-      var component = this;
+  },
 
-      membership.set('role', 'member');
-      membership.save().then(function () {
-        component.sendAction('message', 'Succesfuly updated');
-      }).catch(function(response) {
-        var errorMessage = extractError(response);
-        membership.rollback();
-        component.sendAction('error', errorMessage);
-      });
-    }
+  setRole: function(role) {
+    var membership = this.get('membership');
+    var component = this;
+
+    membership.set('role', role);
+    membership.save().then(function () {
+      component.sendAction('message', 'Succesfuly updated');
+    }).catch(function(response) {
+      var errorMessage = extractError(response);
+      membership.rollback();
+      component.sendAction('error', errorMessage);
+    });
   }
 });

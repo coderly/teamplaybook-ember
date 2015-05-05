@@ -7,8 +7,8 @@
   <div class="columns medium-6">
     {{#if isEditable}}
       <ul class="button-group">
-        <li><button class="small button {{if isAdmin 'secondary'}}" disabled={{isAdmin}} {{ action 'setRole' 'admin'}}>Admin</button></li>
-        <li><button class="small button {{if isMember 'secondary'}}" disabled={{isMember}} {{ action 'setRole' 'member'}}>Member</button></li>
+        <li><button class="small button {{if isAdmin 'secondary'}}" disabled={{isAdmin}} {{ action 'setRoleToAdmin'}}>Admin</button></li>
+        <li><button class="small button {{if isMember 'secondary'}}" disabled={{isMember}} {{ action 'setRoleToMember'}}>Member</button></li>
       </ul>
     {{/if}}
   </div>
