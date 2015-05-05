@@ -40,6 +40,22 @@ export default Ember.Controller.extend({
       };
 
       teamMembership.save().then(onSuccess, onFailure);
+    },
+
+    message: function(message) {
+      this.setProperties({
+        showError: false,
+        message: message,
+        showMessage: true
+      });
+    },
+
+    error: function(error) {
+      this.setProperties({
+        showMessage: false,
+        errorMessage: error,
+        showError: true
+      });
     }
   }
 });

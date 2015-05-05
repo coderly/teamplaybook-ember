@@ -1,0 +1,6 @@
+<h4>{{membership.email}}</h4>
+<p>Role: {{membership.role}}</p>
+{{#if isRegistered}}
+  <button {{action 'promote'}}>Promote</button>
+  <button {{action 'demote'}}>Demote</button>
+{{/if}}
