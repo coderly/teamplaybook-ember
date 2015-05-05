@@ -6,7 +6,11 @@ import Ember from 'ember';
 
 import { loginSuccessResponse } from '../mocks/account';
 import { basicTeamResponse } from '../mocks/team';
-import { basicTeamMembershipResponse, listOfNTeamMembershipsResponseBuilder } from '../mocks/team-membership';
+import {
+  basicTeamMembershipResponse,
+  listOfTeamMembershipsOneOfEachRole,
+  listOfNTeamMembershipsResponseBuilder
+} from '../mocks/team-membership';
 
 var App, server;
 
@@ -141,5 +145,66 @@ test('Failed team membership creation', function(assert){
 
   andThen(function() {
     assert.equal(find('.error').length, 1, 'Shows an error message');
+  });
+});
+
+test('Role modification actions', function(assert){
+  assert.expect(4);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(find('.invitee .actions').length, 0, 'Is not possible for team members with "invitee" role');
+    assert.equal(find('.member .actions').length, 1, 'Is possible for team members with "member" role');
+    assert.equal(find('.admin .actions').length, 1, 'Is possible for team members with "admin" role');
+    assert.equal(find('.owner .actions').length, 0, 'Is not possible for team members with "owner" role');
+  });
+});
+
+test('Setting role to "admin"', function(assert) {
+  assert.expect(1);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  server.patch('team_memberships/2', function(request){
+    var body = JSON.parse(request.requestBody);
+    assert.equal(body.data.roles.indexOf('admin'), 0, 'Sends PATCH to API with roles property set to array containing "admin" item');
+    return buildResponse(200, body);
+  });
+
+  visit('login');
+  login();
+  visit('members');
+  andThen(function() {
+    click('.member .set-admin');
+  });
+});
+
+test('Setting role to "member"', function(assert) {
+  assert.expect(1);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  server.patch('team_memberships/3', function(request){
+    var body = JSON.parse(request.requestBody);
+    assert.equal(body.data.roles.indexOf('member'), 0, 'Sends PATCH to API with roles property set to array containing "member" item');
+    return buildResponse(200, body);
+  });
+
+  visit('login');
+  login();
+  visit('members');
+  andThen(function() {
+    click('.admin .set-member');
   });
 });

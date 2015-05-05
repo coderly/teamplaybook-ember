@@ -3,6 +3,7 @@ import extractError from 'teamplaybook-ember/lib/extract-error';
 
 export default Ember.Component.extend({
   classNames: ['team-membership'],
+  classNameBindings: 'membership.role',
 
   membership: null,
 
