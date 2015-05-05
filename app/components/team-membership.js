@@ -2,6 +2,7 @@ import Ember from 'ember';
 import extractError from 'teamplaybook-ember/lib/extract-error';
 
 export default Ember.Component.extend({
+  classNames: ['team-membership'],
 
   membership: null,
 
