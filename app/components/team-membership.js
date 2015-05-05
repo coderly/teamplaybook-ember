@@ -20,6 +20,7 @@ export default Ember.Component.extend({
       }).catch(function(response) {
         var errorMessage = extractError(response);
         var email = membership.get('user.email');
+        membership.rollback();
         component.sendAction('error', `Failed to promote ${email}. The error returned was: "${errorMessage}"`);
       });
     },
@@ -35,6 +36,7 @@ export default Ember.Component.extend({
       }).catch(function(response) {
         var errorMessage = extractError(response);
         var email = membership.get('user.email');
+        membership.rollback();
         component.sendAction('error', `Failed to promote ${email}. The error returned was: "${errorMessage}"`);
       });
     }
