@@ -2,7 +2,7 @@ import Ember from 'ember';
 import { extractSubdomainFromHostname } from 'teamplaybook-ember/lib/url-utils';
 import ENV from '../config/environment';
 
-var urlInfo = Ember.Object.extend({
+export default Ember.Object.extend({
 
   protocol: function() {
     return window.location.protocol;
@@ -58,7 +58,4 @@ var urlInfo = Ember.Object.extend({
   _buildUrl: function(protocol, subdomain, hostname, port) {
     return `${protocol}//${subdomain}.${hostname}:${port}`;
   }
-
 });
-
-export default urlInfo;
