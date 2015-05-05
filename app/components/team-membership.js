@@ -5,23 +5,36 @@ export default Ember.Component.extend({
 
   membership: null,
 
-  isInvite: Ember.computed.equal('membership.role', 'invitee'),
-  isRegistered: Ember.computed.not('isInvite'),
+  isAdmin: Ember.computed.equal('membership.role', 'admin'),
+  isMember: Ember.computed.equal('membership.role', 'member'),
+  isEditable: Ember.computed.any('isAdmin', 'isMember'),
 
   actions: {
+    setRole: function(role) {
+      var membership = this.get('membership');
+      var component = this;
+
+      membership.set('role', role);
+      membership.save().then(function () {
+        component.sendAction('message', 'Succesfuly updated');
+      }).catch(function(response) {
+        var errorMessage = extractError(response);
+        membership.rollback();
+        component.sendAction('error', errorMessage);
+      });
+    },
+
     promote: function() {
       var membership = this.get('membership');
       var component = this;
 
       membership.set('role', 'admin');
       membership.save().then(function () {
-        var email = membership.get('user.email');
-        component.sendAction('message', `Succesfuly promoted ${email}.`);
+        component.sendAction('message', 'Succesfuly updated');
       }).catch(function(response) {
         var errorMessage = extractError(response);
-        var email = membership.get('user.email');
         membership.rollback();
-        component.sendAction('error', `Failed to promote ${email}. The error returned was: "${errorMessage}"`);
+        component.sendAction('error', errorMessage);
       });
     },
 
@@ -31,13 +44,11 @@ export default Ember.Component.extend({
 
       membership.set('role', 'member');
       membership.save().then(function () {
-        var email = membership.get('user.email');
-        component.sendAction('message', `Succesfuly demoted ${email}.`);
+        component.sendAction('message', 'Succesfuly updated');
       }).catch(function(response) {
         var errorMessage = extractError(response);
-        var email = membership.get('user.email');
         membership.rollback();
-        component.sendAction('error', `Failed to promote ${email}. The error returned was: "${errorMessage}"`);
+        component.sendAction('error', errorMessage);
       });
     }
   }

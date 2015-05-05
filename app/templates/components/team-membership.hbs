@@ -1,6 +1,15 @@
 <h4>{{membership.email}}</h4>
-<p>Role: {{membership.role}}</p>
-{{#if isRegistered}}
-  <button {{action 'promote'}}>Promote</button>
-  <button {{action 'demote'}}>Demote</button>
-{{/if}}
+<div class="row">
+  <div class="columns medium-3">Role</div>
+  <div class="columns medium-3">
+    {{membership.role}}
+  </div>
+  <div class="columns medium-6">
+    {{#if isEditable}}
+      <ul class="button-group">
+        <li><button class="small button {{if isAdmin 'secondary'}}" disabled={{isAdmin}} {{ action 'setRole' 'admin'}}>Admin</button></li>
+        <li><button class="small button {{if isMember 'secondary'}}" disabled={{isMember}} {{ action 'setRole' 'member'}}>Member</button></li>
+      </ul>
+    {{/if}}
+  </div>
+</div>
