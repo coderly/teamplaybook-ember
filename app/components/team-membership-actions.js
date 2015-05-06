@@ -16,7 +16,7 @@ export default Ember.Component.extend({
       var component = this;
       membership.deleteRecord();
       membership.save().then(function() {
-        component.sendAction('message', 'Succesfuly removed user from team');
+        component.sendAction('message', 'Succesfuly removed member from team');
       }).catch(function(response) {
         var errorMessage = extractError(response);
         membership.rollback();
