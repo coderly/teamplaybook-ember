@@ -9,7 +9,6 @@ import { teamResponseWithOwnerLinkage } from '../mocks/team';
 import {
   basicTeamMembershipResponse,
   listOfTeamMembershipsOneOfEachRole,
-  listOfNTeamMembershipsResponseBuilder
 } from '../mocks/team-membership';
 import { listOfUsersOneForEachRole } from '../mocks/user';
 var App, server;
@@ -25,7 +24,7 @@ module('Team members', {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginSuccessResponse));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
-      this.get('team_memberships', response(200, listOfNTeamMembershipsResponseBuilder(1)));
+      this.get('team_memberships', response(200, listOfTeamMembershipsOneOfEachRole));
       this.get('users', response(200, listOfUsersOneForEachRole));
     });
     App = startApp({ subdomain: 'test'});
@@ -64,7 +63,7 @@ test('Team memberships list', function(assert) {
 
   server.get('team_memberships', function() {
     assert.ok(true, 'Fetches list of team memberships from the API.');
-    return buildResponse(200, listOfNTeamMembershipsResponseBuilder(5));
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
   });
 
   visit('login');
@@ -72,7 +71,7 @@ test('Team memberships list', function(assert) {
   visit('members');
 
   andThen(function() {
-    assert.equal(find('.team-membership').length, 5, 'Shows an entry for each team membership.');
+    assert.equal(find('.team-membership').length, 4, 'Shows an entry for each team membership.');
   });
 });
 
@@ -126,7 +125,7 @@ test('Succesful team membership creation', function(assert) {
 
   andThen(function() {
     assert.equal(find('.message').length, 1, 'Shows a success message.');
-    assert.equal(find('.team-membership').length, 2, 'Adds the membership to the list.');
+    assert.equal(find('.team-membership').length, 5, 'Adds the membership to the list.');
   });
 });
 
@@ -152,10 +151,6 @@ test('Failed team membership creation', function(assert){
 test('Role modification action by team member', function(assert) {
   assert.expect(1);
 
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
-
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
       data: {
@@ -178,10 +173,6 @@ test('Role modification action by team member', function(assert) {
 
 test('Role modification action by team admin', function(assert) {
   assert.expect(1);
-
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
 
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
@@ -206,10 +197,6 @@ test('Role modification action by team admin', function(assert) {
 test('Role modification action by team owner', function(assert) {
   assert.expect(1);
 
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
-
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
       data: {
@@ -232,10 +219,6 @@ test('Role modification action by team owner', function(assert) {
 
 test('Role modification actions', function(assert){
   assert.expect(4);
-
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
 
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
@@ -263,10 +246,6 @@ test('Role modification actions', function(assert){
 
 test('Setting role to "admin"', function(assert) {
   assert.expect(1);
-
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
 
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
@@ -296,10 +275,6 @@ test('Setting role to "admin"', function(assert) {
 test('Setting role to "member"', function(assert) {
   assert.expect(1);
 
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
-
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
       data: {
@@ -328,10 +303,6 @@ test('Setting role to "member"', function(assert) {
 test('Membership deletion by team member', function(assert) {
   assert.expect(1);
 
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
-
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
       data: {
@@ -356,10 +327,6 @@ test('Membership deletion by team member', function(assert) {
 test('Membership deletion by team admin', function(assert) {
   assert.expect(1);
 
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
-
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
       data: {
@@ -383,10 +350,6 @@ test('Membership deletion by team admin', function(assert) {
 test('Membership deletion by team owner', function(assert) {
   assert.expect(1);
 
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
-
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
       data: {
@@ -409,10 +372,6 @@ test('Membership deletion by team owner', function(assert) {
 
 test('Succesful membership deletion', function(assert) {
   assert.expect(3);
-
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
 
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
@@ -446,10 +405,6 @@ test('Succesful membership deletion', function(assert) {
 
 test('Failed membership deletion', function(assert) {
   assert.expect(1);
-
-  server.get('team_memberships', function() {
-    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
-  });
 
   server.post('accounts/tokens', function() {
     return buildResponse(200, {
