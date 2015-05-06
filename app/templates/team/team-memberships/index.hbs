@@ -28,15 +28,15 @@
   </div>
   <div class="row collapse">
     <div class="large-12 columns">
-      {{input class='button' type='submit' value='Send invite' disabled=createInviteActionDisabled}}
+      {{input id='create-membership' class='button' type='submit' value='Send invite' disabled=createInviteActionDisabled}}
     </div>
   </div>
 </form>
 
 {{#if showMessage}}
-  <p>{{message}}</p>
+  <p class="message">{{message}}</p>
 {{/if}}
 
 {{#if showError}}
-  <p>{{errorMessage}}</p>
+  <p class="error">{{errorMessage}}</p>
 {{/if}}

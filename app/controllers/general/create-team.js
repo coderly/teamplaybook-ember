@@ -9,6 +9,15 @@ export default Ember.Controller.extend({
   errorMessage: null,
   createdTeamURL: null,
 
+  teamCreationAllowed: function() {
+    var name = this.get('model.name');
+    var subdomain = this.get('model.subdomain');
+
+    return Ember.isPresent(name) && Ember.isPresent(subdomain);
+  }.property('model.name', 'model.subdomain'),
+
+  teamCreationNotAllowed: Ember.computed.not('teamCreationAllowed'),
+
   actions: {
     create: function() {
 
@@ -19,7 +28,7 @@ export default Ember.Controller.extend({
           showError: false,
           showMessage: true,
           message: 'Team ' + team.get('name') + ' created successfully',
-          createdTeamURL: controller.get('urlInfo').urlForTeam(team)
+          createdTeamURL: controller.get('urlInfo').urlForSubdomain(team.get('subdomain'))
         });
       };
 

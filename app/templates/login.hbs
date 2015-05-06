@@ -1,4 +1,4 @@
-{{partial 'general-nav'}}
+{{partial 'account-nav'}}
 
 <div class="row">
   <div class="large-12 columns">
@@ -23,7 +23,7 @@
       </div>
       <div class="row">
         <div class="large-12 columns">
-          <input class="button" type="submit" value="Login"/>
+          {{input class='button' id='login' type='submit' value='Login' disabled=loginNotAllowed}}
         </div>
       </div>
     </form>
@@ -33,7 +33,7 @@
 {{#if showError}}
   <div class="row">
     <div class="large-12 columns">
-      <p>{{errorMessage}}</p>
+      <p class="error">{{errorMessage}}</p>
     </div>
   </div>
 {{/if}}

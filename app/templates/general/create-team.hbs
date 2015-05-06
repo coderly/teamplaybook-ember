@@ -18,7 +18,7 @@
 
       <div class="row">
         <div class="large-12 columns">
-          <input class="button" type="submit" value="Create" />
+          {{input id='create-team' class='button' type='submit' value='Create' disabled=teamCreationNotAllowed}}
         </div>
       </div>
     </form>
@@ -28,8 +28,8 @@
 {{#if showMessage}}
   <div class="row">
     <div class="large-12 columns">
-      <p>{{message}}</p>
-      <p>Click <a href={{createdTeamURL}}>here</a> to visit team site</p>
+      <p class="message">{{message}}</p>
+      <p>Click <a class="team-link" href={{createdTeamURL}}>here</a> to visit team site</p>
     </div>
   </div>
 {{/if}}
@@ -37,7 +37,7 @@
 {{#if showError}}
   <div class="row">
     <div class="large-12 columns">
-      <p>{{errorMessage}}</p>
+      <p class="error">{{errorMessage}}</p>
     </div>
   </div>
 {{/if}}
