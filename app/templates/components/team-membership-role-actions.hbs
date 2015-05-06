@@ -1,0 +1,10 @@
+{{#if isEditable}}
+  <ul class="button-group actions">
+    <li>
+      <button class="small button set-admin {{if isAdmin 'secondary'}}" disabled={{isAdmin}} {{ action 'setRoleToAdmin'}}>Admin</button>
+    </li>
+    <li>
+      <button class="small button set-member {{if isMember 'secondary'}}" disabled={{isMember}} {{ action 'setRoleToMember'}}>Member</button>
+    </li>
+  </ul>
+{{/if}}

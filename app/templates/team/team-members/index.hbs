@@ -1,7 +1,13 @@
 <h1>Members</h1>
 
 {{#each teamMembership in model}}
-  {{team-membership membership=teamMembership message='message' error='error'}}
+  {{#team-membership classNames='row' membership=teamMembership message='message' error='error'}}
+    {{team-membership-listing classNames='columns medium-3' membership=teamMembership message='message' error='error'}}
+    {{team-membership-role-actions classNames='columns medium-3 end' membership=teamMembership message='message' error='error'}}
+    {{#if currentUserIsTeamOwner}}
+      {{team-membership-actions classNames='columns medium-3' membership=teamMembership message='message' error='error'}}
+    {{/if}}
+  {{/team-membership}}
 {{/each}}
 
 <h2>Send an invite</h2>
@@ -15,7 +21,7 @@
   </div>
   <div class="row collapse">
     <div class="large-12 columns">
-      {{input id='create-membership' class='button' type='submit' value='Send invite' disabled=createInviteActionDisabled}}
+      {{input id='create-membership' class='button' type='submit' value='Send invite' disabled=createInviteNotAllowed}}
     </div>
   </div>
 </form>

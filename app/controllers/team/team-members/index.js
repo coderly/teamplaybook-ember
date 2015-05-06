@@ -2,6 +2,8 @@ import Ember from 'ember';
 import extractError from 'teamplaybook-ember/lib/extract-error';
 
 export default Ember.Controller.extend({
+  needs: ['team'],
+
   newInviteEmail: null,
 
   showError: false,
@@ -10,7 +12,13 @@ export default Ember.Controller.extend({
   showMessage: false,
   message: null,
 
-  createInviteActionDisabled: Ember.computed.empty('newInviteEmail'),
+  createInviteNotAllowed: Ember.computed.empty('newInviteEmail'),
+
+  currentUserIsTeamOwner: function() {
+    var teamOwnerId = this.get('controllers.team.model.owner.id');
+    var currentUserId = this.get('session.secure.id');
+    return teamOwnerId === currentUserId;
+  }.property('session'),
 
   actions: {
     createInvite: function() {
