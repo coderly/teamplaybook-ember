@@ -14,11 +14,24 @@ export default Ember.Controller.extend({
 
   createInviteNotAllowed: Ember.computed.empty('newInviteEmail'),
 
+  currentUser: Ember.computed.alias('session.secure'),
+  currentTeam: Ember.computed.alias('controllers.team.model'),
+
   currentUserIsTeamOwner: function() {
-    var teamOwnerId = this.get('controllers.team.model.owner.id');
-    var currentUserId = this.get('session.secure.id');
+    var teamOwnerId = this.get('currentTeam.owner.id');
+    var currentUserId = this.get('currentUser.id');
     return teamOwnerId === currentUserId;
   }.property('session'),
+
+  currentUserIsAtLeastAdmin: function() {
+    var currentUserId = this.get('currentUser.id');
+    var teamMemberships = this.get('model');
+
+    var currentUsersRoleInTeam = teamMemberships.findBy('user.id', currentUserId).get('role');
+    var roleIsAtLeastAdmin = currentUsersRoleInTeam === 'admin' || currentUsersRoleInTeam === 'owner';
+
+    return roleIsAtLeastAdmin;
+  }.property('session', 'model.@each'),
 
   actions: {
     createInvite: function() {
