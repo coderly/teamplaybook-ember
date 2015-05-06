@@ -5,5 +5,5 @@ export default Ember.Component.extend({
   role: Ember.computed.alias('membership.role'),
 
   classNames: ['team-membership'],
-  classNameBinding: 'role',
+  classNameBindings: ['role'],
 });
