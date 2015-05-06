@@ -1,16 +1,29 @@
-<table>
-  <thead>
-    <tr>
-      <th>E-mail</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each user in model}}
-      <tr>
-        <td>{{user.email}}</td>
-        <td>N/A</td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
+<h1>Members</h1>
+
+{{#each teamMembership in model}}
+  {{team-membership membership=teamMembership message='message' error='error'}}
+{{/each}}
+
+<h2>Send an invite</h2>
+
+<form {{action 'createInvite' on='submit'}}>
+  <div class="row collapse">
+    <div class="large-12 columns">
+      <label for="email">E-mail</label>
+      {{input type='text' id='email' name='email' value=newInviteEmail}}
+    </div>
+  </div>
+  <div class="row collapse">
+    <div class="large-12 columns">
+      {{input id='create-membership' class='button' type='submit' value='Send invite' disabled=createInviteActionDisabled}}
+    </div>
+  </div>
+</form>
+
+{{#if showMessage}}
+  <div class="message alert-box success">{{message}}</div>
+{{/if}}
+
+{{#if showError}}
+  <div class="error alert-box alert">{{errorMessage}}</div>
+{{/if}}

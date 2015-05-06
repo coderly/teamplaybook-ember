@@ -16,10 +16,6 @@ export default Router.map(function() {
 
   if (shouldMapTeamRoutes) {
     this.route('team', { path: '/' }, function() {
-      this.route('team-memberships', { path: 'invites' }, function() {
-        this.route('index', { path: '/' });
-      });
-
       this.route('team-members', { path: 'members' }, function() {
         this.route('index', { path: '/' });
       });
