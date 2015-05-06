@@ -5,13 +5,13 @@ import mockServer from '../helpers/mock-server';
 import Ember from 'ember';
 
 import { loginSuccessResponse } from '../mocks/account';
-import { basicTeamResponse } from '../mocks/team';
+import { teamResponseWithOwnerLinkage } from '../mocks/team';
 import {
   basicTeamMembershipResponse,
   listOfTeamMembershipsOneOfEachRole,
   listOfNTeamMembershipsResponseBuilder
 } from '../mocks/team-membership';
-
+import { listOfUsersOneForEachRole } from '../mocks/user';
 var App, server;
 
 function login(){
@@ -24,8 +24,9 @@ module('Team members', {
   beforeEach: function() {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginSuccessResponse));
-      this.get('team', response(200, basicTeamResponse));
+      this.get('team', response(200, teamResponseWithOwnerLinkage));
       this.get('team_memberships', response(200, listOfNTeamMembershipsResponseBuilder(1)));
+      this.get('users', response(200, listOfUsersOneForEachRole));
     });
     App = startApp({ subdomain: 'test'});
   },
@@ -148,12 +149,105 @@ test('Failed team membership creation', function(assert){
   });
 });
 
+test('Role modification action by team member', function(assert) {
+  assert.expect(1);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'member',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(find('.member .actions').length, 0, 'Is not possible');
+  });
+});
+
+test('Role modification action by team admin', function(assert) {
+  assert.expect(1);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'admin',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(find('.member .actions').length, 1, 'Is possible');
+  });
+});
+
+test('Role modification action by team owner', function(assert) {
+  assert.expect(1);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'owner',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(find('.member .actions').length, 1, 'Is possible');
+  });
+});
+
 test('Role modification actions', function(assert){
   assert.expect(4);
 
   server.get('team_memberships', function() {
     return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
   });
+
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'owner',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
 
   visit('login');
   login();
@@ -174,7 +268,18 @@ test('Setting role to "admin"', function(assert) {
     return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
   });
 
-  server.patch('team_memberships/2', function(request){
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'owner',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
+  server.patch('team_memberships/member', function(request){
     var body = JSON.parse(request.requestBody);
     assert.equal(body.data.roles.indexOf('admin'), 0, 'Sends PATCH to API with roles property set to array containing "admin" item');
     return buildResponse(200, body);
@@ -195,7 +300,18 @@ test('Setting role to "member"', function(assert) {
     return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
   });
 
-  server.patch('team_memberships/3', function(request){
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'owner',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
+  server.patch('team_memberships/admin', function(request){
     var body = JSON.parse(request.requestBody);
     assert.equal(body.data.roles.indexOf('member'), 0, 'Sends PATCH to API with roles property set to array containing "member" item');
     return buildResponse(200, body);
@@ -206,5 +322,159 @@ test('Setting role to "member"', function(assert) {
   visit('members');
   andThen(function() {
     click('.admin .set-member');
+  });
+});
+
+test('Membership deletion by team member', function(assert) {
+  assert.expect(1);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'member',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(find('.invitee .delete').length, 0, 'Is not possible');
+  });
+});
+
+test('Membership deletion by team admin', function(assert) {
+  assert.expect(1);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'admin',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(find('.invitee .delete').length, 0, 'Is not possible');
+  });
+});
+
+test('Membership deletion by team owner', function(assert) {
+  assert.expect(1);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'owner',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(find('.invitee .delete').length, 1, 'Is possible');
+  });
+});
+
+test('Succesful membership deletion', function(assert) {
+  assert.expect(3);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'owner',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
+  server.delete('team_memberships/invitee', function() {
+    assert.ok(true, 'Posts to proper API endpoint');
+    return buildResponse(204);
+  });
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    click('.invitee .delete');
+  });
+
+  andThen(function() {
+    assert.equal(find('.message').length, 1, 'Shows success message');
+    assert.equal(find('.team-membership').length, 3, 'Removes the membership from the list');
+  });
+});
+
+test('Failed membership deletion', function(assert) {
+  assert.expect(1);
+
+  server.get('team_memberships', function() {
+    return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
+  });
+
+  server.post('accounts/tokens', function() {
+    return buildResponse(200, {
+      data: {
+        type: 'users',
+        id: 'owner',
+        email: 'test@example.com',
+        authentication_token: 'test_token'
+      }
+    });
+  });
+
+  server.delete('team_memberships/invitee', function() {
+    return buildResponse(405);
+  });
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    click('.invitee .delete');
+  });
+
+  andThen(function() {
+    assert.equal(find('.error').length, 1, 'Shows an error message');
   });
 });

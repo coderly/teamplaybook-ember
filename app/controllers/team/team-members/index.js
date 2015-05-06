@@ -27,7 +27,8 @@ export default Ember.Controller.extend({
     var currentUserId = this.get('currentUser.id');
     var teamMemberships = this.get('model');
 
-    var currentUsersRoleInTeam = teamMemberships.findBy('user.id', currentUserId).get('role');
+    var currentUsersMembership = teamMemberships.findBy('user.id', currentUserId);
+    var currentUsersRoleInTeam = Ember.isPresent(currentUsersMembership) ? currentUsersMembership.get('role') : null;
     var roleIsAtLeastAdmin = currentUsersRoleInTeam === 'admin' || currentUsersRoleInTeam === 'owner';
 
     return roleIsAtLeastAdmin;

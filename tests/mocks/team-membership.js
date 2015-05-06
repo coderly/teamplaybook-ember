@@ -8,10 +8,10 @@ var basicTeamMembershipResponse = {
 
 var listOfTeamMembershipsOneOfEachRole = {
   data: [
-    { id: 1, email: 'invite@test.com', type: 'team-memberships', roles: ['invitee'] },
-    { id: 2, email: 'member@ŧest.com', type: 'team-memberships', roles: ['member'] },
-    { id: 3, email: 'admin@test.com', type: 'team-memberships', roles: ['admin'] },
-    { id: 4, email: 'owner@test.com', type: 'team-memberships', roles: ['owner'] }
+    { id: 'invitee', email: 'invite@test.com', type: 'team-memberships', roles: ['invitee']},
+    { id: 'member', email: 'member@ŧest.com', type: 'team-memberships', roles: ['member'], links: { user: { linkage: { type: 'users', id: 'member'} } }  },
+    { id: 'admin', email: 'admin@test.com', type: 'team-memberships', roles: ['admin'], links: { user: { linkage: { type: 'users', id: 'admin'} } }  },
+    { id: 'owner', email: 'owner@test.com', type: 'team-memberships', roles: ['owner'], links: { user: { linkage: { type: 'users', id: 'owner'} } }  }
   ]
 };
 

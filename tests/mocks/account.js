@@ -1,7 +1,7 @@
 var loginSuccessResponse = {
   data: {
     type: 'users',
-    id: 1,
+    id: 0,
     email: 'test@example.com',
     authentication_token: 'test_token'
   }
@@ -10,7 +10,7 @@ var loginSuccessResponse = {
 var registrationSuccessResponse = {
   data: {
     type: 'users',
-    id: 1,
+    id: 0,
     email: 'test@example.com',
     authentication_token: 'test_token'
   }
@@ -19,7 +19,7 @@ var registrationSuccessResponse = {
 var meResponse = {
   data: {
     type: 'users',
-    id: 1,
+    id: 0,
     email: 'test@example.com',
     authentication_token: 'test_token'
   }
