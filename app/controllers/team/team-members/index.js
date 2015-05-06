@@ -29,41 +29,52 @@ export default Ember.Controller.extend({
       var onSuccess = function(teamMembership) {
         var email = teamMembership.get('email');
 
-        controller.setProperties({
-          newInviteEmail: null,
-          showMessage: true,
-          message: `Invite successfully sent to ${email}`,
-          showError: false,
-          error: null
-        });
+        controller.set('newInviteEmail', null);
+        controller.displayMessage(`Invite successfully sent to ${email}`);
       };
 
       var onFailure = function(response) {
-        controller.setProperties({
-          showMessage: false,
-          message: null,
-          showError: true,
-          errorMessage: extractError(response)
-        });
+        controller.displayError(response);
       };
 
       teamMembership.save().then(onSuccess, onFailure);
     },
 
-    message: function(message) {
-      this.setProperties({
-        showError: false,
-        message: message,
-        showMessage: true
+    updateRole: function(teamMembership, role) {
+      var controller = this;
+      teamMembership.set('role', role);
+      teamMembership.save().then(function() {
+        controller.displayMessage('Succesfully updated.');
+      }).catch(function(response) {
+        controller.displayError(response);
       });
     },
 
-    error: function(error) {
-      this.setProperties({
-        showMessage: false,
-        errorMessage: error,
-        showError: true
+    delete: function(teamMembership) {
+      var controller = this;
+      teamMembership.deleteRecord();
+      teamMembership.save().then(function() {
+        controller.displayMessage('Succesfuly removed member from team');
+      }).catch(function(response) {
+        controller.displayError(response);
       });
     }
+  },
+
+  displayMessage: function(message) {
+    this.setProperties({
+      showError: false,
+      message: message,
+      showMessage: true
+    });
+  },
+
+  displayError: function(response) {
+    var error = extractError(response);
+    this.setProperties({
+      showMessage: false,
+      errorMessage: error,
+      showError: true
+    });
   }
 });

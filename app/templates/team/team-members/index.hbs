@@ -1,13 +1,13 @@
 <h1>Members</h1>
 
 {{#each teamMembership in model}}
-  {{#team-membership classNames='row' membership=teamMembership message='message' error='error'}}
+  <div class="row team-membership {{teamMembership.role}}">
     {{team-membership-listing classNames='columns medium-3' membership=teamMembership}}
-    {{team-membership-role-actions classNames='columns medium-3 end' membership=teamMembership message='message' error='error'}}
+    {{team-membership-role-actions classNames='columns medium-3 end' membership=teamMembership updateRole='updateRole'}}
     {{#if currentUserIsTeamOwner}}
-      {{team-membership-actions classNames='columns medium-3' membership=teamMembership message='message' error='error'}}
+      {{team-membership-actions classNames='columns medium-3' membership=teamMembership delete='delete'}}
     {{/if}}
-  {{/team-membership}}
+  </div>
 {{/each}}
 
 <h2>Send an invite</h2>
