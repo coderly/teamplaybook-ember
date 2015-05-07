@@ -1,23 +1,22 @@
+import Ember from 'ember';
 import { test, module } from 'qunit';
+
 import startApp from '../helpers/start-app';
-import { response, buildResponse } from '../helpers/response';
 import login from '../helpers/login';
 import mockServer from '../helpers/mock-server';
-import Ember from 'ember';
+import { response, buildResponse } from '../helpers/response';
 
-import { loginSuccessResponse } from '../mocks/account';
+import { loginResponseForSpecificRole } from '../mocks/account';
 import { teamResponseWithOwnerLinkage } from '../mocks/team';
-import {
-  basicTeamMembershipResponse,
-  listOfTeamMembershipsOneOfEachRole,
-} from '../mocks/team-membership';
+import { listOfTeamMembershipsOneOfEachRole } from '../mocks/team-membership';
 import { listOfUsersOneForEachRole } from '../mocks/user';
+
 var App, server;
 
 module('Team member deletion', {
   beforeEach: function() {
     server = mockServer(function() {
-      this.post('accounts/tokens', response(200, loginSuccessResponse));
+      this.post('accounts/tokens', response(200, loginResponseForSpecificRole('owner')));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
       this.get('team_memberships', response(200, listOfTeamMembershipsOneOfEachRole));
       this.get('users', response(200, listOfUsersOneForEachRole));
@@ -38,17 +37,7 @@ module('Team member deletion', {
 test('Membership deletion by team member', function(assert) {
   assert.expect(1);
 
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'member',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
-
+  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('member')));
 
   visit('login');
   login();
@@ -62,16 +51,7 @@ test('Membership deletion by team member', function(assert) {
 test('Membership deletion by team admin', function(assert) {
   assert.expect(1);
 
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'admin',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
+  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));
 
   visit('login');
   login();
@@ -85,16 +65,7 @@ test('Membership deletion by team admin', function(assert) {
 test('Membership deletion by team owner', function(assert) {
   assert.expect(1);
 
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'owner',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
+  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('owner')));
 
   visit('login');
   login();
@@ -107,17 +78,6 @@ test('Membership deletion by team owner', function(assert) {
 
 test('Succesful membership deletion', function(assert) {
   assert.expect(3);
-
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'owner',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
 
   server.delete('team_memberships/invitee', function() {
     assert.ok(true, 'Posts to proper API endpoint');
@@ -140,17 +100,6 @@ test('Succesful membership deletion', function(assert) {
 
 test('Failed membership deletion', function(assert) {
   assert.expect(1);
-
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'owner',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
 
   server.delete('team_memberships/invitee', function() {
     return buildResponse(405);

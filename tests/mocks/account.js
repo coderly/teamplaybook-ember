@@ -25,8 +25,20 @@ var meResponse = {
   }
 };
 
+function loginResponseForSpecificRole(role) {
+  return {
+    data: {
+      type: 'users',
+      id: role,
+      email: 'test@example.com',
+      authentication_token: 'test_token'
+    }
+  };
+}
+
 export {
   loginSuccessResponse,
+  loginResponseForSpecificRole,
   registrationSuccessResponse,
   meResponse
 };

@@ -1,23 +1,21 @@
+import Ember from 'ember';
 import { test, module } from 'qunit';
+
 import startApp from '../helpers/start-app';
-import { response, buildResponse } from '../helpers/response';
 import login from '../helpers/login';
 import mockServer from '../helpers/mock-server';
-import Ember from 'ember';
+import { response, buildResponse } from '../helpers/response';
 
-import { loginSuccessResponse } from '../mocks/account';
+import { loginResponseForSpecificRole } from '../mocks/account';
 import { teamResponseWithOwnerLinkage } from '../mocks/team';
-import {
-  basicTeamMembershipResponse,
-  listOfTeamMembershipsOneOfEachRole,
-} from '../mocks/team-membership';
+import { listOfTeamMembershipsOneOfEachRole } from '../mocks/team-membership';
 import { listOfUsersOneForEachRole } from '../mocks/user';
 var App, server;
 
 module('Team member roles', {
   beforeEach: function() {
     server = mockServer(function() {
-      this.post('accounts/tokens', response(200, loginSuccessResponse));
+      this.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
       this.get('team_memberships', response(200, listOfTeamMembershipsOneOfEachRole));
       this.get('users', response(200, listOfUsersOneForEachRole));
@@ -38,16 +36,7 @@ module('Team member roles', {
 test('Role modification action by team member', function(assert) {
   assert.expect(1);
 
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'member',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
+  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('member')));
 
   visit('login');
   login();
@@ -61,16 +50,7 @@ test('Role modification action by team member', function(assert) {
 test('Role modification action by team admin', function(assert) {
   assert.expect(1);
 
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'admin',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
+  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));
 
   visit('login');
   login();
@@ -84,16 +64,7 @@ test('Role modification action by team admin', function(assert) {
 test('Role modification action by team owner', function(assert) {
   assert.expect(1);
 
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'owner',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
+  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('owner')));
 
   visit('login');
   login();
@@ -107,43 +78,20 @@ test('Role modification action by team owner', function(assert) {
 test('Role modification actions', function(assert){
   assert.expect(4);
 
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'owner',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
-
-
   visit('login');
   login();
   visit('members');
 
   andThen(function() {
-    assert.equal(find('.invitee .actions').length, 0, 'Is not possible for team members with "invitee" role');
-    assert.equal(find('.member .actions').length, 1, 'Is possible for team members with "member" role');
-    assert.equal(find('.admin .actions').length, 1, 'Is possible for team members with "admin" role');
-    assert.equal(find('.owner .actions').length, 0, 'Is not possible for team members with "owner" role');
+    assert.equal(find('.invitee .actions').length, 0, 'Are not possible for team members with "invitee" role');
+    assert.equal(find('.member .actions').length, 1, 'Are possible for team members with "member" role');
+    assert.equal(find('.admin .actions').length, 1, 'Are possible for team members with "admin" role');
+    assert.equal(find('.owner .actions').length, 0, 'Are not possible for team members with "owner" role');
   });
 });
 
 test('Setting role to "admin"', function(assert) {
   assert.expect(1);
-
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'owner',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
 
   server.patch('team_memberships/member', function(request){
     var body = JSON.parse(request.requestBody);
@@ -161,17 +109,6 @@ test('Setting role to "admin"', function(assert) {
 
 test('Setting role to "member"', function(assert) {
   assert.expect(1);
-
-  server.post('accounts/tokens', function() {
-    return buildResponse(200, {
-      data: {
-        type: 'users',
-        id: 'owner',
-        email: 'test@example.com',
-        authentication_token: 'test_token'
-      }
-    });
-  });
 
   server.patch('team_memberships/admin', function(request){
     var body = JSON.parse(request.requestBody);
