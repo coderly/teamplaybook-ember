@@ -1,6 +1,7 @@
 import { test, module } from 'qunit';
 import startApp from '../helpers/start-app';
 import { response, buildResponse } from '../helpers/response';
+import login from '../helpers/login';
 import mockServer from '../helpers/mock-server';
 import Ember from 'ember';
 
@@ -8,12 +9,6 @@ import { loginSuccessResponse } from '../mocks/account';
 import { basicTeamResponse } from '../mocks/team';
 
 var App, server;
-
-function login(){
-  fillIn('#email', 'test@example.com');
-  fillIn('#password', '123456');
-  click('#login');
-}
 
 module('Team creation', {
   beforeEach: function() {
