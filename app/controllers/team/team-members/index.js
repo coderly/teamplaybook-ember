@@ -2,8 +2,6 @@ import Ember from 'ember';
 import extractError from 'teamplaybook-ember/lib/extract-error';
 
 export default Ember.Controller.extend({
-  needs: ['team'],
-
   newInviteEmail: null,
 
   showError: false,
@@ -15,24 +13,23 @@ export default Ember.Controller.extend({
   createInviteNotAllowed: Ember.computed.empty('newInviteEmail'),
 
   currentUser: Ember.computed.alias('session.secure'),
-  currentTeam: Ember.computed.alias('controllers.team.model'),
 
-  currentUserIsTeamOwner: function() {
-    var teamOwnerId = this.get('currentTeam.owner.id');
-    var currentUserId = this.get('currentUser.id');
-    return teamOwnerId === currentUserId;
-  }.property('session'),
-
-  currentUserIsAtLeastAdmin: function() {
+  currentUsersTeamMembership: function() {
     var currentUserId = this.get('currentUser.id');
     var teamMemberships = this.get('model');
 
-    var currentUsersMembership = teamMemberships.findBy('user.id', currentUserId);
-    var currentUsersRoleInTeam = Ember.isPresent(currentUsersMembership) ? currentUsersMembership.get('role') : null;
-    var roleIsAtLeastAdmin = currentUsersRoleInTeam === 'admin' || currentUsersRoleInTeam === 'owner';
+    return teamMemberships.findBy('user.id', currentUserId);
+  }.property('currentUser', 'model.@each'),
 
-    return roleIsAtLeastAdmin;
-  }.property('session', 'model.@each'),
+  currentUsersRoleInTeam: function() {
+    var currentUsersTeamMembership = this.get('currentUsersTeamMembership');
+
+    return Ember.isPresent(currentUsersTeamMembership) ? currentUsersTeamMembership.get('role') : null;
+  }.property('currentUsersTeamMembership'),
+
+  currentUserIsTeamOwner: Ember.computed.equal('currentUsersRoleInTeam', 'owner'),
+  currentUserIsTeamAdmin: Ember.computed.equal('currentUsersRoleInTeam', 'admin'),
+  currentUserIsAtLeastAdmin: Ember.computed.or('currentUserIsTeamAdmin', 'currentUserIsTeamOwner'),
 
   actions: {
     createInvite: function() {
