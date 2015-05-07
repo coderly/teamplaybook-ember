@@ -3,8 +3,8 @@
 {{#each teamMembership in model}}
   <div class="row team-membership {{teamMembership.role}}">
     {{team-membership-listing classNames='columns medium-4' membership=teamMembership}}
-    {{#if currentUserIsAtLeastAdmin}}
-    {{team-membership-role-actions classNames='columns medium-4 end' membership=teamMembership updateRole='updateRole'}}
+    {{#if currentUserIsTeamOwnerOrAdmin}}
+      {{team-membership-role-actions classNames='columns medium-4 end' membership=teamMembership updateRole='updateRole'}}
     {{/if}}
     {{#if currentUserIsTeamOwner}}
       {{team-membership-actions classNames='columns medium-4' membership=teamMembership delete='delete'}}

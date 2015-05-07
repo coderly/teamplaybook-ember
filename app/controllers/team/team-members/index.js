@@ -29,7 +29,7 @@ export default Ember.Controller.extend({
 
   currentUserIsTeamOwner: Ember.computed.equal('currentUsersRoleInTeam', 'owner'),
   currentUserIsTeamAdmin: Ember.computed.equal('currentUsersRoleInTeam', 'admin'),
-  currentUserIsAtLeastAdmin: Ember.computed.or('currentUserIsTeamAdmin', 'currentUserIsTeamOwner'),
+  currentUserIsTeamOwnerOrAdmin: Ember.computed.or('currentUserIsTeamAdmin', 'currentUserIsTeamOwner'),
 
   actions: {
     createInvite: function() {
