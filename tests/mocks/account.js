@@ -16,15 +16,6 @@ var registrationSuccessResponse = {
   }
 };
 
-var meResponse = {
-  data: {
-    type: 'users',
-    id: 0,
-    email: 'test@example.com',
-    authentication_token: 'test_token'
-  }
-};
-
 function loginResponseForSpecificRole(role) {
   return {
     data: {
@@ -39,6 +30,5 @@ function loginResponseForSpecificRole(role) {
 export {
   loginSuccessResponse,
   loginResponseForSpecificRole,
-  registrationSuccessResponse,
-  meResponse
+  registrationSuccessResponse
 };

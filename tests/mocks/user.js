@@ -1,13 +1,3 @@
-function listOfNTeamMembersResponseBuilder(memberCount) {
-  var data = [];
-  for (let i = 0; i < memberCount; i++) {
-    var teamMember = { id: i, email: `member${i}@test.com`, type: 'users' };
-    data.push(teamMember);
-  }
-
-  return { data: data };
-}
-
 var listOfUsersOneForEachRole = {
   data: [
     { id: 'member', email: 'member@ŧest.com', type: 'users' },
@@ -17,6 +7,5 @@ var listOfUsersOneForEachRole = {
 };
 
 export {
-  listOfNTeamMembersResponseBuilder,
   listOfUsersOneForEachRole
 };
