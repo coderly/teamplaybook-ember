@@ -14,10 +14,14 @@ export default Ember.Controller.extend({
       var plans = this.store.all('plan');
       var plan = plans.findBy('slug', this.get('model.planSlug'));
 
-      if(plan.isPaidPlan){
-        createStripeToken(requestPlanChange);
+      console.log(this.get('model.planSlug'))
+      console.log(plan.get('name'))
+      console.log(plan.get('amount'))
+
+      if(plan.get('isPaidPlan')){
+        this.createStripeToken(requestPlanChange);
       }else{
-        requestPlanChange();
+        this.requestPlanChange();
       }
     }
   },
@@ -38,11 +42,13 @@ export default Ember.Controller.extend({
        card_token: this.get('cardToken')
      }
     }).then(function(){
+      alert("You have changed your plan");
       controller.get('model').reload();
     });
   },
 
   createStripeToken: function(callback){
+    Stripe.setPublishableKey('pk_test_2YDSiQNDW9IlNzdADzleLTvQ');
     var controller = this;
     var $form = $('#payment-form');
 

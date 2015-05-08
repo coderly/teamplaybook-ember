@@ -20,12 +20,13 @@ module.exports = function(environment) {
     /*jshint quotmark: false*/
     contentSecurityPolicy: {
       'default-src': "'none'",
-      'script-src': "'self'",
+      'script-src': "'self' https://js.stripe.com",
       'font-src': "'self'",
       'connect-src': "'self'",
       'img-src': "'self'",
       'style-src': "'self'",
-      'media-src': "'self'"
+      'media-src': "'self' https://js.stripe.com",
+      'frame-src': "'self' https://js.stripe.com"
     },
     /*jshint quotmark: true*/
     subdomainMapping: {
