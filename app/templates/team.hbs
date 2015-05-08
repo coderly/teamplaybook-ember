@@ -1,7 +1,6 @@
 <section role="main" class="team-container">
   <div class="team-sidebar">
-    {{team-options-menu team=model currentUser=session.secure}}
-    <h6 class="subheader">Subdomain: {{model.subdomain}}</h6>
+    {{team-options-menu team=model logout='logout'}}
     {{partial 'team-nav'}}
   </div>
   <div class="team-main">

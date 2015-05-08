@@ -1,9 +1,9 @@
-<h5 {{action 'showMenu'}}>{{team.name}}</h5>
+<h5 class="header" {{action 'showMenu'}}>{{team.name}}</h5>
 {{#if isMenuVisible}}
   <div class="menu">
     <ul class="side-nav">
-      <li>Leave team</li>
-      <li>Sign out of {{team.name}}</li>
+      <li><a href="#" {{action 'leaveTeam'}}>Leave <strong>{{team.name}}</strong></a></li>
+      <li><a href="#" {{action 'logout'}}>Sign out of <strong>{{team.name}}</strong></a></li>
     </ul>
   </div>
 {{/if}}
