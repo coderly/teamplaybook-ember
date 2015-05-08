@@ -17,23 +17,34 @@ export default Ember.Component.extend(ClickOutsideMixin, {
 
   actions: {
     showMenu: function() {
-      this.set('isMenuVisible', true);
+      this.showMenu();
     },
 
     logout: function() {
+      this.hideMenu();
       this.sendAction('logout');
     },
 
     leaveTeam: function() {
-      var userId = this.get('currentUser.id');
       var store = this.get('store');
-      store.find('team-membership').then(function(teamMemberships) {
-        return teamMemberships.findBy('user.id', userId);
+      var component = this;
+      store.find('current-user', 'active').then(function(currentUser) {
+        return currentUser.get('currentTeamMembership');
       }).then(function(teamMembership) {
         teamMembership.deleteRecord();
-        teamMembership.save();
+        return teamMembership.save();
+      }).then(function () {
+        component.send('logout');
       });
     }
+  },
+
+  showMenu: function() {
+    this.set('isMenuVisible', true);
+  },
+
+  hideMenu: function() {
+    this.set('isMenuVisible', false);
   },
 
   clickOutside: function() {
