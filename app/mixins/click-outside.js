@@ -14,17 +14,18 @@ export default Ember.Mixin.create({
     }
   },
 
-  clickHandler: function() {
-    return this.get('handleClick').bind(this);
-  }.property(),
-
   bindToWindowClick: function() {
     this._super.apply(this, arguments);
-    Ember.$(window).on('click', this.get('clickHandler'));
+    var elementId = this.get('elementId');
+    var component = this;
+    Ember.$(window).on(`click.${elementId}`, function(event) {
+      component.handleClick(event);
+    });
   }.on('didInsertElement'),
 
   unbindFromWindowClick: function() {
-    Ember.$(window).of('click', this.get('clickHandler'));
+    var elementId = this.get('elementId');
+    Ember.$(window).off(`click.${elementId}`);
     this._super.apply(this, arguments);
   }.on('willDestroyElement'),
 });
