@@ -1,0 +1,9 @@
+<h5 {{action 'showMenu'}}>{{team.name}}</h5>
+{{#if isMenuVisible}}
+  <div class="menu">
+    <ul class="side-nav">
+      <li>Leave team</li>
+      <li>Sign out of {{team.name}}</li>
+    </ul>
+  </div>
+{{/if}}

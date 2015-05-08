@@ -1,6 +1,6 @@
 <section role="main" class="team-container">
   <div class="team-sidebar">
-    <h5>{{model.name}}</h5>
+    {{team-options-menu team=model currentUser=session.secure}}
     <h6 class="subheader">Subdomain: {{model.subdomain}}</h6>
     {{partial 'team-nav'}}
   </div>
