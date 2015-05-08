@@ -1,3 +1,4 @@
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <h1> Setting for {{model.name}}</h1>
 <h4> Your team is currently subscribed to the {{model.planName}}</h4>
 
@@ -10,6 +11,21 @@
     name="plan"}}
     {{plan.name}}
   {{/each}}
-
-   <button {{action 'changePlan'}}>Change plan</button>
 </form>
+
+<h3>Add your credit card information</h3>
+
+<form action="" method="POST" id="payment-form">
+  <!-- Add a section to display errors if you want -->
+  <span class='payment-errors'></span>
+  <label>Card Number</label>
+  <input data-stripe="number"/>
+  <label>CVC</label>
+  <input data-stripe="cvc"/>
+  <label>Card Expiration Month</label>
+  <input data-stripe="exp-month"/>
+  <label>Card Expiration Year</label>
+  <input data-stripe="exp-year"/>
+</form>
+
+<button {{action 'changePlan'}}>Change plan</button>
