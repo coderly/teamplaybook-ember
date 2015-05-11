@@ -12,20 +12,7 @@ export default Ember.Controller.extend({
 
   createInviteNotAllowed: Ember.computed.empty('newInviteEmail'),
 
-  currentUser: Ember.computed.alias('session.secure'),
-
-  currentUsersTeamMembership: function() {
-    var currentUserId = this.get('currentUser.id');
-    var teamMemberships = this.get('model');
-
-    return teamMemberships.findBy('user.id', currentUserId);
-  }.property('currentUser', 'model.@each'),
-
-  currentUsersRoleInTeam: function() {
-    var currentUsersTeamMembership = this.get('currentUsersTeamMembership');
-
-    return Ember.isPresent(currentUsersTeamMembership) ? currentUsersTeamMembership.get('role') : null;
-  }.property('currentUsersTeamMembership'),
+  currentUsersRoleInTeam: Ember.computed.alias('session.secure.role'),
 
   currentUserIsTeamOwner: Ember.computed.equal('currentUsersRoleInTeam', 'owner'),
   currentUserIsTeamAdmin: Ember.computed.equal('currentUsersRoleInTeam', 'admin'),
