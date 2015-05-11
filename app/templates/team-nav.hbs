@@ -2,5 +2,6 @@
   <ul class="side-nav">
     <li>{{#link-to 'team.index'}}Home{{/link-to}}</li>
     <li>{{#link-to 'team.team-members'}}Members{{/link-to}}</li>
+    {{#if currentUserIsTeamOwner}}<li>{{#link-to 'team.manage'}}Manage team{{/link-to}}</li>{{/if}}
   </ul>
 </nav>
