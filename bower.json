@@ -16,6 +16,7 @@
     "foundation": "~5.5.0",
     "pretender": "~0.6.0",
     "codemirror": "5.2.0",
-    "ember-cli-codemirror-shim": "~0.0.1"
+    "ember-cli-codemirror-shim": "~0.0.1",
+    "showdown": "~0.5.0"
   }
 }
