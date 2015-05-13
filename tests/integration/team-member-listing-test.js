@@ -18,7 +18,7 @@ module('Team member listing', {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginSuccessResponse));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
-      this.get('team_memberships', response(200, listOfTeamMembershipsOneOfEachRole));
+      this.get('team-memberships', response(200, listOfTeamMembershipsOneOfEachRole));
       this.get('users', response(200, listOfUsersOneForEachRole));
     });
     App = startApp({ subdomain: 'test'});
@@ -34,29 +34,33 @@ module('Team member listing', {
   }
 });
 
-test('Navigating to "/members"', function(assert) {
-  assert.expect(2);
+test('Navigating to "/members" requires authentication', function(assert) {
+  assert.expect(1);
 
   visit('members');
 
   andThen(function() {
-    assert.equal(currentRouteName(), 'login', 'Requires authentication.');
-  });
-
-  login();
-
-  visit('members');
-
-  andThen(function() {
-    assert.equal(currentRouteName(), 'team.team-members.index', 'Actually navigates to "team.team-members.index".');
+    assert.equal(currentRouteName(), 'login', 'User is redirected to "login"');
   });
 });
 
-test('Team memberships list', function(assert) {
+test('Navigating to "/members" actually navigates to "team.team-members.index"', function(assert) {
+  assert.expect(1);
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(currentRouteName(), 'team.team-members.index', 'Actually navigates to "team.team-members.index"');
+  });
+});
+
+test('Team memberships list shows the proper amount of entries for each membership', function(assert) {
   assert.expect(2);
 
-  server.get('team_memberships', function() {
-    assert.ok(true, 'Fetches list of team memberships from the API.');
+  server.get('team-memberships', function() {
+    assert.ok(true, 'Fetches list of team memberships from the API');
     return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
   });
 
@@ -65,6 +69,6 @@ test('Team memberships list', function(assert) {
   visit('members');
 
   andThen(function() {
-    assert.equal(find('.team-membership').length, 4, 'Shows an entry for each team membership.');
+    assert.equal(find('.team-membership').length, 4, 'There is a correct number of entries shown');
   });
 });

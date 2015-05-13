@@ -21,6 +21,7 @@ function loginResponseForSpecificRole(role) {
     data: {
       type: 'users',
       id: role,
+      role: role,
       email: 'test@example.com',
       authentication_token: 'test_token'
     }

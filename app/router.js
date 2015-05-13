@@ -20,6 +20,7 @@ export default Router.map(function() {
         this.route('index', { path: '/' });
       });
       this.route('settings');
+      this.route('manage');
     });
   } else if (shouldMapGeneralRoutes) {
     this.route('general', { path: '/' }, function() {
