@@ -1,6 +1,7 @@
 import { test, module } from 'qunit';
 import startApp from '../helpers/start-app';
 import { response } from '../helpers/response';
+import login from '../helpers/login';
 import mockServer from '../helpers/mock-server';
 import Ember from 'ember';
 
@@ -39,9 +40,7 @@ test('Navigating to root', function(assert) {
     assert.equal(currentRouteName(), 'login', 'Requires logging in');
   });
 
-  fillIn('#email', 'test@example.com');
-  fillIn('#password', '123456');
-  click('#login');
+  login();
 
   andThen(function() {
     assert.equal(currentRouteName(), 'team.index', 'Actually navigates to team.index');

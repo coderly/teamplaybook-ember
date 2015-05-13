@@ -1,7 +1,7 @@
 var loginSuccessResponse = {
   data: {
     type: 'users',
-    id: 1,
+    id: 0,
     email: 'test@example.com',
     authentication_token: 'test_token'
   }
@@ -10,23 +10,25 @@ var loginSuccessResponse = {
 var registrationSuccessResponse = {
   data: {
     type: 'users',
-    id: 1,
+    id: 0,
     email: 'test@example.com',
     authentication_token: 'test_token'
   }
 };
 
-var meResponse = {
-  data: {
-    type: 'users',
-    id: 1,
-    email: 'test@example.com',
-    authentication_token: 'test_token'
-  }
-};
+function loginResponseForSpecificRole(role) {
+  return {
+    data: {
+      type: 'users',
+      id: role,
+      email: 'test@example.com',
+      authentication_token: 'test_token'
+    }
+  };
+}
 
 export {
   loginSuccessResponse,
-  registrationSuccessResponse,
-  meResponse
+  loginResponseForSpecificRole,
+  registrationSuccessResponse
 };

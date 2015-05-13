@@ -10,7 +10,26 @@ export default Ember.Controller.extend({
   showMessage: false,
   message: null,
 
-  createInviteActionDisabled: Ember.computed.empty('newInviteEmail'),
+  createInviteNotAllowed: Ember.computed.empty('newInviteEmail'),
+
+  currentUser: Ember.computed.alias('session.secure'),
+
+  currentUsersTeamMembership: function() {
+    var currentUserId = this.get('currentUser.id');
+    var teamMemberships = this.get('model');
+
+    return teamMemberships.findBy('user.id', currentUserId);
+  }.property('currentUser', 'model.@each'),
+
+  currentUsersRoleInTeam: function() {
+    var currentUsersTeamMembership = this.get('currentUsersTeamMembership');
+
+    return Ember.isPresent(currentUsersTeamMembership) ? currentUsersTeamMembership.get('role') : null;
+  }.property('currentUsersTeamMembership'),
+
+  currentUserIsTeamOwner: Ember.computed.equal('currentUsersRoleInTeam', 'owner'),
+  currentUserIsTeamAdmin: Ember.computed.equal('currentUsersRoleInTeam', 'admin'),
+  currentUserIsTeamOwnerOrAdmin: Ember.computed.or('currentUserIsTeamAdmin', 'currentUserIsTeamOwner'),
 
   actions: {
     createInvite: function() {
@@ -21,41 +40,52 @@ export default Ember.Controller.extend({
       var onSuccess = function(teamMembership) {
         var email = teamMembership.get('email');
 
-        controller.setProperties({
-          newInviteEmail: null,
-          showMessage: true,
-          message: `Invite successfully sent to ${email}`,
-          showError: false,
-          error: null
-        });
+        controller.set('newInviteEmail', null);
+        controller.displayMessage(`Invite successfully sent to ${email}`);
       };
 
       var onFailure = function(response) {
-        controller.setProperties({
-          showMessage: false,
-          message: null,
-          showError: true,
-          errorMessage: extractError(response)
-        });
+        controller.displayError(response);
       };
 
       teamMembership.save().then(onSuccess, onFailure);
     },
 
-    message: function(message) {
-      this.setProperties({
-        showError: false,
-        message: message,
-        showMessage: true
+    updateRole: function(teamMembership, role) {
+      var controller = this;
+      teamMembership.set('role', role);
+      teamMembership.save().then(function() {
+        controller.displayMessage('Succesfully updated.');
+      }).catch(function(response) {
+        controller.displayError(response);
       });
     },
 
-    error: function(error) {
-      this.setProperties({
-        showMessage: false,
-        errorMessage: error,
-        showError: true
+    delete: function(teamMembership) {
+      var controller = this;
+      teamMembership.deleteRecord();
+      teamMembership.save().then(function() {
+        controller.displayMessage('Succesfuly removed member from team');
+      }).catch(function(response) {
+        controller.displayError(response);
       });
     }
+  },
+
+  displayMessage: function(message) {
+    this.setProperties({
+      showError: false,
+      message: message,
+      showMessage: true
+    });
+  },
+
+  displayError: function(response) {
+    var error = extractError(response);
+    this.setProperties({
+      showMessage: false,
+      errorMessage: error,
+      showError: true
+    });
   }
 });

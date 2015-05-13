@@ -7,6 +7,17 @@ var basicTeamResponse = {
   }
 };
 
+var teamResponseWithOwnerLinkage = {
+  data: {
+    type: 'teams',
+    id: 'teamWithOwner',
+    subdomain: 'test',
+    name: 'test',
+    links: { owner: { linkage: { type: 'users', id: 'owner'} } }
+  }
+};
+
 export {
-  basicTeamResponse
+  basicTeamResponse,
+  teamResponseWithOwnerLinkage
 };
