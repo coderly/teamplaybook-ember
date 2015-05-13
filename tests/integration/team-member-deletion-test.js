@@ -18,7 +18,7 @@ module('Team member deletion', {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginResponseForSpecificRole('owner')));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
-      this.get('team_memberships', response(200, listOfTeamMembershipsOneOfEachRole));
+      this.get('team-memberships', response(200, listOfTeamMembershipsOneOfEachRole));
       this.get('users', response(200, listOfUsersOneForEachRole));
     });
     App = startApp({ subdomain: 'test'});
@@ -79,7 +79,7 @@ test('An owner can remove another team member', function(assert) {
 test('A succesful delete process POSTs to server, removes member and shows success message', function(assert) {
   assert.expect(3);
 
-  server.delete('team_memberships/invitee', function() {
+  server.delete('team-memberships/invitee', function() {
     assert.ok(true, 'There is a POST request to the API');
     return buildResponse(204);
   });
@@ -101,7 +101,7 @@ test('A succesful delete process POSTs to server, removes member and shows succe
 test('A failed deletion process shows an error message', function(assert) {
   assert.expect(1);
 
-  server.delete('team_memberships/invitee', function() {
+  server.delete('team-memberships/invitee', function() {
     return buildResponse(405);
   });
 
