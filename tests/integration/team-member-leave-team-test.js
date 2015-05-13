@@ -17,7 +17,7 @@ module('Team member leaves team', {
   beforeEach: function() {
     server = mockServer(function() {
       this.get('team', response(200, teamResponseWithOwnerLinkage));
-      this.get('team_memberships/member', response(200, basicTeamMembershipResponse));
+      this.get('team-memberships/member', response(200, basicTeamMembershipResponse));
       this.get('users', response(200, listOfUsersOneForEachRole));
     });
     App = startApp({ subdomain: 'test'});
@@ -33,8 +33,8 @@ module('Team member leaves team', {
   }
 });
 
-test('"Leave team" link in team options menu', function(assert) {
-  assert.expect(3);
+test('Regular member can leave team', function(assert) {
+  assert.expect(1);
 
   server.post('accounts/tokens', response(200, loginResponseForSpecificRole('member')));
   visit('login');
@@ -45,35 +45,43 @@ test('"Leave team" link in team options menu', function(assert) {
   });
 
   andThen(function() {
-    assert.equal(find('.team-options-menu .leave-team').length, 1, 'Is available for user with role "member"');
-    server.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));
-  });
-
-  visit('login');
-  login();
-
-  andThen(function() {
-    click('.team-options-menu .header');
-  });
-
-  andThen(function() {
-    assert.equal(find('.team-options-menu .leave-team').length, 1, 'Is available for user with role "admin"');
-    server.post('accounts/tokens', response(200, loginResponseForSpecificRole('owner')));
-  });
-
-  visit('login');
-  login();
-
-  andThen(function() {
-    click('.team-options-menu .header');
-  });
-
-  andThen(function() {
-    assert.equal(find('.team-options-menu .leave-team').length, 0, 'Is not available for user with role "owner"');
+    assert.equal(find('.team-options-menu .leave-team').length, 1, 'Option to leave team is available');
   });
 });
 
-test('Clicking "Leave team" link in team options menu', function(assert) {
+test('Admin can leave team', function(assert) {
+  assert.expect(1);
+
+  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));
+  visit('login');
+  login();
+
+  andThen(function() {
+    click('.team-options-menu .header');
+  });
+
+  andThen(function() {
+    assert.equal(find('.team-options-menu .leave-team').length, 1, 'Option to leave team is available');
+  });
+});
+
+test('Team owner cannot leave team', function(assert) {
+  assert.expect(1);
+
+  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('owner')));
+  visit('login');
+  login();
+
+  andThen(function() {
+    click('.team-options-menu .header');
+  });
+
+  andThen(function() {
+    assert.equal(find('.team-options-menu .leave-team').length, 0, 'Option to leave team is not available');
+  });
+});
+
+test('The process of leaving the team fetches current user and their membership from API, then DELETEs membership', function(assert) {
   assert.expect(3);
 
   server.post('accounts/tokens', response(200, loginResponseForSpecificRole('member')));
@@ -81,7 +89,7 @@ test('Clicking "Leave team" link in team options menu', function(assert) {
   login();
 
   server.get('me', function() {
-    assert.ok(true, 'Fetches current user from API');
+    assert.ok(true, 'Current user is fetched from the API');
     return buildResponse(200, {
       data: {
         type: 'users',
@@ -95,8 +103,8 @@ test('Clicking "Leave team" link in team options menu', function(assert) {
     });
   });
 
-  server.get('team_memberships/0', function() {
-    assert.ok(true, 'Fetches current team membership from API');
+  server.get('team-memberships/0', function() {
+    assert.ok(true, 'Current team membership is fetched from the API');
     return buildResponse(200, {
       data: {
         id: 0,
@@ -106,8 +114,8 @@ test('Clicking "Leave team" link in team options menu', function(assert) {
     });
   });
 
-  server.delete('team_memberships/0', function() {
-    assert.ok(true, 'Posts to API to delete the membership');
+  server.delete('team-memberships/0', function() {
+    assert.ok(true, 'DELETE request for team membership is sent to the API');
     return buildResponse(204);
   });
 

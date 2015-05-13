@@ -18,7 +18,7 @@ module('Team member invites', {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginSuccessResponse));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
-      this.get('team_memberships', response(200, listOfTeamMembershipsOneOfEachRole));
+      this.get('team-memberships', response(200, listOfTeamMembershipsOneOfEachRole));
       this.get('users', response(200, listOfUsersOneForEachRole));
     });
     App = startApp({ subdomain: 'test'});
@@ -34,7 +34,7 @@ module('Team member invites', {
   }
 });
 
-test('Team membership creation form on "/members"', function(assert) {
+test('Team membership creation form on "/members" has all of the required fields', function(assert) {
   assert.expect(3);
 
   visit('login');
@@ -42,13 +42,13 @@ test('Team membership creation form on "/members"', function(assert) {
   visit('members');
 
   andThen(function() {
-    assert.equal(find('#email').length, 1, 'Shows an email field for creating a new membership.');
-    assert.equal(find('#create-membership').length, 1, 'Shows a button to submit the form.');
-    assert.equal(find('input').length, 2, 'Shows a total of 2 controls.');
+    assert.equal(find('#email').length, 1, 'There is an email field.');
+    assert.equal(find('#create-membership').length, 1, 'There is a submit button.');
+    assert.equal(find('input').length, 2, 'There are two controls in total.');
   });
 });
 
-test('Team membership creation form submission on "/members"', function(assert) {
+test('Team membership creation form on "/members" has proper validations in place', function(assert) {
   assert.expect(2);
 
   visit('login');
@@ -56,16 +56,16 @@ test('Team membership creation form submission on "/members"', function(assert) 
   visit('members');
 
   andThen(function() {
-    assert.equal(find('#create-membership[disabled]').length, 1, 'Is disabled when email is not filled in.');
+    assert.equal(find('#create-membership[disabled]').length, 1, 'Form is disabled when email is not filled in');
   });
 
   fillIn('#email', 'membership@test.com');
   andThen(function() {
-    assert.equal(find('#create-membership[disabled]').length, 0, 'Is enabled when email is filled in.');
+    assert.equal(find('#create-membership[disabled]').length, 0, 'Form is enabled when email is filled in');
   });
 });
 
-test('Succesful team membership creation', function(assert) {
+test('Succesful team membership creation POSTs to API, adds the membership to the list and shows a success message', function(assert) {
   assert.expect(3);
 
   visit('login');
@@ -75,20 +75,20 @@ test('Succesful team membership creation', function(assert) {
   fillIn('#email', 'membership@test.com');
 
   andThen(function() {
-    server.post('team_memberships', function() {
-      assert.ok(true, 'Posts to API.');
+    server.post('team-memberships', function() {
+      assert.ok(true, 'There was an API POST request.');
       return buildResponse(200, basicTeamMembershipResponse);
     });
     click('#create-membership');
   });
 
   andThen(function() {
-    assert.equal(find('.message').length, 1, 'Shows a success message.');
-    assert.equal(find('.team-membership').length, 5, 'Adds the membership to the list.');
+    assert.equal(find('.message').length, 1, 'A success message is shown');
+    assert.equal(find('.team-membership').length, 5, 'The new membership is added to the list');
   });
 });
 
-test('Failed team membership creation', function(assert){
+test('Failed team membership creation shows an error message', function(assert){
   assert.expect(1);
 
   visit('login');
@@ -98,11 +98,11 @@ test('Failed team membership creation', function(assert){
   fillIn('#email', 'test');
 
   andThen(function() {
-    server.post('team_memberships', response(403, {}));
+    server.post('team-memberships', response(403, {}));
     click('#create-membership');
   });
 
   andThen(function() {
-    assert.equal(find('.error').length, 1, 'Shows an error message');
+    assert.equal(find('.error').length, 1, 'An error message is shown');
   });
 });
