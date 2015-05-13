@@ -1,6 +1,9 @@
 import Ember from 'ember';
-import UrlInfo from 'teamplaybook-ember/lib/url-info';
 import ajax from 'ic-ajax';
+import ENV from 'teamplaybook-ember/config/environment';
+
+var Stripe = window.Stripe;
+var $ = window.$;
 
 export default Ember.Controller.extend({
   cardToken: null,
@@ -14,12 +17,12 @@ export default Ember.Controller.extend({
       var plans = this.store.all('plan');
       var plan = plans.findBy('slug', this.get('model.planSlug'));
 
-      console.log(this.get('model.planSlug'))
-      console.log(plan.get('name'))
-      console.log(plan.get('amount'))
+      console.log(this.get('model.planSlug'));
+      console.log(plan.get('name'));
+      console.log(plan.get('amount'));
 
-      if(plan.get('isPaidPlan')){
-        this.createStripeToken(requestPlanChange);
+      if(plan.get('isPaid')){
+        this.createStripeToken(this.requestPlanChange);
       }else{
         this.requestPlanChange();
       }
@@ -48,14 +51,14 @@ export default Ember.Controller.extend({
   },
 
   createStripeToken: function(callback){
-    Stripe.setPublishableKey('pk_test_2YDSiQNDW9IlNzdADzleLTvQ');
+    Stripe.setPublishableKey(ENV.STRIPE_PUBLIC_KEY);
     var controller = this;
     var $form = $('#payment-form');
 
-    stripeCallback = function(status, response){
+    var stripeCallback = function(status, response){
       controller.set('cardToken', response.id);
       callback();
-    }
+    };
     Stripe.card.createToken($form, stripeCallback);
   }
 });

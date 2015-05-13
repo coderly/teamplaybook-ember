@@ -37,7 +37,8 @@ module.exports = function(environment) {
       routeAfterAuthentication: '/',
       authorizer: 'authorizer:custom',
       crossOriginWhitelist: ['*']
-    }
+    },
+    STRIPE_PUBLIC_KEY: 'pk_test_2YDSiQNDW9IlNzdADzleLTvQ'
   };
 
   if (environment === 'development') {
