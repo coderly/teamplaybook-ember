@@ -33,7 +33,7 @@ module('Team member roles', {
   }
 });
 
-test('Role modification action by team member', function(assert) {
+test('A team member cannot change the role of a user', function(assert) {
   assert.expect(1);
 
   server.post('accounts/tokens', response(200, loginResponseForSpecificRole('member')));
@@ -43,11 +43,11 @@ test('Role modification action by team member', function(assert) {
   visit('members');
 
   andThen(function() {
-    assert.equal(find('.member .actions').length, 0, 'Is not possible');
+    assert.equal(find('.member .role.actions').length, 0, 'Actions to change role are not available');
   });
 });
 
-test('Role modification action by team admin', function(assert) {
+test('A team admin can change the role of a user', function(assert) {
   assert.expect(1);
 
   server.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));
@@ -57,11 +57,11 @@ test('Role modification action by team admin', function(assert) {
   visit('members');
 
   andThen(function() {
-    assert.equal(find('.member .actions').length, 1, 'Is possible');
+    assert.equal(find('.member .role.actions').length, 1, 'Actions to change role are available');
   });
 });
 
-test('Role modification action by team owner', function(assert) {
+test('A team owner can change the role of a user', function(assert) {
   assert.expect(1);
 
   server.post('accounts/tokens', response(200, loginResponseForSpecificRole('owner')));
@@ -71,31 +71,66 @@ test('Role modification action by team owner', function(assert) {
   visit('members');
 
   andThen(function() {
-    assert.equal(find('.member .actions').length, 1, 'Is possible');
+    assert.equal(find('.member .role.actions').length, 1, 'Actions to change role are available');
   });
 });
 
-test('Role modification actions', function(assert){
-  assert.expect(4);
+test('An invitee cannot have their role changed', function(assert){
+  assert.expect(1);
 
   visit('login');
   login();
   visit('members');
 
   andThen(function() {
-    assert.equal(find('.invitee .actions').length, 0, 'Are not possible for team members with "invitee" role');
-    assert.equal(find('.member .actions').length, 1, 'Are possible for team members with "member" role');
-    assert.equal(find('.admin .actions').length, 1, 'Are possible for team members with "admin" role');
-    assert.equal(find('.owner .actions').length, 0, 'Are not possible for team members with "owner" role');
+    assert.equal(find('.invitee .role.actions').length, 0, 'Actions to change role are not available');
   });
 });
 
-test('Setting role to "admin"', function(assert) {
+test('A member can have their role changed', function(assert){
+  assert.expect(2);
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(find('.member .role.actions .set-member[disabled]').length, 1, 'Action to demote to member is rendered, but disabled');
+    assert.equal(find('.member .role.actions .set-admin').length, 1, 'Action to promote to admin is rendered and enabled');
+  });
+});
+
+test('An admin can have their role changed', function(assert){
+  assert.expect(2);
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(find('.admin .role.actions .set-member').length, 1, 'Action to demote to member is rendered');
+    assert.equal(find('.admin .role.actions .set-admin[disabled]').length, 1, 'Action to promote to admin is rendered, but disabled');
+  });
+});
+
+test('An owner cannot have ther role changed', function(assert){
+  assert.expect(1);
+
+  visit('login');
+  login();
+  visit('members');
+
+  andThen(function() {
+    assert.equal(find('.owner .role.actions').length, 0, 'Actions to change role are not available');
+  });
+});
+
+test('Setting role to "admin" sends a PATCH request to API, with the correct payload', function(assert) {
   assert.expect(1);
 
   server.patch('team_memberships/member', function(request){
     var body = JSON.parse(request.requestBody);
-    assert.equal(body.data.roles.indexOf('admin'), 0, 'Sends PATCH to API with roles property set to array containing "admin" item');
+    assert.equal(body.data.roles.indexOf('admin'), 0, 'There is a PATCH to API with roles property set to array containing "admin" item');
     return buildResponse(200, body);
   });
 
@@ -107,12 +142,12 @@ test('Setting role to "admin"', function(assert) {
   });
 });
 
-test('Setting role to "member"', function(assert) {
+test('Setting role to "member" sends a PATCH request to API, with the correct payload', function(assert) {
   assert.expect(1);
 
   server.patch('team_memberships/admin', function(request){
     var body = JSON.parse(request.requestBody);
-    assert.equal(body.data.roles.indexOf('member'), 0, 'Sends PATCH to API with roles property set to array containing "member" item');
+    assert.equal(body.data.roles.indexOf('member'), 0, 'There is a PATCH to API with roles property set to array containing "member" item');
     return buildResponse(200, body);
   });
 
@@ -123,4 +158,3 @@ test('Setting role to "member"', function(assert) {
     click('.admin .set-member');
   });
 });
-

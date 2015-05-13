@@ -34,7 +34,7 @@ module('Team member deletion', {
   }
 });
 
-test('Membership deletion by team member', function(assert) {
+test('A regular member cannot remove another team member', function(assert) {
   assert.expect(1);
 
   server.post('accounts/tokens', response(200, loginResponseForSpecificRole('member')));
@@ -44,11 +44,11 @@ test('Membership deletion by team member', function(assert) {
   visit('members');
 
   andThen(function() {
-    assert.equal(find('.invitee .delete').length, 0, 'Is not possible');
+    assert.equal(find('.invitee .delete').length, 0, 'Delete button is not present');
   });
 });
 
-test('Membership deletion by team admin', function(assert) {
+test('An ddmin cannot remove another team member', function(assert) {
   assert.expect(1);
 
   server.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));
@@ -58,11 +58,11 @@ test('Membership deletion by team admin', function(assert) {
   visit('members');
 
   andThen(function() {
-    assert.equal(find('.invitee .delete').length, 0, 'Is not possible');
+    assert.equal(find('.invitee .delete').length, 0, 'Delete button is not present');
   });
 });
 
-test('Membership deletion by team owner', function(assert) {
+test('An owner can remove another team member', function(assert) {
   assert.expect(1);
 
   server.post('accounts/tokens', response(200, loginResponseForSpecificRole('owner')));
@@ -72,15 +72,15 @@ test('Membership deletion by team owner', function(assert) {
   visit('members');
 
   andThen(function() {
-    assert.equal(find('.invitee .delete').length, 1, 'Is possible');
+    assert.equal(find('.invitee .delete').length, 1, 'Delete button is present');
   });
 });
 
-test('Succesful membership deletion', function(assert) {
+test('A succesful delete process POSTs to server, removes member and shows success message', function(assert) {
   assert.expect(3);
 
   server.delete('team_memberships/invitee', function() {
-    assert.ok(true, 'Posts to proper API endpoint');
+    assert.ok(true, 'There is a POST request to the API');
     return buildResponse(204);
   });
 
@@ -93,12 +93,12 @@ test('Succesful membership deletion', function(assert) {
   });
 
   andThen(function() {
-    assert.equal(find('.message').length, 1, 'Shows success message');
-    assert.equal(find('.team-membership').length, 3, 'Removes the membership from the list');
+    assert.equal(find('.message').length, 1, 'A success message is shown');
+    assert.equal(find('.team-membership').length, 3, 'The membership is removed from the list');
   });
 });
 
-test('Failed membership deletion', function(assert) {
+test('A failed deletion process shows an error message', function(assert) {
   assert.expect(1);
 
   server.delete('team_memberships/invitee', function() {
@@ -114,6 +114,6 @@ test('Failed membership deletion', function(assert) {
   });
 
   andThen(function() {
-    assert.equal(find('.error').length, 1, 'Shows an error message');
+    assert.equal(find('.error').length, 1, 'An error message is visible');
   });
 });
