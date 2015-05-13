@@ -18,7 +18,7 @@ module('Team member listing', {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginSuccessResponse));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
-      this.get('team_memberships', response(200, listOfTeamMembershipsOneOfEachRole));
+      this.get('team-memberships', response(200, listOfTeamMembershipsOneOfEachRole));
       this.get('users', response(200, listOfUsersOneForEachRole));
     });
     App = startApp({ subdomain: 'test'});
@@ -59,7 +59,7 @@ test('Navigating to "/members" actually navigates to "team.team-members.index"',
 test('Team memberships list shows the proper amount of entries for each membership', function(assert) {
   assert.expect(2);
 
-  server.get('team_memberships', function() {
+  server.get('team-memberships', function() {
     assert.ok(true, 'Fetches list of team memberships from the API');
     return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
   });

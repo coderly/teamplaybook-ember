@@ -18,7 +18,7 @@ module('Team member invites', {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginSuccessResponse));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
-      this.get('team_memberships', response(200, listOfTeamMembershipsOneOfEachRole));
+      this.get('team-memberships', response(200, listOfTeamMembershipsOneOfEachRole));
       this.get('users', response(200, listOfUsersOneForEachRole));
     });
     App = startApp({ subdomain: 'test'});
@@ -75,7 +75,7 @@ test('Succesful team membership creation POSTs to API, adds the membership to th
   fillIn('#email', 'membership@test.com');
 
   andThen(function() {
-    server.post('team_memberships', function() {
+    server.post('team-memberships', function() {
       assert.ok(true, 'There was an API POST request.');
       return buildResponse(200, basicTeamMembershipResponse);
     });
@@ -98,7 +98,7 @@ test('Failed team membership creation shows an error message', function(assert){
   fillIn('#email', 'test');
 
   andThen(function() {
-    server.post('team_memberships', response(403, {}));
+    server.post('team-memberships', response(403, {}));
     click('#create-membership');
   });
 

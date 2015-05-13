@@ -17,7 +17,7 @@ module('Team member roles', {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
-      this.get('team_memberships', response(200, listOfTeamMembershipsOneOfEachRole));
+      this.get('team-memberships', response(200, listOfTeamMembershipsOneOfEachRole));
       this.get('users', response(200, listOfUsersOneForEachRole));
     });
     App = startApp({ subdomain: 'test'});
@@ -128,7 +128,7 @@ test('An owner cannot have ther role changed', function(assert){
 test('Setting role to "admin" sends a PATCH request to API, with the correct payload', function(assert) {
   assert.expect(1);
 
-  server.patch('team_memberships/member', function(request){
+  server.patch('team-memberships/member', function(request){
     var body = JSON.parse(request.requestBody);
     assert.equal(body.data.roles.indexOf('admin'), 0, 'There is a PATCH to API with roles property set to array containing "admin" item');
     return buildResponse(200, body);
@@ -145,7 +145,7 @@ test('Setting role to "admin" sends a PATCH request to API, with the correct pay
 test('Setting role to "member" sends a PATCH request to API, with the correct payload', function(assert) {
   assert.expect(1);
 
-  server.patch('team_memberships/admin', function(request){
+  server.patch('team-memberships/admin', function(request){
     var body = JSON.parse(request.requestBody);
     assert.equal(body.data.roles.indexOf('member'), 0, 'There is a PATCH to API with roles property set to array containing "member" item');
     return buildResponse(200, body);
