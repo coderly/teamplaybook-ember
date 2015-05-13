@@ -17,7 +17,7 @@ module('Team member leaves team', {
   beforeEach: function() {
     server = mockServer(function() {
       this.get('team', response(200, teamResponseWithOwnerLinkage));
-      this.get('team_memberships/member', response(200, basicTeamMembershipResponse));
+      this.get('team-memberships/member', response(200, basicTeamMembershipResponse));
       this.get('users', response(200, listOfUsersOneForEachRole));
     });
     App = startApp({ subdomain: 'test'});
@@ -103,7 +103,7 @@ test('The process of leaving the team fetches current user and their membership 
     });
   });
 
-  server.get('team_memberships/0', function() {
+  server.get('team-memberships/0', function() {
     assert.ok(true, 'Current team membership is fetched from the API');
     return buildResponse(200, {
       data: {
@@ -114,7 +114,7 @@ test('The process of leaving the team fetches current user and their membership 
     });
   });
 
-  server.delete('team_memberships/0', function() {
+  server.delete('team-memberships/0', function() {
     assert.ok(true, 'DELETE request for team membership is sent to the API');
     return buildResponse(204);
   });
