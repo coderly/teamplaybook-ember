@@ -14,19 +14,21 @@
   {{/each}}
 </form>
 
-<h3>Add your credit card information</h3>
+{{#if currentPlanIsPaid}}
 
-<form action="" method="POST" id="payment-form">
-  <!-- Add a section to display errors if you want -->
-  <span class='payment-errors'></span>
-  <label>Card Number</label>
-  <input data-stripe="number"/>
-  <label>CVC</label>
-  <input data-stripe="cvc"/>
-  <label>Card Expiration Month</label>
-  <input data-stripe="exp-month"/>
-  <label>Card Expiration Year</label>
-  <input data-stripe="exp-year"/>
-</form>
-
+  <h3>This is a paid plan, add your credit card information</h3>
+  
+  <form action="" method="POST" id="payment-form">
+    <!-- Add a section to display errors if you want -->
+    <span class='payment-errors'></span>
+    <label>Card Number</label>
+    <input data-stripe="number"/>
+    <label>CVC</label>
+    <input data-stripe="cvc"/>
+    <label>Card Expiration Month</label>
+    <input data-stripe="exp-month"/>
+    <label>Card Expiration Year</label>
+    <input data-stripe="exp-year"/>
+  </form>
+{{/if}}
 <button {{action 'changePlan'}}>Change plan</button>

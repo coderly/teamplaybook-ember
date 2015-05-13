@@ -7,6 +7,12 @@ var $ = window.$;
 
 export default Ember.Controller.extend({
   cardToken: null,
+  currentPlan: Ember.computed('model.planSlug', function (){
+    var plans = this.store.all('plan');
+    return plans.findBy('slug', this.get('model.planSlug'));
+  }),
+
+  currentPlanIsPaid: Ember.computed.alias('currentPlan.isPaid'),
 
   plans: Ember.computed(function(){
     return this.store.find('plan');
@@ -14,14 +20,7 @@ export default Ember.Controller.extend({
 
   actions:{
     changePlan: function(){
-      var plans = this.store.all('plan');
-      var plan = plans.findBy('slug', this.get('model.planSlug'));
-
-      console.log(this.get('model.planSlug'));
-      console.log(plan.get('name'));
-      console.log(plan.get('amount'));
-
-      if(plan.get('isPaid')){
+      if(this.get('currentPlanIsPaid')){
         this.createStripeToken(this.requestPlanChange);
       }else{
         this.requestPlanChange();
