@@ -3,11 +3,18 @@ import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
 moduleForComponent('team-options-menu');
 
-test('The dropdown menu', function(assert) {
-  assert.expect(5);
+test('The dropdown menu is hidden by default', function(assert) {
+  assert.expect(1);
 
   var component = this.subject();
   assert.equal(this.$().find('.menu').length, 0, 'Is hidden by default');
+
+});
+
+test('The dropdown menu visibility is determined by the "isMenuVisible" flag', function(assert) {
+  assert.expect(2);
+
+  var component = this.subject();
 
   Ember.run(function() {
     component.set('isMenuVisible', true);
@@ -20,19 +27,25 @@ test('The dropdown menu', function(assert) {
   });
 
   assert.equal(this.$().find('.menu').length, 0, 'Is not rendered if "isMenuVisible" is set to false');
+});
+
+test('The "isMenuVisible" flag value is controlled by "showMenu" and "hideMenu"', function(assert) {
+  assert.expect(2);
+
+  var component = this.subject();
 
   Ember.run(function() {
     component.showMenu();
   });
-  assert.equal(this.$().find('.menu').length, 1, 'Is made visible by calling "showMenu"');
+  assert.equal(component.get('isMenuVisible'), true, '"showMenu" sets flag to true');
 
   Ember.run(function() {
     component.hideMenu();
   });
-  assert.equal(this.$().find('.menu').length, 0, 'Is made hidden by calling "hideMenu"');
+  assert.equal(component.get('isMenuVisible'), false, '"hideMenu" sets flag to false');
 });
 
-test('An anonymous user', function(assert) {
+test('An anonymous user cannot leave the team', function(assert) {
   assert.expect(2);
 
   var component = this.subject();
@@ -42,11 +55,11 @@ test('An anonymous user', function(assert) {
     component.set('currentUser', null);
   });
 
-  assert.equal(component.get('isCurrentUserAllowedToLeaveTeam'), false, 'Cannot leave the team, since they are not a member');
-  assert.equal(this.$().find('.leave-team').length, 0, 'Does not see the button for leaving the team');
+  assert.equal(component.get('isCurrentUserAllowedToLeaveTeam'), false, 'Flag is set to false');
+  assert.equal(this.$().find('.leave-team').length, 0, 'Button is not rendered');
 });
 
-test('A team member', function(assert) {
+test('A team member can leave the team', function(assert) {
   assert.expect(2);
 
   var component = this.subject();
@@ -56,11 +69,11 @@ test('A team member', function(assert) {
     component.set('currentUser', Ember.Object.create({ role: 'member' }));
   });
 
-  assert.equal(component.get('isCurrentUserAllowedToLeaveTeam'), true, 'Can leave the team');
-  assert.equal(this.$().find('.leave-team').length, 1, 'Sees the button for leaving the team');
+  assert.equal(component.get('isCurrentUserAllowedToLeaveTeam'), true, 'Flag is set to true');
+  assert.equal(this.$().find('.leave-team').length, 1, 'Button is rendered');
 });
 
-test('A team admin', function(assert) {
+test('A team admin can leave the team', function(assert) {
   assert.expect(2);
 
   var component = this.subject();
@@ -70,11 +83,11 @@ test('A team admin', function(assert) {
     component.set('currentUser', Ember.Object.create({ role: 'admin' }));
   });
 
-  assert.equal(component.get('isCurrentUserAllowedToLeaveTeam'), true, 'Can leave the team');
-  assert.equal(this.$('.leave-team').length, 1, 'Sees the button for leaving the team');
+  assert.equal(component.get('isCurrentUserAllowedToLeaveTeam'), true, 'Flag is set to true');
+  assert.equal(this.$().find('.leave-team').length, 1, 'Button is rendered');
 });
 
-test('A team owner', function(assert) {
+test('A team owner cannot leave the team', function(assert) {
   assert.expect(2);
 
   var component = this.subject();
@@ -84,11 +97,11 @@ test('A team owner', function(assert) {
     component.set('currentUser', Ember.Object.create({ role: 'owner' }));
   });
 
-  assert.equal(component.get('isCurrentUserAllowedToLeaveTeam'), false, 'Cannot leave the team');
-  assert.equal(this.$().find('.leave-team').length, 0, 'Does not see the button for leaving the team');
+  assert.equal(component.get('isCurrentUserAllowedToLeaveTeam'), false, 'Flag is set to false');
+  assert.equal(this.$().find('.leave-team').length, 0, 'Button is not rendered');
 });
 
-test('"Leave team" action', function(assert) {
+test('Clicking the button to leave team sends a delete action to target, followed by logging the user out', function(assert) {
   assert.expect(4);
 
   var component = this.subject();
