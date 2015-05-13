@@ -1,8 +1,8 @@
 import Ember from 'ember';
 import ajax from 'ic-ajax';
 import ENV from 'teamplaybook-ember/config/environment';
+import extractError from 'teamplaybook-ember/lib/extract-error';
 
-var Stripe = window.Stripe;
 var $ = window.$;
 
 export default Ember.Controller.extend({
@@ -21,7 +21,7 @@ export default Ember.Controller.extend({
   actions:{
     changePlan: function(){
       if(this.get('currentPlanIsPaid')){
-        this.createStripeToken(this.requestPlanChange);
+        this.createStripeToken(this.requestPlanChange.bind(this));
       }else{
         this.requestPlanChange();
       }
@@ -34,22 +34,24 @@ export default Ember.Controller.extend({
   },
 
   requestPlanChange: function(){
-    var controller = this;
+    var team = this.get('model');
 
     ajax({
      type: 'POST',
      url: this._buildURL('team/change_plan'),
      data: {
-       plan_slug: this.get('model.planSlug'),
+       plan_slug: team.get('planSlug'),
        card_token: this.get('cardToken')
      }
     }).then(function(){
       alert("You have changed your plan");
-      controller.get('model').reload();
+    }, function(response){
+      alert(extractError(response));
     });
   },
 
   createStripeToken: function(callback){
+    var Stripe = window.Stripe;
     Stripe.setPublishableKey(ENV.STRIPE_PUBLIC_KEY);
     var controller = this;
     var $form = $('#payment-form');
