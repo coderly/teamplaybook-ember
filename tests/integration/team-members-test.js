@@ -25,7 +25,7 @@ module('Team members', {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginSuccessResponse));
       this.get('team', response(200, basicTeamResponse));
-      this.get('team_memberships', response(200, listOfNTeamMembershipsResponseBuilder(1)));
+      this.get('team-memberships', response(200, listOfNTeamMembershipsResponseBuilder(1)));
     });
     App = startApp({ subdomain: 'test'});
   },
@@ -61,7 +61,7 @@ test('Navigating to "/members"', function(assert) {
 test('Team memberships list', function(assert) {
   assert.expect(2);
 
-  server.get('team_memberships', function() {
+  server.get('team-memberships', function() {
     assert.ok(true, 'Fetches list of team memberships from the API.');
     return buildResponse(200, listOfNTeamMembershipsResponseBuilder(5));
   });
@@ -116,7 +116,7 @@ test('Succesful team membership creation', function(assert) {
   fillIn('#email', 'membership@test.com');
 
   andThen(function() {
-    server.post('team_memberships', function() {
+    server.post('team-memberships', function() {
       assert.ok(true, 'Posts to API.');
       return buildResponse(200, basicTeamMembershipResponse);
     });
@@ -139,7 +139,7 @@ test('Failed team membership creation', function(assert){
   fillIn('#email', 'test');
 
   andThen(function() {
-    server.post('team_memberships', response(403, {}));
+    server.post('team-memberships', response(403, {}));
     click('#create-membership');
   });
 
@@ -151,7 +151,7 @@ test('Failed team membership creation', function(assert){
 test('Role modification actions', function(assert){
   assert.expect(4);
 
-  server.get('team_memberships', function() {
+  server.get('team-memberships', function() {
     return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
   });
 
@@ -170,11 +170,11 @@ test('Role modification actions', function(assert){
 test('Setting role to "admin"', function(assert) {
   assert.expect(1);
 
-  server.get('team_memberships', function() {
+  server.get('team-memberships', function() {
     return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
   });
 
-  server.patch('team_memberships/2', function(request){
+  server.patch('team-memberships/2', function(request){
     var body = JSON.parse(request.requestBody);
     assert.equal(body.data.roles.indexOf('admin'), 0, 'Sends PATCH to API with roles property set to array containing "admin" item');
     return buildResponse(200, body);
@@ -191,11 +191,11 @@ test('Setting role to "admin"', function(assert) {
 test('Setting role to "member"', function(assert) {
   assert.expect(1);
 
-  server.get('team_memberships', function() {
+  server.get('team-memberships', function() {
     return buildResponse(200, listOfTeamMembershipsOneOfEachRole);
   });
 
-  server.patch('team_memberships/3', function(request){
+  server.patch('team-memberships/3', function(request){
     var body = JSON.parse(request.requestBody);
     assert.equal(body.data.roles.indexOf('member'), 0, 'Sends PATCH to API with roles property set to array containing "member" item');
     return buildResponse(200, body);
