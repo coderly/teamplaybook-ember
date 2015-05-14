@@ -1,8 +1,8 @@
 <h2>Pages</h2>
 <ul>
-{{#each}}
+{{#each page in model}}
   <li>
-    {{#link-to 'team.index.page' this}} {{title}} {{/link-to}}
+    {{#link-to 'team.index.page' page}} {{page.title}} {{/link-to}}
   </li>
 {{/each}}
 </ul>
