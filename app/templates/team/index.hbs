@@ -1,4 +1,9 @@
 <h2>Pages</h2>
+<ul>
 {{#each}}
-  <p>{{title}}</p>
+  <li>
+    {{#link-to 'team.index.page' this}} {{title}} {{/link-to}}
+  </li>
 {{/each}}
+</ul>
+{{outlet}}

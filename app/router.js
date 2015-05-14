@@ -20,6 +20,9 @@ export default Router.map(function() {
         this.route('index', { path: '/' });
       });
       this.route('manage');
+      this.route('index', {path: '/'}, function(){
+        this.route('page', { path: '/pages/:page_id' })
+      });
     });
   } else if (shouldMapGeneralRoutes) {
     this.route('general', { path: '/' }, function() {
