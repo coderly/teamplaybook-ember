@@ -130,7 +130,7 @@ test('Setting role to "admin" sends a PATCH request to API, with the correct pay
 
   server.patch('team-memberships/member', function(request){
     var body = JSON.parse(request.requestBody);
-    assert.equal(body.data.roles.indexOf('admin'), 0, 'There is a PATCH to API with roles property set to array containing "admin" item');
+    assert.equal(body.data.role, 'admin', 0, 'There is a PATCH to API with roles property set to array containing "admin" item');
     return buildResponse(200, body);
   });
 
@@ -147,7 +147,7 @@ test('Setting role to "member" sends a PATCH request to API, with the correct pa
 
   server.patch('team-memberships/admin', function(request){
     var body = JSON.parse(request.requestBody);
-    assert.equal(body.data.roles.indexOf('member'), 0, 'There is a PATCH to API with roles property set to array containing "member" item');
+    assert.equal(body.data.role, 'member', 'There is a PATCH to API with roles property set to array containing "member" item');
     return buildResponse(200, body);
   });
 
