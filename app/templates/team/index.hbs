@@ -1,9 +1,5 @@
 <h2>Pages</h2>
 <ul>
-{{#each page in model}}
-  <li>
-    {{#link-to 'team.index.page' page}} {{page.title}} {{/link-to}}
-  </li>
-{{/each}}
+  {{page-node model=model}}
 </ul>
 {{outlet}}

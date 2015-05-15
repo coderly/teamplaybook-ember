@@ -1,0 +1,8 @@
+{{#link-to 'team.index.page' page}} {{model.title}} {{/link-to}}
+{{#if hasChildren}}
+  <ul>
+    {{#each child in children}}
+      {{page-node model=child}}
+    {{/each}}
+  </ul>
+{{/if}}
