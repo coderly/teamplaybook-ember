@@ -19,7 +19,6 @@ export default Router.map(function() {
       this.route('team-members', { path: 'members' }, function() {
         this.route('index', { path: '/' });
       });
-      this.route('settings');
       this.route('manage');
     });
   } else if (shouldMapGeneralRoutes) {
