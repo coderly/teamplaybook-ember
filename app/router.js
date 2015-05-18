@@ -21,7 +21,7 @@ export default Router.map(function() {
       });
       this.route('manage');
       this.route('index', {path: '/'}, function(){
-        this.route('page', { path: '/pages/:page_id' })
+        this.route('page', { path: '/pages/:page_id' });
       });
     });
   } else if (shouldMapGeneralRoutes) {

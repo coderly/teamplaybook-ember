@@ -1,0 +1,92 @@
+import Ember from 'ember';
+import { test, module } from 'qunit';
+
+import startApp from '../helpers/start-app';
+import login from '../helpers/login';
+import mockServer from '../helpers/mock-server';
+import { response, buildResponse } from '../helpers/response';
+
+import { loginSuccessResponse } from '../mocks/account';
+import { teamResponseWithOwnerLinkage } from '../mocks/team';
+
+var App, server;
+
+module('Pages list test', {
+  beforeEach: function() {
+    server = mockServer(function() {
+      this.post('accounts/tokens', response(200, loginSuccessResponse));
+      this.get('team', response(200, teamResponseWithOwnerLinkage));
+      //this.get('pages', response(200, listOfTeamMembershipsOneOfEachRole));
+      //this.get('users', response(200, listOfUsersOneForEachRole));
+    });
+    App = startApp({ subdomain: 'test'});
+  },
+
+  afterEach: function() {
+    // Todo - Remove this when we update Ember from< 1.11.1
+    // see https://github.com/emberjs/ember.js/issues/10310#issuecomment-95685137
+    App.registry = App.buildRegistry();
+    App.reset();
+    server.shutdown();
+    Ember.run(App, 'destroy');
+  }
+});
+
+test('Root nodes of the pages tree', function(assert) {
+  assert.expect(2);
+
+  visit('login');
+  login();
+  visit('/');
+
+  andThen(function() {
+    assert.equal(find('.pages-tree > .page-node:first a:first').text(), "Westeros");
+    assert.equal(find('.pages-tree > .page-node').size(), 1);
+  });
+});
+
+test('Child nodes', function(assert) {
+  assert.expect(5);
+
+  visit('login');
+  login();
+  visit('/');
+
+  andThen(function() {
+    assert.equal(find('.pages-tree .page-node:first .page-node').size(), 8);
+    assert.equal(find('.pages-tree .page-node:first > ul > li > .page-node').size(), 3);
+    assert.equal(find('.pages-tree .page-node:first > ul > li > .page-node:first > ul > li > .page-node').size(), 2);
+    assert.equal(find('.pages-tree .page-node:first > ul > li > .page-node:eq(1) > ul > li > .page-node').size(), 1);
+    assert.equal(find('.pages-tree .page-node:first > ul > li > .page-node:last > ul > li > .page-node').size(), 2);
+  });
+});
+
+test('Navigate to page', function(assert) {
+  assert.expect(6);
+
+  visit('login');
+  login();
+  visit('/');
+
+  andThen(function() {
+    click(".pages-tree .page-node:first > a");
+  });
+
+  andThen(function() {
+    assert.equal(find('.page-expanded .page-title').text(), "Westeros");
+    assert.equal(find('.page-expanded .page-body').text(), "Fake place from a book series for nerds");
+    click(".pages-tree .page-node:first > ul > li > .page-node:first > a");
+  });
+
+  andThen(function() {
+    assert.equal(find('.page-expanded .page-title').text(), "The North");
+    assert.equal(find('.page-expanded .page-body').text(), "It's really cold");
+    click(".pages-tree .page-node:first > ul > li > .page-node:first > ul > li > .page-node:first a");
+  });
+
+  andThen(function() {
+    assert.equal(find('.page-expanded .page-title').text(), "Winterfell");
+    assert.equal(find('.page-expanded .page-body').text(), "Home of the house Stark");
+  });
+
+});

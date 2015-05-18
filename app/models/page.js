@@ -12,7 +12,7 @@ Page.reopenClass({
   FIXTURES: [
     {
       id: 1,
-      title: "westeros",
+      title: "Westeros",
       body: "Fake place from a book series for nerds",
       children: [2,3,4],
       root: true
