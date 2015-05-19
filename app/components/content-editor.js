@@ -11,9 +11,10 @@ export default Ember.Component.extend({
 
   disableReturn: false,
   disableToolbar: false,
+  buttons: ['bold', 'italic', 'underline', 'strikethrough', 'quote', 'pre', 'unorderedlist', 'orderedlist', 'anchor', 'header1', 'header2'],
 
   initializeEditor: function() {
-    var options = this.getProperties('disableReturn', 'disableToolbar');
+    var options = this.getProperties('disableReturn', 'disableToolbar', 'buttons');
     new MediumEditor(this.$(), options);
     return this.setContent();
   }.on('didInsertElement'),
