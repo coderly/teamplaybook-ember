@@ -1,6 +1,8 @@
 <h2>Pages</h2>
 <div class="pages-tree">
-  {{page-node model=model}}
+  {{#each page in rootPageNodes}}
+    {{page-node model=page}}
+  {{/each}}
 </div>
 <div class="page-expanded">
   {{outlet}}

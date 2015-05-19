@@ -8,6 +8,7 @@ import { response, buildResponse } from '../helpers/response';
 
 import { loginSuccessResponse } from '../mocks/account';
 import { teamResponseWithOwnerLinkage } from '../mocks/team';
+import listOfPages from '../mocks/pages';
 
 var App, server;
 
@@ -16,8 +17,7 @@ module('Pages list test', {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginSuccessResponse));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
-      //this.get('pages', response(200, listOfTeamMembershipsOneOfEachRole));
-      //this.get('users', response(200, listOfUsersOneForEachRole));
+      this.get('pages', response(200, listOfPages));
     });
     App = startApp({ subdomain: 'test'});
   },
