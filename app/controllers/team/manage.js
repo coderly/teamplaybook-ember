@@ -41,8 +41,11 @@ export default Ember.Controller.extend({
       }
     },
     changePlan: function(){
+      var controller = this;
       if(this.get('currentPlanIsPaid')){
-        this.createStripeToken().then(this.requestPlanChange.bind(this));
+        this.createStripeToken().then(function(){
+          controller.requestPlanChange();
+        });
       }else{
         this.requestPlanChange();
       }
