@@ -12,7 +12,6 @@ export default Ember.Component.extend({
   disableReturn: false,
   disableToolbar: false,
 
-
   initializeEditor: function() {
     var options = this.getProperties('disableReturn', 'disableToolbar');
     new MediumEditor(this.$(), options);
@@ -28,13 +27,19 @@ export default Ember.Component.extend({
 
   input: function() {
     if (this.get('plaintext')) {
-      return this.set('value', this.$().text());
+      this.set('value', this.$().text());
     } else {
-      return this.set('value', this.$().html());
+      this.set('value', this.$().html());
     }
+
+    return Ember.run.debounce(this, this.notifyContentChanged, 1000);
   },
 
   render: function(buffer) {
     buffer.push((this.get('value') || null));
   },
+
+  notifyContentChanged: function() {
+    this.sendAction('contentChanged');
+  }
 });
