@@ -24,7 +24,7 @@ module.exports = function(environment) {
       'font-src': "'self'",
       'connect-src': "'self'",
       'img-src': "'self'",
-      'style-src': "'self'",
+      'style-src': "'self' 'unsafe-inline'",
       'media-src': "'self'"
     },
     /*jshint quotmark: true*/
