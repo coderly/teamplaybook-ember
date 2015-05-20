@@ -24,7 +24,7 @@ export default Ember.Component.extend({
     if (component.$()) {
       return component.$().html(component.get('value'));
     }
-  },
+  }.observes('value'),
 
   input: function() {
     if (this.get('plaintext')) {

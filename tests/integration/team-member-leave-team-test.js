@@ -19,6 +19,7 @@ module('Team member leaves team', {
       this.get('team', response(200, teamResponseWithOwnerLinkage));
       this.get('team-memberships/member', response(200, basicTeamMembershipResponse));
       this.get('users', response(200, listOfUsersOneForEachRole));
+      this.get('pages', response(200, { data: [] }));
     });
     App = startApp({ subdomain: 'test'});
   },
