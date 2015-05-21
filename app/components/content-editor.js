@@ -91,12 +91,6 @@ export default Ember.Component.extend({
   },
 
   render: function(buffer) {
-    console.log('render');
-    buffer.push((this.get('value') || null));
-  },
-
-  rerender: function(buffer) {
-    console.log('rerender');
     buffer.push((this.get('value') || null));
   },
 
