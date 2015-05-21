@@ -19,11 +19,11 @@ module.exports = function(environment) {
     },
     /*jshint quotmark: false*/
     contentSecurityPolicy: {
-      'default-src': "'none'",
-      'script-src': "'self'",
+      'default-src': "dialog.filepicker.io www.filepicker.io",
+      'script-src': "'self' api.filepicker.io",
       'font-src': "'self'",
-      'connect-src': "'self'",
-      'img-src': "'self'",
+      'connect-src': "'self' www.filepicker.io",
+      'img-src': "'self' www.filepicker.io",
       'style-src': "'self' 'unsafe-inline'",
       'media-src': "'self'"
     },
