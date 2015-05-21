@@ -16,7 +16,6 @@ export default Ember.Controller.extend({
   },
 
   onPageCreated: function(page){
-    this.store.push('page', page)
+    this.get('model').pushObject(page);
   }
-
 });
