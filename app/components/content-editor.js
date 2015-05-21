@@ -11,6 +11,8 @@ export default Ember.Component.extend({
 
   filepicker: Ember.inject.service(),
 
+  editorInstance: null,
+
   value: null,
 
   plaintext: false,
@@ -40,8 +42,6 @@ export default Ember.Component.extend({
   },
 
   initializeUploaders: function() {
-
-
     var component = this;
 
     return this.get('filepicker.promise').then(function(filepicker) {
@@ -71,18 +71,14 @@ export default Ember.Component.extend({
       })
     };
 
-    var finalOptions = Ember.merge(options, this.get('mandatoryOptions'))
+    var finalOptions = Ember.merge(options, this.get('mandatoryOptions'));
 
-    new MediumEditor(this.$(), finalOptions);
-    return this.setContent();
+    this.set('editorInstance', new MediumEditor(this.$(), finalOptions));
   },
 
-  setContent: function() {
-    var component = this;
-    if (component.$()) {
-      return component.$().html(component.get('value'));
-    }
-  }.observes('value'),
+  setEditorContent: function() {
+    this.$().html(this.get('value'));
+  }.observes('pageId'),
 
   input: function() {
     if (this.get('plaintext')) {
@@ -95,6 +91,12 @@ export default Ember.Component.extend({
   },
 
   render: function(buffer) {
+    console.log('render');
+    buffer.push((this.get('value') || null));
+  },
+
+  rerender: function(buffer) {
+    console.log('rerender');
     buffer.push((this.get('value') || null));
   },
 
