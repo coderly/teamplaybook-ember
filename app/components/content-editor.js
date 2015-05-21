@@ -1,9 +1,13 @@
 /*global MediumEditor*/
 import Ember from 'ember';
+import ImagePaste from 'teamplaybook-ember/lib/medium-extension-image-paste';
+import PastedImageUploader from 'teamplaybook-ember/lib/pasted-image-uploader';
 
 export default Ember.Component.extend({
   classNames: ['editor'],
   tagName: 'div',
+
+  filepicker: Ember.inject.service(),
 
   value: null,
 
@@ -13,11 +17,33 @@ export default Ember.Component.extend({
   disableToolbar: false,
   buttons: ['bold', 'italic', 'underline', 'strikethrough', 'quote', 'pre', 'unorderedlist', 'orderedlist', 'anchor', 'header1', 'header2'],
 
-  initializeEditor: function() {
+  initializeUploader: function() {
+
+
+    var component = this;
+
+    return this.get('filepicker.promise').then(function(filepicker) {
+      var pastedImageUploader = PastedImageUploader.create({
+        filepicker: filepicker
+      });
+
+      return component.initializeEditor(pastedImageUploader);
+    });
+  }.on('didInsertElement'),
+
+
+  initializeEditor: function(pastedImageUploader) {
     var options = this.getProperties('disableReturn', 'disableToolbar', 'buttons');
+
+    options.extensions = {
+      'image-paste': new ImagePaste({
+        pastedImageUploader: pastedImageUploader
+      })
+    };
+
     new MediumEditor(this.$(), options);
     return this.setContent();
-  }.on('didInsertElement'),
+  },
 
   setContent: function() {
     var component = this;

@@ -55,6 +55,8 @@ module.exports = function(environment) {
 
     ENV.API_REGULAR_URL = 'http://teamplaybook.dev:3000';
     ENV.API_TEAM_URL = 'http://subdomain.teamplaybook.dev:3000';
+
+    ENV.filepickerKey = 'Ajq3zM6QImaazmDnVLqvQz';
   }
 
   if (environment === 'test') {
