@@ -1,4 +1,5 @@
 {{#link-to 'team.index.page' model}}{{model.title}}{{/link-to}}
+(<a {{action 'addChild'}}>Add Child</a>)
 {{#if hasChildren}}
   <ul>
     {{#each child in model.children}}
