@@ -11,30 +11,21 @@ export default Ember.Object.extend({
     'image/bmp': 'bpm'
   },
 
-  checkIfEventShouldBeHandled: function (event) {
-    return event.clipboardData && event.clipboardData.items.length === 1 && event.clipboardData.items[0].type.indexOf('image/') > -1;
-  },
 
   handlePaste: function() {
-    var shouldHandleEvent = this.checkIfEventShouldBeHandled(event);
-    if(shouldHandleEvent) {
+    event.preventDefault();
 
-      event.preventDefault();
+    var imageBlob = event.clipboardData.items[0].getAsFile();
+    var imageFile = this.createFileFromBlob(imageBlob);
+    var filepicker = this.get('filepicker');
 
-      var imageBlob = event.clipboardData.items[0].getAsFile();
-      var imageFile = this.createFileFromBlob(imageBlob);
-      var filepicker = this.get('filepicker');
-
-      return new Ember.RSVP.Promise(function (resolve) {
-        if (Ember.isPresent(imageBlob)) {
-          filepicker.store(imageFile, {}, function(response) {
-            resolve(response);
-          });
-        }
-      });
-
-
-    }
+    return new Ember.RSVP.Promise(function (resolve) {
+      if (Ember.isPresent(imageBlob)) {
+        filepicker.store(imageFile, {}, function(response) {
+          resolve(response);
+        });
+      }
+    });
   },
 
   createFileFromBlob: function(blob) {
