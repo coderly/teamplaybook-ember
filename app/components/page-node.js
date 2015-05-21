@@ -7,6 +7,7 @@ export default Ember.Component.extend({
   actions: {
     addChild: function(){
       console.log('onAddchild');
+      console.log(this.get('model'));
       this.sendAction('createChild', this.get('model'));
     }
   }

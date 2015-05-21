@@ -2,7 +2,7 @@
 <div class="pages-tree">
   <button {{action 'createRootPage'}}>Create Root Page</button>
   {{#each page in rootPageNodes}}
-    {{page-node model=page createChild=createChildPage}}
+    {{page-node model=page createChild="createChildPage"}}
   {{/each}}
 </div>
 <div class="page-expanded">
