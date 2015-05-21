@@ -33,4 +33,10 @@ export default Ember.Object.extend({
       return imageUploader.uploadFile(imageFile);
     }
   },
+
+  handleManualUpload: function () {
+    return new Ember.RSVP.Promise(function(resolve) {
+      resolve();
+    });
+  }
 });

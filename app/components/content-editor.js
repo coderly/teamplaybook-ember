@@ -2,6 +2,7 @@
 import Ember from 'ember';
 import ImagePaste from 'teamplaybook-ember/lib/medium-extension-image-paste';
 import ImageDrop from 'teamplaybook-ember/lib/medium-extension-image-drag-drop';
+import ImageManualUpload from 'teamplaybook-ember/lib/medium-extension-image-upload-button';
 import EditorEventHandler from 'teamplaybook-ember/lib/editor-event-handler';
 
 export default Ember.Component.extend({
@@ -16,7 +17,21 @@ export default Ember.Component.extend({
 
   disableReturn: false,
   disableToolbar: false,
-  buttons: ['bold', 'italic', 'underline', 'strikethrough', 'quote', 'pre', 'unorderedlist', 'orderedlist', 'anchor', 'header1', 'header2'],
+
+  buttons: [
+    'bold',
+    'italic',
+    'underline',
+    'strikethrough',
+    'quote',
+    'pre',
+    'unorderedlist',
+    'orderedlist',
+    'anchor',
+    'header1',
+    'header2',
+    'image-manual-upload'
+  ],
 
   mandatoryOptions: {
     // required in order to disable the default image drag and drop functionality which embeds the image as base64
@@ -48,6 +63,10 @@ export default Ember.Component.extend({
       }),
 
       'image-drop': new ImageDrop({
+        eventHandler: eventHandler
+      }),
+
+      'image-manual-upload': new ImageManualUpload({
         eventHandler: eventHandler
       })
     };
