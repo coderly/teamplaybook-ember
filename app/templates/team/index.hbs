@@ -1,5 +1,6 @@
 <h2>Pages</h2>
 <div class="pages-tree">
+  <button {{action 'createRootPage'}}>Create Root Page</button>
   {{#each page in rootPageNodes}}
     {{page-node model=page}}
   {{/each}}
