@@ -10,9 +10,9 @@ export default Ember.Object.extend({
   },
 
   uploadBlob: function(blob) {
-    var imageFile = this.createFileFromBlob(blob);
+    var imageFile = this._createFileFromBlob(blob);
 
-    return this.uploadFile(imageFile)
+    return this.uploadFile(imageFile);
   },
 
   uploadFile: function(file) {
@@ -24,7 +24,23 @@ export default Ember.Object.extend({
     });
   },
 
-  createFileFromBlob: function(blob) {
+  manualImageUpload: function() {
+    var filepicker = this.get('filepicker');
+
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+      filepicker.pick({
+        mimetypes: ['image/*'],
+        container: 'window',
+        services: ['COMPUTER']
+      }, function(blob) {
+        resolve(blob);
+      }, function(filePickerError) {
+        reject(filePickerError.toString());
+      });
+    });
+  },
+
+  _createFileFromBlob: function(blob) {
     var parts = [blob];
     var creationDate = new Date();
     var extension = this.extensions[blob.type];

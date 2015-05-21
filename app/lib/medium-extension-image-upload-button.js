@@ -26,10 +26,10 @@ var ImageUploadButton = MediumEditor.Extension.extend({
     var extension = this;
     this.eventHandler.handleManualUpload().then(function (response) {
       extension.handleManualUploadDone(response);
-    })
+    });
   },
 
-  handleManualUploadDone: function(resonse) {
+  handleManualUploadDone: function(response) {
     var imgParagraph = `<p><img src="${response.url}"/></p>`;
     this.base.pasteHTML(imgParagraph);
   }
