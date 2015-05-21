@@ -1,25 +1,24 @@
 /*global MediumEditor*/
 
-
 var ImagePasteHandler = MediumEditor.Extension.extend({
   parent: true,
 
   init: function() {
     var extension = this;
     this.base.subscribe('editablePaste', function (event, element) {
-      extension.handlePaste(event, element);
+      var shouldHandleEvent = extension.checkIfEventShouldBeHandled(event);
+
+      if (shouldHandleEvent) {
+        extension.handlePaste(event, element);
+      }
     });
   },
 
   handlePaste: function(event, element) {
-    var shouldHandleEvent = this.checkIfEventShouldBeHandled(event);
-
-    if (shouldHandleEvent) {
-      var extension = this;
-      this.pastedImageUploader.handlePaste(event, element).then(function(response) {
-        extension.handlePasteDone(response);
-      });
-    }
+    var extension = this;
+    this.eventHandler.handlePaste(event, element).then(function(response) {
+      extension.handlePasteDone(response);
+    });
   },
 
   handlePasteDone: function(response) {

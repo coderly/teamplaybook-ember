@@ -2,8 +2,6 @@ import Ember from 'ember';
 
 export default Ember.Object.extend({
 
-  filepicker: null,
-
   extensions: {
     'image/png': 'png',
     'image/jpeg': 'jpg',
@@ -11,20 +9,18 @@ export default Ember.Object.extend({
     'image/bmp': 'bpm'
   },
 
+  uploadBlob: function(blob) {
+    var imageFile = this.createFileFromBlob(blob);
 
-  handlePaste: function() {
-    event.preventDefault();
+    return this.uploadFile(imageFile)
+  },
 
-    var imageBlob = event.clipboardData.items[0].getAsFile();
-    var imageFile = this.createFileFromBlob(imageBlob);
+  uploadFile: function(file) {
     var filepicker = this.get('filepicker');
-
     return new Ember.RSVP.Promise(function (resolve) {
-      if (Ember.isPresent(imageBlob)) {
-        filepicker.store(imageFile, {}, function(response) {
-          resolve(response);
-        });
-      }
+      filepicker.store(file, {}, function(response) {
+        resolve(response);
+      });
     });
   },
 

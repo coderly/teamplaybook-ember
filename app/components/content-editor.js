@@ -1,7 +1,8 @@
 /*global MediumEditor*/
 import Ember from 'ember';
 import ImagePaste from 'teamplaybook-ember/lib/medium-extension-image-paste';
-import PastedImageUploader from 'teamplaybook-ember/lib/pasted-image-uploader';
+import ImageDrop from 'teamplaybook-ember/lib/medium-extension-image-drag-drop';
+import EditorEventHandler from 'teamplaybook-ember/lib/editor-event-handler';
 
 export default Ember.Component.extend({
   classNames: ['editor'],
@@ -17,31 +18,43 @@ export default Ember.Component.extend({
   disableToolbar: false,
   buttons: ['bold', 'italic', 'underline', 'strikethrough', 'quote', 'pre', 'unorderedlist', 'orderedlist', 'anchor', 'header1', 'header2'],
 
-  initializeUploader: function() {
+  mandatoryOptions: {
+    // required in order to disable the default image drag and drop functionality which embeds the image as base64
+    // instead, we use our own custom functionality, which uploads the image first
+    imageDragging: false
+  },
+
+  initializeUploaders: function() {
 
 
     var component = this;
 
     return this.get('filepicker.promise').then(function(filepicker) {
-      var pastedImageUploader = PastedImageUploader.create({
+      var eventHandler = EditorEventHandler.create({
         filepicker: filepicker
       });
 
-      return component.initializeEditor(pastedImageUploader);
+      return component.initializeEditor(eventHandler);
     });
   }.on('didInsertElement'),
 
 
-  initializeEditor: function(pastedImageUploader) {
+  initializeEditor: function(eventHandler) {
     var options = this.getProperties('disableReturn', 'disableToolbar', 'buttons');
 
     options.extensions = {
       'image-paste': new ImagePaste({
-        pastedImageUploader: pastedImageUploader
+        eventHandler: eventHandler
+      }),
+
+      'image-drop': new ImageDrop({
+        eventHandler: eventHandler
       })
     };
 
-    new MediumEditor(this.$(), options);
+    var finalOptions = Ember.merge(options, this.get('mandatoryOptions'))
+
+    new MediumEditor(this.$(), finalOptions);
     return this.setContent();
   },
 
