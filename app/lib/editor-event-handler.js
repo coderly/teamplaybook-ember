@@ -7,9 +7,9 @@ export default Ember.Object.extend({
 
   imageUploader: function() {
     return ImageUploader.create({
-      filepicker: filepicker
+      filepicker: this.get('filepicker'),
     });
-  }.property(),
+  }.property('filepicker'),
 
   handlePaste: function() {
     event.preventDefault();
@@ -37,6 +37,6 @@ export default Ember.Object.extend({
   handleManualUpload: function () {
     var imageUploader = this.get('imageUploader');
 
-    return imageUploader.manualImageUpload();
+    return imageUploader.pickAndUploadFile();
   }
 });

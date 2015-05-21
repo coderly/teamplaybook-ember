@@ -24,7 +24,7 @@ export default Ember.Object.extend({
     });
   },
 
-  manualImageUpload: function() {
+  pickAndUploadFile: function() {
     var filepicker = this.get('filepicker');
 
     return new Ember.RSVP.Promise(function (resolve, reject) {
