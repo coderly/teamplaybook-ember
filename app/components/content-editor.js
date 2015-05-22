@@ -20,6 +20,8 @@ export default Ember.Component.extend({
   disableReturn: false,
   disableToolbar: false,
 
+  enableToolbar: Ember.computed.not('disableToolbar'),
+
   buttons: [
     'bold',
     'italic',
@@ -73,26 +75,27 @@ export default Ember.Component.extend({
 
     var finalOptions = Ember.merge(options, this.get('mandatoryOptions'));
 
-    this.set('editorInstance', new MediumEditor(this.$(), finalOptions));
+    this.setEditorContent();
+    this.set('editorInstance', new MediumEditor(this.$('.content'), finalOptions));
   },
 
   setEditorContent: function() {
-    this.$().html(this.get('value'));
+    this.$('.content').html(this.get('value'));
   }.observes('pageId'),
 
   input: function() {
     if (this.get('plaintext')) {
-      this.set('value', this.$().text());
+      this.set('value', this.$('.content').text());
     } else {
-      this.set('value', this.$().html());
+      this.set('value', this.$('.content').html());
     }
 
     return Ember.run.debounce(this, this.notifyContentChanged, 1000);
   },
 
-  render: function(buffer) {
-    buffer.push((this.get('value') || null));
-  },
+  /*render: function(buffer) {
+    buffer.push(this.get('value') || null));
+  },*/
 
   notifyContentChanged: function() {
     this.sendAction('contentChanged');
