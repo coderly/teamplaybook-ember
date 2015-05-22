@@ -19,11 +19,11 @@ module.exports = function(environment) {
     },
     /*jshint quotmark: false*/
     contentSecurityPolicy: {
-      'default-src': "'none'",
-      'script-src': "'self'",
+      'default-src': "dialog.filepicker.io www.filepicker.io",
+      'script-src': "'self' api.filepicker.io",
       'font-src': "'self'",
-      'connect-src': "'self'",
-      'img-src': "'self'",
+      'connect-src': "'self' www.filepicker.io",
+      'img-src': "'self' www.filepicker.io",
       'style-src': "'self' 'unsafe-inline'",
       'media-src': "'self'"
     },
@@ -55,6 +55,8 @@ module.exports = function(environment) {
 
     ENV.API_REGULAR_URL = 'http://teamplaybook.dev:3000';
     ENV.API_TEAM_URL = 'http://subdomain.teamplaybook.dev:3000';
+
+    ENV.filepickerKey = 'Ajq3zM6QImaazmDnVLqvQz';
   }
 
   if (environment === 'test') {
