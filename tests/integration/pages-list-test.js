@@ -64,11 +64,6 @@ test('Child nodes', function(assert) {
 test('Navigate to page', function(assert) {
   assert.expect(6);
 
-  Ember.run.debounce = function(target, func) {
-    console.log('debounce');
-    func.call(target);
-  };
-
   visit('login');
   login();
   visit('/');
