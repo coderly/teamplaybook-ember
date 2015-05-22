@@ -1,4 +1,6 @@
 {{#if enableToolbar}}
-<div class="toolbar"></div>
+<div class="toolbar">
+  {{image-upload-button eventHandler=eventHandler uploadDone='uploadDone'}}
+</div>
 {{/if}}
 <div class="content"></div>

@@ -11,6 +11,14 @@ export default Ember.Component.extend({
 
   filepicker: Ember.inject.service(),
 
+  eventHandler: function() {
+    return this.get('filepicker.promise').then(function(fikepicker) {
+      return EditorEventHandler.create({
+        filepicker: filepicker
+      });
+    });
+  }.property('filepicker.promise.resolved'),
+
   editorInstance: null,
 
   value: null,
@@ -46,11 +54,7 @@ export default Ember.Component.extend({
   initializeUploaders: function() {
     var component = this;
 
-    return this.get('filepicker.promise').then(function(filepicker) {
-      var eventHandler = EditorEventHandler.create({
-        filepicker: filepicker
-      });
-
+    return this.get('eventHandler').then(function(eventHandler) {
       return component.initializeEditor(eventHandler);
     });
   }.on('didInsertElement'),
@@ -100,5 +104,40 @@ export default Ember.Component.extend({
 
   notifyContentChanged: function() {
     this.sendAction('contentChanged');
+  },
+
+  ensureEditorHasSelection: function() {
+    var editorSelection = this.get('editorInstance').exportSelection();
+    if (Ember.isEmpty(editorSelection)) {
+      this.selectLastCharacterInEditorInstance();
+    }
+  },
+
+  selectLastCharacterInEditorInstance: function() {
+    var editorInstance = this.get('editorInstance');
+    var editorContentLength = this.getEditorContentLength();
+    editorInstance.importSelection({ start: editorContentLength, end: editorContentLength })
+  },
+
+  getEditorContentLength: function () {
+    var editorInstance = this.get('editorInstance');
+    editorInstance.selectAllContents();
+    var editorSelection = editorInstance.exportSelection();
+    if (Ember.isEmpty(editorSelection)) {
+      var rootEditorElement = editorInstance.elements[0];
+      editorInstance.selectElement(rootEditorElement);
+      editorSelection = editorInstance.exportSelection();
+    }
+
+    return editorSelection.end;
+  },
+
+  actions: {
+    uploadDone: function(imageUrl) {
+      this.ensureEditorHasSelection();
+
+      var imgParagraph = `<p><img src="${imageUrl}"/></p>`;
+      this.get('editorInstance').pasteHTML(imgParagraph);
+    }
   }
 });
