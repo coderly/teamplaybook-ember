@@ -93,10 +93,6 @@ export default Ember.Component.extend({
     return Ember.run.debounce(this, this.notifyContentChanged, 1000);
   },
 
-  /*render: function(buffer) {
-    buffer.push(this.get('value') || null));
-  },*/
-
   notifyContentChanged: function() {
     this.sendAction('contentChanged');
   }
