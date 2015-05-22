@@ -17,4 +17,8 @@ var app = new EmberApp();
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
+app.import(app.bowerDirectory + '/medium-editor/dist/js/medium-editor.js');
+app.import(app.bowerDirectory + '/medium-editor/dist/css/medium-editor.css');
+app.import(app.bowerDirectory + '/medium-editor/dist/css/themes/default.css');
+
 module.exports = app.toTree();

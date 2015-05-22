@@ -5,8 +5,8 @@ var listOfPages = {
       type: "page",
       title: "Westeros",
       body: "Fake place from a book series for nerds",
-      root: true,
-      links: { 
+      rootNode: true,
+      links: {
         children: {
           linkage: [
             { type: "page", "id": "2" },
@@ -21,7 +21,7 @@ var listOfPages = {
       type: "page",
       title: "The North",
       body: "It's really cold",
-      links: { 
+      links: {
         children: {
           linkage: [
             { type: "page", "id": "5" },
@@ -35,7 +35,7 @@ var listOfPages = {
       type: "page",
       title: "The Riverlands",
       body: "It has a lot of water",
-      links: { 
+      links: {
         children: {
           linkage: [
             { type: "page", "id": "7" }
@@ -48,7 +48,7 @@ var listOfPages = {
       title: "Dorne",
       type: "page",
       body: "It's full of sand",
-      links: { 
+      links: {
         children: {
           linkage: [
             { type: "page", "id": "8" },
