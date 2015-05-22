@@ -78,7 +78,7 @@ export default Ember.Controller.extend({
     var Stripe = window.Stripe;
     Stripe.setPublishableKey(ENV.STRIPE_PUBLIC_KEY);
     var controller = this;
-    var $form = $('#payment-form');
+    var $form = Ember.$('#payment-form');
 
     return new Ember.RSVP.Promise(function(resolve) {
       Stripe.card.createToken($form, function(status, response) {
