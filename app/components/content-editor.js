@@ -57,6 +57,12 @@ export default Ember.Component.extend({
 
 
   initializeEditor: function(eventHandler) {
+    var editorOptions = this.initializeOptions(eventHandler);
+    this.setEditorContent();
+    this.set('editorInstance', new MediumEditor(this.$('.content'), editorOptions));
+  },
+
+  initializeOptions: function(eventHandler) {
     var options = this.getProperties('disableReturn', 'disableToolbar', 'buttons');
 
     options.extensions = {
@@ -75,8 +81,7 @@ export default Ember.Component.extend({
 
     var finalOptions = Ember.merge(options, this.get('mandatoryOptions'));
 
-    this.setEditorContent();
-    this.set('editorInstance', new MediumEditor(this.$('.content'), finalOptions));
+    return finalOptions;
   },
 
   setEditorContent: function() {
