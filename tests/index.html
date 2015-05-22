@@ -7,6 +7,21 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <script type="text/javascript">
+      // a polyfil for Function.prototype.bind, due to PhantomJS not having a definition for it.
+      // this is required because the medium-editor component which we are currently using uses
+      // Function.prototype.bind internally in several places in its code
+      // Once and if we switch from medium-editor, or PhantomJS gets updated, this can be removed
+      if (!Function.prototype.bind) {
+        Function.prototype.bind = Function.prototype.bind || function (thisp) {
+          var fn = this;
+          return function () {
+            return fn.apply(thisp, arguments);
+          };
+        };
+      }
+    </script>
+
     {{content-for 'head'}}
     {{content-for 'test-head'}}
 

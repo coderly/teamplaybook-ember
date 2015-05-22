@@ -14,6 +14,7 @@
     "qunit": "~1.17.1",
     "ember-simple-auth": "0.8.0-beta.2",
     "foundation": "~5.5.0",
-    "pretender": "~0.6.0"
+    "pretender": "~0.6.0",
+    "medium-editor": "~4.9.0"
   }
 }
