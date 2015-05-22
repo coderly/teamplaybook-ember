@@ -9,6 +9,7 @@ export default Ember.Object.extend({
     event.stopPropagation();
 
     var imageFile = event.dataTransfer.files[0];
+    var filepicker = this.get('filepicker');
 
     return new Ember.RSVP.Promise(function (resolve) {
       if (Ember.isPresent(imageFile)) {
