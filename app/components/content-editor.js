@@ -12,12 +12,10 @@ export default Ember.Component.extend({
   filepicker: Ember.inject.service(),
 
   eventHandler: function() {
-    return this.get('filepicker.promise').then(function(fikepicker) {
-      return EditorEventHandler.create({
-        filepicker: filepicker
-      });
+    return EditorEventHandler.create({
+      filepicker: this.get('filepicker.instance')
     });
-  }.property('filepicker.promise.resolved'),
+  }.property('filepicker'),
 
   editorInstance: null,
 
@@ -51,20 +49,13 @@ export default Ember.Component.extend({
     imageDragging: false
   },
 
-  initializeUploaders: function() {
-    var component = this;
+  initializeEditor: function() {
+    var eventHandler = this.get('eventHandler');
 
-    return this.get('eventHandler').then(function(eventHandler) {
-      return component.initializeEditor(eventHandler);
-    });
-  }.on('didInsertElement'),
-
-
-  initializeEditor: function(eventHandler) {
     var editorOptions = this.initializeOptions(eventHandler);
     this.setEditorContent();
     this.set('editorInstance', new MediumEditor(this.$('.content'), editorOptions));
-  },
+  }.on('didInsertElement'),
 
   initializeOptions: function(eventHandler) {
     var options = this.getProperties('disableReturn', 'disableToolbar', 'buttons');
@@ -89,7 +80,9 @@ export default Ember.Component.extend({
   },
 
   setEditorContent: function() {
-    this.$('.content').html(this.get('value'));
+    if (this.$()) {
+      this.$('.content').html(this.get('value'));
+    }
   }.observes('pageId'),
 
   input: function() {
@@ -116,7 +109,7 @@ export default Ember.Component.extend({
   selectLastCharacterInEditorInstance: function() {
     var editorInstance = this.get('editorInstance');
     var editorContentLength = this.getEditorContentLength();
-    editorInstance.importSelection({ start: editorContentLength, end: editorContentLength })
+    editorInstance.importSelection({ start: editorContentLength, end: editorContentLength });
   },
 
   getEditorContentLength: function () {

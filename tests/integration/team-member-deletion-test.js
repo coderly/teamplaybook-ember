@@ -49,7 +49,7 @@ test('A regular member cannot remove another team member', function(assert) {
   });
 });
 
-test('An ddmin cannot remove another team member', function(assert) {
+test('An admin cannot remove another team member', function(assert) {
   assert.expect(1);
 
   server.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));
