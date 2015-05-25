@@ -4,6 +4,7 @@ import ImagePaste from 'teamplaybook-ember/lib/medium-extension-image-paste';
 import ImageDrop from 'teamplaybook-ember/lib/medium-extension-image-drag-drop';
 import ImageManualUpload from 'teamplaybook-ember/lib/medium-extension-image-upload-button';
 import ImageHandler from 'teamplaybook-ember/lib/image-handler';
+import extractError from 'teamplaybook-ember/lib/extract-error';
 
 export default Ember.Component.extend({
   classNames: ['editor'],
@@ -67,7 +68,7 @@ export default Ember.Component.extend({
 
     options.extensions = {
       'image-paste': new ImagePaste({
-        imageHandler: imageHandler
+        imageHandler: imageHandler,
       }),
 
       'image-drop': new ImageDrop({
@@ -137,7 +138,7 @@ export default Ember.Component.extend({
         return imageHandler.handleImageManualUpload();
       }).then(function(response) {
         return component.handeManualUploadDone(response.url);
-      });
+      }).catch(this.logError);
     },
 
   },
@@ -147,5 +148,10 @@ export default Ember.Component.extend({
 
     var imgParagraph = `<p><img src="${imageUrl}"/></p>`;
     this.get('editorInstance').pasteHTML(imgParagraph);
+  },
+
+  logError: function(response) {
+    var errorMessage = extractError(response);
+    console.log(errorMessage);
   }
 });
