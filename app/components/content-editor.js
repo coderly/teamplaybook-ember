@@ -53,10 +53,11 @@ export default Ember.Component.extend({
 
   initializeEditor: function() {
     var component = this;
+    component.setEditorContent();
+
     return this.createImageHandler().then(function(imageHandler) {
       return component.createEditorOptions(imageHandler);
     }).then(function(editorOptions) {
-      component.setEditorContent();
       component.set('editorInstance', new MediumEditor(component.$('.content'), editorOptions));
     });
   }.on('didInsertElement'),
