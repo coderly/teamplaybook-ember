@@ -3,19 +3,13 @@ import Ember from 'ember';
 import ImagePaste from 'teamplaybook-ember/lib/medium-extension-image-paste';
 import ImageDrop from 'teamplaybook-ember/lib/medium-extension-image-drag-drop';
 import ImageManualUpload from 'teamplaybook-ember/lib/medium-extension-image-upload-button';
-import EditorEventHandler from 'teamplaybook-ember/lib/editor-event-handler';
+import ImageHandler from 'teamplaybook-ember/lib/image-handler';
 
 export default Ember.Component.extend({
   classNames: ['editor'],
   tagName: 'div',
 
   filepicker: Ember.inject.service(),
-
-  eventHandler: function() {
-    return EditorEventHandler.create({
-      filepicker: this.get('filepicker.instance')
-    });
-  }.property('filepicker'),
 
   editorInstance: null,
 
@@ -49,28 +43,38 @@ export default Ember.Component.extend({
     imageDragging: false
   },
 
-  initializeEditor: function() {
-    var eventHandler = this.get('eventHandler');
+  createImageHandler: function() {
+    return this.get('filepicker.promise').then(function(filepickerInstance) {
+      return ImageHandler.create({
+        filepicker: filepickerInstance
+      });
+    });
+  },
 
-    var editorOptions = this.initializeOptions(eventHandler);
-    this.setEditorContent();
-    this.set('editorInstance', new MediumEditor(this.$('.content'), editorOptions));
+  initializeEditor: function() {
+    var component = this;
+    return this.createImageHandler().then(function(imageHandler) {
+      return component.createEditorOptions(imageHandler);
+    }).then(function(editorOptions) {
+      component.setEditorContent();
+      component.set('editorInstance', new MediumEditor(component.$('.content'), editorOptions));
+    });
   }.on('didInsertElement'),
 
-  initializeOptions: function(eventHandler) {
+  createEditorOptions: function(imageHandler) {
     var options = this.getProperties('disableReturn', 'disableToolbar', 'buttons');
 
     options.extensions = {
       'image-paste': new ImagePaste({
-        eventHandler: eventHandler
+        imageHandler: imageHandler
       }),
 
       'image-drop': new ImageDrop({
-        eventHandler: eventHandler
+        imageHandler: imageHandler
       }),
 
       'image-manual-upload': new ImageManualUpload({
-        eventHandler: eventHandler
+        imageHandler: imageHandler
       })
     };
 
@@ -126,11 +130,21 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    uploadDone: function(imageUrl) {
-      this.ensureEditorHasSelection();
+    browseAndUpload: function() {
+      var component = this;
+      this.createImageHandler().then(function(imageHandler) {
+        return imageHandler.handleImageManualUpload();
+      }).then(function(response) {
+        return component.handeManualUploadDone(response.url);
+      });
+    },
 
-      var imgParagraph = `<p><img src="${imageUrl}"/></p>`;
-      this.get('editorInstance').pasteHTML(imgParagraph);
-    }
+  },
+
+  handeManualUploadDone: function(imageUrl) {
+    this.ensureEditorHasSelection();
+
+    var imgParagraph = `<p><img src="${imageUrl}"/></p>`;
+    this.get('editorInstance').pasteHTML(imgParagraph);
   }
 });

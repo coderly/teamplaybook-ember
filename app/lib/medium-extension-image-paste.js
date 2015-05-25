@@ -16,7 +16,7 @@ var ImagePasteHandler = MediumEditor.Extension.extend({
 
   handlePaste: function(event, element) {
     var extension = this;
-    this.eventHandler.handlePaste(event, element).then(function(response) {
+    this.imageHandler.handleImagePaste(event, element).then(function(response) {
       extension.handlePasteDone(response);
     });
   },
