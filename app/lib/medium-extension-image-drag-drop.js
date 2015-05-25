@@ -6,19 +6,19 @@ var ImageDragAndDropHandler = MediumEditor.Extension.extend({
   init: function() {
     var extension = this;
 
-    this.base.subscribe('editableDrag', function (event, element) {
+    this.base.subscribe('editableDrag', function (event) {
       var shouldHandleEvent = extension.checkIfEventShouldBeHandled(event);
 
       if (shouldHandleEvent) {
-        extension.handleDrag(event, element);
+        extension.handleDrag(event);
       }
     });
 
-    this.base.subscribe('editableDrop', function (event, element) {
+    this.base.subscribe('editableDrop', function (event) {
       var shouldHandleEvent = extension.checkIfEventShouldBeHandled(event);
 
       if (shouldHandleEvent) {
-        extension.handleDrop(event, element);
+        extension.handleDrop(event);
       }
     });
   },
@@ -31,8 +31,6 @@ var ImageDragAndDropHandler = MediumEditor.Extension.extend({
     var className = 'medium-editor-dragover';
     event.dataTransfer.dropEffect = 'copy';
 
-    event.preventDefault();
-
     if (event.type === 'dragover') {
       event.target.classList.add(className);
     } else if (event.type === 'dragleave') {
@@ -44,17 +42,7 @@ var ImageDragAndDropHandler = MediumEditor.Extension.extend({
     var className = 'medium-editor-dragover';
     event.target.classList.remove(className);
 
-    event.preventDefault();
-
-    var extension = this;
-    this.imageHandler.handleImageDrop(event).then(function(response) {
-      extension.handleDropDone(response);
-    });
-  },
-
-  handleDropDone: function(response) {
-    var imgParagraph = `<p><img src="${response.url}"/></p>`;
-    this.base.pasteHTML(imgParagraph);
+    this.target.send('imageDropped', event);
   }
 });
 

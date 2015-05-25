@@ -13,6 +13,12 @@ export default Ember.Component.extend({
 
   filepicker: Ember.inject.service(),
 
+  imageHandler: function() {
+    return ImageHandler.create({
+      filepicker: this.get('filepicker')
+    });
+  }.property('filepicker'),
+
   editorInstance: null,
 
   value: null,
@@ -45,41 +51,28 @@ export default Ember.Component.extend({
     imageDragging: false
   },
 
-  createImageHandler: function() {
-    var component = this;
-    return this.get('filepicker.promise').then(function(filepickerInstance) {
-      return ImageHandler.create({
-        filepicker: filepickerInstance,
-        target: component
-      });
-    });
-  },
-
   initializeEditor: function() {
-    var component = this;
-    component.setContent();
+    this.setContent();
 
-    return this.createImageHandler().then(function(imageHandler) {
-      return component.createEditorOptions(imageHandler);
-    }).then(function(editorOptions) {
-      component.set('editorInstance', new MediumEditor(component.$('.content'), editorOptions));
-    });
+    var editorOptions = this.createEditorOptions();
+    this.set('editorInstance', new MediumEditor(this.$('.content'), editorOptions));
+
   }.on('didInsertElement'),
 
-  createEditorOptions: function(imageHandler) {
+  createEditorOptions: function() {
     var options = this.getProperties('disableReturn', 'disableToolbar', 'buttons');
 
     options.extensions = {
       'image-paste': new ImagePaste({
-        imageHandler: imageHandler,
+        target: this,
       }),
 
       'image-drop': new ImageDrop({
-        imageHandler: imageHandler
+        target: this,
       }),
 
       'image-manual-upload': new ImageManualUpload({
-        imageHandler: imageHandler
+        target: this,
       })
     };
 
@@ -109,18 +102,36 @@ export default Ember.Component.extend({
   },
 
   actions: {
+    imageDropped: function(event) {
+      var component = this;
+      var imageHandler = this.get('imageHandler');
+
+      return imageHandler.handleImageDrop(event).then(function(response)  {
+        component.onImageUploadDone(response.url);
+      }, this.onFilePickerException);
+    },
+
+    imagePasted: function(event) {
+      var component = this;
+      var imageHandler = this.get('imageHandler');
+
+      imageHandler.handleImagePaste(event).then(function(response)  {
+        component.onImageUploadDone(response.url);
+      }, this.onFilePickerException);
+    },
+
     browseAndUpload: function() {
       var component = this;
-      this.createImageHandler().then(function(imageHandler) {
-        return imageHandler.handleImageManualUpload();
-      }).then(function(response) {
-        return component.handeManualUploadDone(response.url);
+      var imageHandler = this.get('imageHandler');
+
+      return imageHandler.handleImageManualUpload().then(function(response) {
+        return component.onImageUploadDone(response.url);
       }).catch(this.onFilePickerException);
     },
   },
 
-  handeManualUploadDone: function(imageUrl) {
-    ensureEditorHasSelection();
+  onImageUploadDone: function(imageUrl) {
+    ensureEditorHasSelection(this.get('editorInstance'));
 
     var imgParagraph = `<p><img src="${imageUrl}"/></p>`;
     this.get('editorInstance').pasteHTML(imgParagraph);

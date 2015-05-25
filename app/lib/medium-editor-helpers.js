@@ -15,6 +15,7 @@ function _selectLastCharacterInEditorInstance(editorInstance) {
 function _getEditorContentLength(editorInstance) {
   editorInstance.selectAllContents();
   var editorSelection = editorInstance.exportSelection();
+
   if (Ember.isEmpty(editorSelection)) {
     var rootEditorElement = editorInstance.elements[0];
     editorInstance.selectElement(rootEditorElement);

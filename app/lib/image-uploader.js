@@ -9,6 +9,8 @@ export default Ember.Object.extend({
     'image/bmp': 'bpm'
   },
 
+  filepicker: null,
+
   uploadBlob: function(blob) {
     var imageFile = this._createFileFromBlob(blob);
 
@@ -16,7 +18,18 @@ export default Ember.Object.extend({
   },
 
   uploadFile: function(file) {
-    var filepicker = this.get('filepicker');
+    var imageUploader = this;
+    return this.get('filepicker.promise').then(function(filepicker) {
+      return imageUploader._filepickerUpload(filepicker, file);
+    });
+  },
+
+  pickAndUploadFile: function() {
+    return this.get('filepicker.promise').then(this._filepickerBrowseAndUpload);
+
+  },
+
+  _filepickerUpload: function(filepicker, file) {
     return new Ember.RSVP.Promise(function (resolve, reject) {
       filepicker.store(file, {}, function(response) {
         resolve(response);
@@ -26,9 +39,7 @@ export default Ember.Object.extend({
     });
   },
 
-  pickAndUploadFile: function() {
-    var filepicker = this.get('filepicker');
-
+  _filepickerBrowseAndUpload: function(filepicker) {
     return new Ember.RSVP.Promise(function (resolve, reject) {
       filepicker.pick({
         mimetypes: ['image/*'],
