@@ -3,7 +3,9 @@ import Ember from 'ember';
 var FALLBACK_ERROR_MESSAGE = 'Unknown error.';
 
 function extractErrorMessage(response) {
-  if (Ember.isPresent(response.errorThrown)) {
+  if (Ember.isEmpty(response)) {
+    return FALLBACK_ERROR_MESSAGE;
+  } else if (Ember.isPresent(response.errorThrown)) {
     return response.errorThrown;
   } else if (Ember.isPresent(response.message)) {
     return extractErrorFromResponseMessage(response.message);
@@ -11,7 +13,7 @@ function extractErrorMessage(response) {
     return response.error;
   } else if (typeof response === 'string') {
     return response;
-  }else {
+  } else {
     return FALLBACK_ERROR_MESSAGE;
   }
 }
