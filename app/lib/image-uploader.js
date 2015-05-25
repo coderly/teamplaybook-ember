@@ -53,10 +53,15 @@ export default Ember.Object.extend({
     });
   },
 
+
+  _extensionForType: function(type) {
+    return this.extensions[type];
+  },
+
   _createFileFromBlob: function(blob) {
     var parts = [blob];
     var creationDate = new Date();
-    var extension = this.extensions[blob.type];
+    var extension = this._extensionForType[blob.type];
     return new window.File(parts, `${creationDate}.${extension}`, {
       lastModified: creationDate,
       type: blob.type
