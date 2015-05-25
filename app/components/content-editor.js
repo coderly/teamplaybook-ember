@@ -51,6 +51,8 @@ export default Ember.Component.extend({
     imageDragging: false
   },
 
+  dragOverClassName: 'medium-editor-dragover',
+
   initializeEditor: function() {
     this.setContent();
 
@@ -102,22 +104,28 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    imageDropped: function(event) {
-      var component = this;
-      var imageHandler = this.get('imageHandler');
+    imageDragged: function(event) {
+      var shouldHandleEvent = this.doesDragDropEventContainImage(event);
 
-      return imageHandler.handleImageDrop(event).then(function(response)  {
-        component.onImageUploadDone(response.url);
-      }, this.onFilePickerException);
+      if(shouldHandleEvent) {
+        this.dragImage(event);
+      }
+    },
+
+    imageDropped: function(event) {
+      var shouldHandleEvent = this.doesDragDropEventContainImage(event);
+
+      if(shouldHandleEvent) {
+        this.dropImage(event);
+      }
     },
 
     imagePasted: function(event) {
-      var component = this;
-      var imageHandler = this.get('imageHandler');
+      var shouldHandleEvent = this.doesPasteEventContainImage(event);
 
-      imageHandler.handleImagePaste(event).then(function(response)  {
-        component.onImageUploadDone(response.url);
-      }, this.onFilePickerException);
+      if (shouldHandleEvent) {
+        this.pasteImage(event);
+      }
     },
 
     browseAndUpload: function() {
@@ -140,5 +148,46 @@ export default Ember.Component.extend({
   onFilePickerException: function(exception) {
     var errorMessage = extractError(exception);
     console.log(errorMessage);
+  },
+
+  doesPasteEventContainImage: function(event) {
+    return event.clipboardData && event.clipboardData.items.length === 1 && event.clipboardData.items[0].type.indexOf('image/') > -1;
+  },
+
+  pasteImage: function(event) {
+    var component = this;
+    var imageHandler = this.get('imageHandler');
+
+    imageHandler.handleImagePaste(event).then(function(response)  {
+      component.onImageUploadDone(response.url);
+    }, this.onFilePickerException);
+  },
+
+  doesDragDropEventContainImage: function (event) {
+    return event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length === 1 && event.dataTransfer.files[0].type.indexOf('image/') > -1;
+  },
+
+  dragImage: function(event) {
+    var className = this.get('dragOverClassName');
+    event.dataTransfer.dropEffect = 'copy';
+
+    if (event.type === 'dragover') {
+      event.target.classList.add(className);
+    } else if (event.type === 'dragleave') {
+      event.target.classList.remove(className);
+    }
+  },
+
+  dropImage: function(event) {
+
+    var className = this.get('dragOverClassName');
+    event.target.classList.remove(className);
+
+    var component = this;
+    var imageHandler = this.get('imageHandler');
+
+    return imageHandler.handleImageDrop(event).then(function(response)  {
+      component.onImageUploadDone(response.url);
+    }, this.onFilePickerException);
   }
 });
