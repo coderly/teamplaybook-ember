@@ -65,17 +65,9 @@ export default Ember.Component.extend({
     var options = this.getProperties('disableReturn', 'disableToolbar', 'buttons');
 
     options.extensions = {
-      'image-paste': new ImagePaste({
-        target: this,
-      }),
-
-      'image-drop': new ImageDrop({
-        target: this,
-      }),
-
-      'image-manual-upload': new ImageManualUpload({
-        target: this,
-      })
+      'image-paste': new ImagePaste({ target: this }),
+      'image-drop': new ImageDrop({ target: this }),
+      'image-manual-upload': new ImageManualUpload({ target: this })
     };
 
     var finalOptions = Ember.merge(options, this.get('mandatoryOptions'));
@@ -138,20 +130,12 @@ export default Ember.Component.extend({
     },
   },
 
-  onImageUploadDone: function(imageUrl) {
-    ensureEditorHasSelection(this.get('editorInstance'));
-
-    var imgParagraph = `<p><img src="${imageUrl}"/></p>`;
-    this.get('editorInstance').pasteHTML(imgParagraph);
-  },
-
-  onFilePickerException: function(exception) {
-    var errorMessage = extractError(exception);
-    console.log(errorMessage);
-  },
-
   doesPasteEventContainImage: function(event) {
     return event.clipboardData && event.clipboardData.items.length === 1 && event.clipboardData.items[0].type.indexOf('image/') > -1;
+  },
+
+  doesDragDropEventContainImage: function (event) {
+    return event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length === 1 && event.dataTransfer.files[0].type.indexOf('image/') > -1;
   },
 
   pasteImage: function(event) {
@@ -161,10 +145,6 @@ export default Ember.Component.extend({
     imageHandler.handleImagePaste(event).then(function(response)  {
       component.onImageUploadDone(response.url);
     }, this.onFilePickerException);
-  },
-
-  doesDragDropEventContainImage: function (event) {
-    return event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length === 1 && event.dataTransfer.files[0].type.indexOf('image/') > -1;
   },
 
   dragImage: function(event) {
@@ -189,5 +169,17 @@ export default Ember.Component.extend({
     return imageHandler.handleImageDrop(event).then(function(response)  {
       component.onImageUploadDone(response.url);
     }, this.onFilePickerException);
-  }
+  },
+
+  onImageUploadDone: function(imageUrl) {
+    ensureEditorHasSelection(this.get('editorInstance'));
+
+    var imgParagraph = `<p><img src="${imageUrl}"/></p>`;
+    this.get('editorInstance').pasteHTML(imgParagraph);
+  },
+
+  onFilePickerException: function(exception) {
+    var errorMessage = extractError(exception);
+    console.log(errorMessage);
+  },
 });
