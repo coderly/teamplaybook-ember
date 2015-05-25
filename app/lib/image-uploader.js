@@ -17,9 +17,11 @@ export default Ember.Object.extend({
 
   uploadFile: function(file) {
     var filepicker = this.get('filepicker');
-    return new Ember.RSVP.Promise(function (resolve) {
+    return new Ember.RSVP.Promise(function (resolve, reject) {
       filepicker.store(file, {}, function(response) {
         resolve(response);
+      }, function(filepickerError) {
+        reject(filepickerError.toString());
       });
     });
   },
@@ -34,8 +36,8 @@ export default Ember.Object.extend({
         services: ['COMPUTER']
       }, function(blob) {
         resolve(blob);
-      }, function(filePickerError) {
-        reject(filePickerError.toString());
+      }, function(filepickerError) {
+        reject(filepickerError.toString());
       });
     });
   },

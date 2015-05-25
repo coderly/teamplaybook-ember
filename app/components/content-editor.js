@@ -5,6 +5,7 @@ import ImageDrop from 'teamplaybook-ember/lib/medium-extension-image-drag-drop';
 import ImageManualUpload from 'teamplaybook-ember/lib/medium-extension-image-upload-button';
 import ImageHandler from 'teamplaybook-ember/lib/image-handler';
 import extractError from 'teamplaybook-ember/lib/extract-error';
+import { ensureEditorHasSelection } from 'teamplaybook-ember/lib/medium-editor-helpers';
 
 export default Ember.Component.extend({
   classNames: ['editor'],
@@ -45,16 +46,18 @@ export default Ember.Component.extend({
   },
 
   createImageHandler: function() {
+    var component = this;
     return this.get('filepicker.promise').then(function(filepickerInstance) {
       return ImageHandler.create({
-        filepicker: filepickerInstance
+        filepicker: filepickerInstance,
+        target: component
       });
     });
   },
 
   initializeEditor: function() {
     var component = this;
-    component.setEditorContent();
+    component.setContent();
 
     return this.createImageHandler().then(function(imageHandler) {
       return component.createEditorOptions(imageHandler);
@@ -85,7 +88,7 @@ export default Ember.Component.extend({
     return finalOptions;
   },
 
-  setEditorContent: function() {
+  setContent: function() {
     if (this.$()) {
       this.$('.content').html(this.get('value'));
     }
@@ -105,32 +108,6 @@ export default Ember.Component.extend({
     this.sendAction('contentChanged');
   },
 
-  ensureEditorHasSelection: function() {
-    var editorSelection = this.get('editorInstance').exportSelection();
-    if (Ember.isEmpty(editorSelection)) {
-      this.selectLastCharacterInEditorInstance();
-    }
-  },
-
-  selectLastCharacterInEditorInstance: function() {
-    var editorInstance = this.get('editorInstance');
-    var editorContentLength = this.getEditorContentLength();
-    editorInstance.importSelection({ start: editorContentLength, end: editorContentLength });
-  },
-
-  getEditorContentLength: function () {
-    var editorInstance = this.get('editorInstance');
-    editorInstance.selectAllContents();
-    var editorSelection = editorInstance.exportSelection();
-    if (Ember.isEmpty(editorSelection)) {
-      var rootEditorElement = editorInstance.elements[0];
-      editorInstance.selectElement(rootEditorElement);
-      editorSelection = editorInstance.exportSelection();
-    }
-
-    return editorSelection.end;
-  },
-
   actions: {
     browseAndUpload: function() {
       var component = this;
@@ -138,20 +115,19 @@ export default Ember.Component.extend({
         return imageHandler.handleImageManualUpload();
       }).then(function(response) {
         return component.handeManualUploadDone(response.url);
-      }).catch(this.logError);
+      }).catch(this.onFilePickerException);
     },
-
   },
 
   handeManualUploadDone: function(imageUrl) {
-    this.ensureEditorHasSelection();
+    ensureEditorHasSelection();
 
     var imgParagraph = `<p><img src="${imageUrl}"/></p>`;
     this.get('editorInstance').pasteHTML(imgParagraph);
   },
 
-  logError: function(response) {
-    var errorMessage = extractError(response);
+  onFilePickerException: function(exception) {
+    var errorMessage = extractError(exception);
     console.log(errorMessage);
   }
 });

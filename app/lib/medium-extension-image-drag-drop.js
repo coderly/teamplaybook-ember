@@ -29,13 +29,14 @@ var ImageDragAndDropHandler = MediumEditor.Extension.extend({
 
   handleDrag: function(event) {
     var className = 'medium-editor-dragover';
-    event.preventDefault();
     event.dataTransfer.dropEffect = 'copy';
 
+    event.preventDefault();
+
     if (event.type === 'dragover') {
-        event.target.classList.add(className);
+      event.target.classList.add(className);
     } else if (event.type === 'dragleave') {
-        event.target.classList.remove(className);
+      event.target.classList.remove(className);
     }
   },
 
@@ -43,8 +44,10 @@ var ImageDragAndDropHandler = MediumEditor.Extension.extend({
     var className = 'medium-editor-dragover';
     event.target.classList.remove(className);
 
+    event.preventDefault();
+
     var extension = this;
-    this.imageHandlr.handleImageDrop(event).then(function(response) {
+    this.imageHandler.handleImageDrop(event).then(function(response) {
       extension.handleDropDone(response);
     });
   },

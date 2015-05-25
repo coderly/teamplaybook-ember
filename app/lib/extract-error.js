@@ -9,7 +9,9 @@ function extractErrorMessage(response) {
     return extractErrorFromResponseMessage(response.message);
   } else if (Ember.isPresent(response.error)) {
     return response.error;
-  } else {
+  } else if (typeof response === 'string') {
+    return response;
+  }else {
     return FALLBACK_ERROR_MESSAGE;
   }
 }
