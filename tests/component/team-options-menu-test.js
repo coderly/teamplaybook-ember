@@ -147,3 +147,38 @@ test('Clicking the button to leave team sends a delete action to target, followe
 
   this.$().find('.leave-team').click();
 });
+
+test('Navigation link for "manage" route is not available for regular members', function(assert) {
+  assert.expect(1);
+
+  var component = this.subject({
+    isMenuVisible: true,
+    currentUser: Ember.Object.create({ role: 'member' })
+  });
+
+  assert.equal(this.$().find('.manage-team').length, 0, 'Navigation link is not present');
+});
+
+
+test('Navigation link for "manage" route is not available for admins', function(assert) {
+  assert.expect(1);
+
+  var component = this.subject({
+    isMenuVisible: true,
+    currentUser: Ember.Object.create({ role: 'member' })
+  });
+
+  assert.equal(this.$().find('.manage-team').length, 0, 'Navigation link is not present');
+});
+
+
+test('Navigation link for "manage" route is available for team owners', function(assert) {
+  assert.expect(1);
+
+  var component = this.subject({
+    isMenuVisible: true,
+    currentUser: Ember.Object.create({ role: 'owner' })
+  });
+
+  assert.equal(this.$().find('.manage-team').length, 1, 'Navigation link is present');
+});

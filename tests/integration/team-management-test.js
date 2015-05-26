@@ -33,44 +33,6 @@ module('Team management', {
   }
 });
 
-test('Navigation link for "manage" route is not available for regular members', function(assert) {
-  assert.expect(1);
-
-  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('member')));
-  visit('login');
-  login();
-  visit('/');
-  andThen(function() {
-    assert.equal(find('a[href="/manage"]').length, 0, "Navigation link is not present");
-  });
-});
-
-
-test('Navigation link for "manage" route is not available for admins', function(assert) {
-  assert.expect(1);
-
-  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));
-  visit('login');
-  login();
-  visit('/');
-  andThen(function() {
-    assert.equal(find('a[href="/manage"]').length, 0, "Navigation link is not present");
-  });
-});
-
-
-test('Navigation link for "manage" route is available for team owners', function(assert) {
-  assert.expect(1);
-
-  server.post('accounts/tokens', response(200, loginResponseForSpecificRole('owner')));
-  visit('login');
-  login();
-  visit('/');
-  andThen(function() {
-    assert.equal(find('a[href="/manage"]').length, 1, "Navigation link is present");
-  });
-});
-
 test('Navigating to "manage" requires authentication', function(assert) {
   assert.expect(2);
 

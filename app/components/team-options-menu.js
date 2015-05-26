@@ -9,9 +9,13 @@ export default Ember.Component.extend(ClickOutsideMixin, {
   currentUser: null,
 
   currentUsersRoleInCurrentTeam: Ember.computed.alias('currentUser.role'),
+
   isCurrentUserMember: Ember.computed.equal('currentUsersRoleInCurrentTeam', 'member'),
   isCurrentUserAdmin: Ember.computed.equal('currentUsersRoleInCurrentTeam', 'admin'),
+  isCurrentUserTeamOwner: Ember.computed.equal('currentUsersRoleInCurrentTeam', 'owner'),
+
   isCurrentUserAllowedToLeaveTeam: Ember.computed.or('isCurrentUserAdmin', 'isCurrentUserMember'),
+
 
   isMenuVisible: false,
 

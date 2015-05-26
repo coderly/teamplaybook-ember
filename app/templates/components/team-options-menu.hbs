@@ -2,9 +2,8 @@
 {{#if isMenuVisible}}
   <div class="menu">
     <ul class="side-nav">
-      {{#if isCurrentUserAllowedToLeaveTeam}}
-        <li><a href="#" class="leave-team" {{action 'leaveTeam'}}>Leave <strong>{{team.name}}</strong></a></li>
-      {{/if}}
+      {{#if isCurrentUserTeamOwner}}<li>{{#link-to 'team.manage' class='manage-team'}}Manage team{{/link-to}}</li>{{/if}}
+      {{#if isCurrentUserAllowedToLeaveTeam}}<li><a href="#" class="leave-team" {{action 'leaveTeam'}}>Leave <strong>{{team.name}}</strong></a></li>{{/if}}
       <li><a href="#" class="logout" {{action 'logout'}}>Sign out of <strong>{{team.name}}</strong></a></li>
     </ul>
   </div>
