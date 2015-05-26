@@ -192,3 +192,13 @@ test('Navigation link for "team-members" route is rendered', function(assert) {
 
   assert.equal(this.$().find('.team-members').length, 1, 'Navigation link is present');
 });
+
+test('Navigation link for "team.pages" route is rendered', function(assert) {
+  assert.expect(1);
+
+  var component = this.subject({
+    isMenuVisible: true
+  });
+
+  assert.equal(this.$().find('.pages').length, 1, 'Navigation link is present');
+});

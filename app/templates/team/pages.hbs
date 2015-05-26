@@ -1,9 +1,13 @@
-<h2>Pages</h2>
-<div class="pages-tree">
-  {{#each page in rootPageNodes}}
-    {{page-node model=page}}
-  {{/each}}
+<div class="team-sidebar">
+  <h2>Pages</h2>
+  <div class="pages-tree">
+    {{#each page in rootPageNodes}}
+      {{page-node model=page}}
+    {{/each}}
+  </div>
 </div>
-<div class="page-expanded">
-  {{outlet}}
+<div class="team-main">
+  <div class="page-expanded">
+    {{outlet}}
+  </div>
 </div>
