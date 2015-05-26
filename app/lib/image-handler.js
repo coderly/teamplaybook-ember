@@ -9,9 +9,11 @@ export default Ember.Object.extend({
     return ImageUploader.create({
       filepicker: this.get('filepicker'),
     });
-  }.property('filepicker'),
+  }.property(),
 
-  handlePaste: function() {
+  handleImagePaste: function(event) {
+
+    event.stopPropagation();
     event.preventDefault();
 
     var imageBlob = event.clipboardData.items[0].getAsFile();
@@ -22,9 +24,10 @@ export default Ember.Object.extend({
     }
   },
 
-  handleDrop: function() {
-    event.preventDefault();
+  handleImageDrop: function(event) {
+
     event.stopPropagation();
+    event.preventDefault();
 
     var imageFile = event.dataTransfer.files[0];
     var imageUploader = this.get('imageUploader');
@@ -34,7 +37,7 @@ export default Ember.Object.extend({
     }
   },
 
-  handleManualUpload: function () {
+  handleImageManualUpload: function () {
     var imageUploader = this.get('imageUploader');
 
     return imageUploader.pickAndUploadFile();
