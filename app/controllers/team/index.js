@@ -1,9 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  rootPageNodes: Ember.computed.filterBy('model', 'rootNode', true)
-    return this.get('model').filterProperty('rootNode', true);
-  }),
+  rootPageNodes: Ember.computed.filterBy('model', 'rootNode', true),
   actions: {
     createRootPage: function(){
       this.createPage();

@@ -6,9 +6,15 @@ export default Ember.Component.extend({
   hasChildren: Ember.computed.notEmpty('model.children'),
   actions: {
     addChild: function(){
-      console.log('onAddchild');
-      console.log(this.get('model'));
       this.sendAction('createChild', this.get('model'));
+    },
+    remove: function(){
+      var component = this;
+      var page = this.get('model');
+      page.deleteRecord();
+      page.save().then(function(){
+        component.destroy();
+      });
     }
   }
 });
