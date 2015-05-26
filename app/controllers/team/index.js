@@ -14,13 +14,13 @@ export default Ember.Controller.extend({
 
     onPageCreated: function(page){
       this.get('model').pushObject(page);
-    } 
+    }
   },
 
   createPage: function(parent){
     var controller = this;
     var params = this.paramsForPage(parent);
-  
+
     var page = this.store.createRecord('page', params);
 
     page.on('didCommit', function(page){

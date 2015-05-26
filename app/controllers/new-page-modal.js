@@ -16,7 +16,7 @@ export default Ember.Controller.extend({
 
       var onSaveSucess = function(){
         controller.send('closeModal');
-      }
+      };
 
       var onSaveFailure = function(response){
         controller.setProperties({
@@ -24,7 +24,7 @@ export default Ember.Controller.extend({
           showError: true,
           errorMessage: extractError(response)
         });
-      }
+      };
 
       page.save().then(onSaveSucess, onSaveFailure);
     }
