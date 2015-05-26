@@ -182,3 +182,13 @@ test('Navigation link for "manage" route is available for team owners', function
 
   assert.equal(this.$().find('.manage-team').length, 1, 'Navigation link is present');
 });
+
+test('Navigation link for "team-members" route is rendered', function(assert) {
+  assert.expect(1);
+
+  var component = this.subject({
+    isMenuVisible: true
+  });
+
+  assert.equal(this.$().find('.team-members').length, 1, 'Navigation link is present');
+});
