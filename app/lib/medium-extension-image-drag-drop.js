@@ -44,7 +44,7 @@ var ImageDragAndDropHandler = MediumEditor.Extension.extend({
     event.target.classList.remove(className);
 
     var extension = this;
-    this.eventHandler.handleDrop(event).then(function(response) {
+    this.imageHandlr.handleImageDrop(event).then(function(response) {
       extension.handleDropDone(response);
     });
   },

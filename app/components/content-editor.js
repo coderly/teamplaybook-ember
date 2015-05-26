@@ -3,7 +3,7 @@ import Ember from 'ember';
 import ImagePaste from 'teamplaybook-ember/lib/medium-extension-image-paste';
 import ImageDrop from 'teamplaybook-ember/lib/medium-extension-image-drag-drop';
 import ImageManualUpload from 'teamplaybook-ember/lib/medium-extension-image-upload-button';
-import EditorEventHandler from 'teamplaybook-ember/lib/editor-event-handler';
+import ImageHandler from 'teamplaybook-ember/lib/image-handler';
 
 export default Ember.Component.extend({
   classNames: ['editor'],
@@ -19,6 +19,8 @@ export default Ember.Component.extend({
 
   disableReturn: false,
   disableToolbar: false,
+
+  enableToolbar: Ember.computed.not('disableToolbar'),
 
   buttons: [
     'bold',
@@ -41,60 +43,109 @@ export default Ember.Component.extend({
     imageDragging: false
   },
 
-  initializeUploaders: function() {
-    var component = this;
-
-    return this.get('filepicker.promise').then(function(filepicker) {
-      var eventHandler = EditorEventHandler.create({
-        filepicker: filepicker
+  createImageHandler: function() {
+    return this.get('filepicker.promise').then(function(filepickerInstance) {
+      return ImageHandler.create({
+        filepicker: filepickerInstance
       });
+    });
+  },
 
-      return component.initializeEditor(eventHandler);
+  initializeEditor: function() {
+    var component = this;
+    component.setEditorContent();
+
+    return this.createImageHandler().then(function(imageHandler) {
+      return component.createEditorOptions(imageHandler);
+    }).then(function(editorOptions) {
+      component.set('editorInstance', new MediumEditor(component.$('.content'), editorOptions));
     });
   }.on('didInsertElement'),
 
-
-  initializeEditor: function(eventHandler) {
+  createEditorOptions: function(imageHandler) {
     var options = this.getProperties('disableReturn', 'disableToolbar', 'buttons');
 
     options.extensions = {
       'image-paste': new ImagePaste({
-        eventHandler: eventHandler
+        imageHandler: imageHandler
       }),
 
       'image-drop': new ImageDrop({
-        eventHandler: eventHandler
+        imageHandler: imageHandler
       }),
 
       'image-manual-upload': new ImageManualUpload({
-        eventHandler: eventHandler
+        imageHandler: imageHandler
       })
     };
 
     var finalOptions = Ember.merge(options, this.get('mandatoryOptions'));
 
-    this.set('editorInstance', new MediumEditor(this.$(), finalOptions));
+    return finalOptions;
   },
 
   setEditorContent: function() {
-    this.$().html(this.get('value'));
+    if (this.$()) {
+      this.$('.content').html(this.get('value'));
+    }
   }.observes('pageId'),
 
   input: function() {
     if (this.get('plaintext')) {
-      this.set('value', this.$().text());
+      this.set('value', this.$('.content').text());
     } else {
-      this.set('value', this.$().html());
+      this.set('value', this.$('.content').html());
     }
 
     return Ember.run.debounce(this, this.notifyContentChanged, 1000);
   },
 
-  render: function(buffer) {
-    buffer.push((this.get('value') || null));
-  },
-
   notifyContentChanged: function() {
     this.sendAction('contentChanged');
+  },
+
+  ensureEditorHasSelection: function() {
+    var editorSelection = this.get('editorInstance').exportSelection();
+    if (Ember.isEmpty(editorSelection)) {
+      this.selectLastCharacterInEditorInstance();
+    }
+  },
+
+  selectLastCharacterInEditorInstance: function() {
+    var editorInstance = this.get('editorInstance');
+    var editorContentLength = this.getEditorContentLength();
+    editorInstance.importSelection({ start: editorContentLength, end: editorContentLength });
+  },
+
+  getEditorContentLength: function () {
+    var editorInstance = this.get('editorInstance');
+    editorInstance.selectAllContents();
+    var editorSelection = editorInstance.exportSelection();
+    if (Ember.isEmpty(editorSelection)) {
+      var rootEditorElement = editorInstance.elements[0];
+      editorInstance.selectElement(rootEditorElement);
+      editorSelection = editorInstance.exportSelection();
+    }
+
+    return editorSelection.end;
+  },
+
+  actions: {
+    browseAndUpload: function() {
+      var component = this;
+      this.createImageHandler().then(function(imageHandler) {
+        return imageHandler.handleImageManualUpload();
+      }).then(function(response) {
+        return component.handeManualUploadDone(response.url);
+      });
+    },
+
+  },
+
+  handeManualUploadDone: function(imageUrl) {
+    this.ensureEditorHasSelection();
+
+    var imgParagraph = `<p><img src="${imageUrl}"/></p>`;
+    this.get('editorInstance').pasteHTML(imgParagraph);
   }
 });

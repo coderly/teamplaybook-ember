@@ -11,7 +11,7 @@ export default Ember.Object.extend({
     });
   }.property('filepicker'),
 
-  handlePaste: function() {
+  handleImagePaste: function() {
     event.preventDefault();
 
     var imageBlob = event.clipboardData.items[0].getAsFile();
@@ -22,7 +22,7 @@ export default Ember.Object.extend({
     }
   },
 
-  handleDrop: function() {
+  handleImageDrop: function() {
     event.preventDefault();
     event.stopPropagation();
 
@@ -34,7 +34,7 @@ export default Ember.Object.extend({
     }
   },
 
-  handleManualUpload: function () {
+  handleImageManualUpload: function () {
     var imageUploader = this.get('imageUploader');
 
     return imageUploader.pickAndUploadFile();
