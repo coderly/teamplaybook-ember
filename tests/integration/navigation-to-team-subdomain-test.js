@@ -15,6 +15,7 @@ module('Navigation to team subdomain', {
     server = mockServer(function() {
       this.get('team', response(200, basicTeamResponse));
       this.post('accounts/tokens', response(200, loginSuccessResponse));
+      this.get('pages', response(200, { data: [] }));
     });
 
     App = startApp({ subdomain: 'test' });
@@ -31,18 +32,25 @@ module('Navigation to team subdomain', {
   }
 });
 
-test('Navigating to root', function(assert) {
-  assert.expect(2);
+test('Navigating to root requires logging in', function(assert) {
+  assert.expect(1);
 
   visit('/');
 
   andThen(function () {
     assert.equal(currentRouteName(), 'login', 'Requires logging in');
   });
+});
 
+test('Navigating to root when logged in actually navigates to "team.pages.index"', function(assert) {
+  assert.expect(1);
+
+  visit('login');
   login();
+  visit('/');
 
   andThen(function() {
-    assert.equal(currentRouteName(), 'team.index', 'Actually navigates to team.index');
+    assert.equal(currentRouteName(), 'team.pages.index', 'Actually navigates to team.pages.index');
   });
 });
+
