@@ -9,6 +9,8 @@ export default Ember.Object.extend({
     'image/bmp': 'bpm'
   },
 
+  filepicker: null,
+
   uploadBlob: function(blob) {
     var imageFile = this._createFileFromBlob(blob);
 
@@ -16,17 +18,28 @@ export default Ember.Object.extend({
   },
 
   uploadFile: function(file) {
-    var filepicker = this.get('filepicker');
-    return new Ember.RSVP.Promise(function (resolve) {
-      filepicker.store(file, {}, function(response) {
-        resolve(response);
-      });
+    var imageUploader = this;
+    return this.get('filepicker.promise').then(function(filepicker) {
+      return imageUploader._filepickerUpload(filepicker, file);
     });
   },
 
   pickAndUploadFile: function() {
-    var filepicker = this.get('filepicker');
+    return this.get('filepicker.promise').then(this._filepickerBrowseAndUpload);
 
+  },
+
+  _filepickerUpload: function(filepicker, file) {
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+      filepicker.store(file, {}, function(response) {
+        resolve(response);
+      }, function(filepickerError) {
+        reject(filepickerError.toString());
+      });
+    });
+  },
+
+  _filepickerBrowseAndUpload: function(filepicker) {
     return new Ember.RSVP.Promise(function (resolve, reject) {
       filepicker.pick({
         mimetypes: ['image/*'],
@@ -34,16 +47,21 @@ export default Ember.Object.extend({
         services: ['COMPUTER']
       }, function(blob) {
         resolve(blob);
-      }, function(filePickerError) {
-        reject(filePickerError.toString());
+      }, function(filepickerError) {
+        reject(filepickerError.toString());
       });
     });
+  },
+
+
+  _extensionForType: function(type) {
+    return this.extensions[type];
   },
 
   _createFileFromBlob: function(blob) {
     var parts = [blob];
     var creationDate = new Date();
-    var extension = this.extensions[blob.type];
+    var extension = this._extensionForType[blob.type];
     return new window.File(parts, `${creationDate}.${extension}`, {
       lastModified: creationDate,
       type: blob.type
