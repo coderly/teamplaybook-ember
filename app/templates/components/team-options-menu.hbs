@@ -2,9 +2,9 @@
 {{#if isMenuVisible}}
   <div class="menu">
     <ul class="side-nav">
-      <li>{{#link-to 'team.pages' class='pages'}}Pages{{/link-to}}</li>
-      <li>{{#link-to 'team.team-members' class='team-members'}}Members{{/link-to}}</li>
-      {{#if isCurrentUserTeamOwner}}<li>{{#link-to 'team.manage' class='manage-team'}}Manage team{{/link-to}}</li>{{/if}}
+      <li>{{#link-to 'team.pages' class='navigation pages'}}Pages{{/link-to}}</li>
+      <li>{{#link-to 'team.team-members' class='navigation team-members'}}Members{{/link-to}}</li>
+      {{#if isCurrentUserTeamOwner}}<li>{{#link-to 'team.manage' class='navigation manage-team'}}Manage team{{/link-to}}</li>{{/if}}
       {{#if isCurrentUserAllowedToLeaveTeam}}<li><a href="#" class="leave-team" {{action 'leaveTeam'}}>Leave <strong>{{team.name}}</strong></a></li>{{/if}}
       <li><a href="#" class="logout" {{action 'logout'}}>Sign out of <strong>{{team.name}}</strong></a></li>
     </ul>

@@ -8,7 +8,6 @@ test('The dropdown menu is hidden by default', function(assert) {
 
   var component = this.subject();
   assert.equal(this.$().find('.menu').length, 0, 'Is hidden by default');
-
 });
 
 test('The dropdown menu visibility is determined by the "isMenuVisible" flag', function(assert) {
@@ -159,7 +158,6 @@ test('Navigation link for "manage" route is not available for regular members', 
   assert.equal(this.$().find('.manage-team').length, 0, 'Navigation link is not present');
 });
 
-
 test('Navigation link for "manage" route is not available for admins', function(assert) {
   assert.expect(1);
 
@@ -170,7 +168,6 @@ test('Navigation link for "manage" route is not available for admins', function(
 
   assert.equal(this.$().find('.manage-team').length, 0, 'Navigation link is not present');
 });
-
 
 test('Navigation link for "manage" route is available for team owners', function(assert) {
   assert.expect(1);
@@ -201,4 +198,20 @@ test('Navigation link for "team.pages" route is rendered', function(assert) {
   });
 
   assert.equal(this.$().find('.pages').length, 1, 'Navigation link is present');
+});
+
+test('Clicking a navigation link hides the dropdown', function(assert) {
+  assert.expect(3);
+
+  var component = this.subject({
+    isMenuVisible: true,
+    hideMenu: function() {
+      assert.ok(true, 'assertion needs to be called once for each link');
+    },
+    currentUser: Ember.Object.create({ role: 'owner' })
+  });
+
+  this.$().find('.navigation.pages').click();
+  this.$().find('.navigation.manage-team').click();
+  this.$().find('.navigation.team-members').click();
 });
