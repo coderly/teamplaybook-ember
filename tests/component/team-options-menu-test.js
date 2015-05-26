@@ -200,7 +200,7 @@ test('Navigation link for "team.pages" route is rendered', function(assert) {
   assert.equal(this.$().find('.pages').length, 1, 'Navigation link is present');
 });
 
-test('Clicking a navigation link hides the dropdown', function(assert) {
+test('Clicking a navigation link also calls "hideMenu"', function(assert) {
   assert.expect(3);
 
   var component = this.subject({
