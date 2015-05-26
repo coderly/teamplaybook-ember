@@ -20,6 +20,7 @@ module('Team member deletion', {
       this.get('team', response(200, teamResponseWithOwnerLinkage));
       this.get('team-memberships', response(200, listOfTeamMembershipsOneOfEachRole));
       this.get('users', response(200, listOfUsersOneForEachRole));
+      this.get('pages', response(200, { data: [] }));
     });
     App = startApp({ subdomain: 'test'});
   },
@@ -48,7 +49,7 @@ test('A regular member cannot remove another team member', function(assert) {
   });
 });
 
-test('An ddmin cannot remove another team member', function(assert) {
+test('An admin cannot remove another team member', function(assert) {
   assert.expect(1);
 
   server.post('accounts/tokens', response(200, loginResponseForSpecificRole('admin')));

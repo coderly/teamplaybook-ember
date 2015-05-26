@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  rootPageNodes: Ember.computed('model.@each', function() {
+  rootPageNodes: Ember.computed.filterBy('model', 'rootNode', true)
     return this.get('model').filterProperty('rootNode', true);
   }),
   actions: {

@@ -12,7 +12,7 @@ import listOfPages from '../mocks/pages';
 
 var App, server;
 
-module('Pages list test', {
+module('Pages list', {
   beforeEach: function() {
     server = mockServer(function() {
       this.post('accounts/tokens', response(200, loginSuccessResponse));
@@ -73,20 +73,20 @@ test('Navigate to page', function(assert) {
   });
 
   andThen(function() {
-    assert.equal(find('.page-expanded .page-title').text(), "Westeros");
-    assert.equal(find('.page-expanded .page-body').text(), "Fake place from a book series for nerds");
+    assert.equal(find('.page-expanded .page-title .content').text(), "Westeros");
+    assert.equal(find('.page-expanded .page-body .content').text(), "Fake place from a book series for nerds");
     click(".pages-tree .page-node:first > ul > li > .page-node:first > a");
   });
 
   andThen(function() {
-    assert.equal(find('.page-expanded .page-title').text(), "The North");
-    assert.equal(find('.page-expanded .page-body').text(), "It's really cold");
+    assert.equal(find('.page-expanded .page-title .content').text(), "The North");
+    assert.equal(find('.page-expanded .page-body .content').text(), "It's really cold");
     click(".pages-tree .page-node:first > ul > li > .page-node:first > ul > li > .page-node:first a");
   });
 
   andThen(function() {
-    assert.equal(find('.page-expanded .page-title').text(), "Winterfell");
-    assert.equal(find('.page-expanded .page-body').text(), "Home of the house Stark");
+    assert.equal(find('.page-expanded .page-title .content').text(), "Winterfell");
+    assert.equal(find('.page-expanded .page-body .content').text(), "Home of the house Stark");
   });
 
 });
