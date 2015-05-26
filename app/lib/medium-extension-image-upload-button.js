@@ -2,15 +2,14 @@
 import Ember from 'ember';
 
 var ImageUploadButton = MediumEditor.Extension.extend({
-
   parent: true,
 
   init: function() {
-    this.button = this.createButton();
+    var target = this.target;
 
-    var extension = this;
+    this.button = this.createButton();
     this.button.click(function () {
-      extension.handleClick();
+      target.send('browseAndUpload');
     });
   },
 
@@ -21,18 +20,6 @@ var ImageUploadButton = MediumEditor.Extension.extend({
   getButton: function() {
     return this.button[0];
   },
-
-  handleClick: function() {
-    var extension = this;
-    this.imageHandler.handleImageManualUpload().then(function (response) {
-      extension.handleManualUploadDone(response);
-    });
-  },
-
-  handleManualUploadDone: function(response) {
-    var imgParagraph = `<p><img src="${response.url}"/></p>`;
-    this.base.pasteHTML(imgParagraph);
-  }
 });
 
 export default ImageUploadButton;
