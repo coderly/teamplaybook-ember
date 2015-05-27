@@ -37,7 +37,7 @@ test('Root nodes of the pages tree', function(assert) {
 
   visit('login');
   login();
-  visit('/');
+  visit('/pages');
 
   andThen(function() {
     assert.equal(find('.pages-tree > .page-node:first a:first').text(), "Westeros");
@@ -50,7 +50,7 @@ test('Child nodes', function(assert) {
 
   visit('login');
   login();
-  visit('/');
+  visit('/pages');
 
   andThen(function() {
     assert.equal(find('.pages-tree .page-node:first .page-node').size(), 8);
@@ -66,7 +66,7 @@ test('Navigate to page', function(assert) {
 
   visit('login');
   login();
-  visit('/');
+  visit('/pages');
 
   andThen(function() {
     click(".pages-tree .page-node:first > a");

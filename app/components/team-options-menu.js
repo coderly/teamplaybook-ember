@@ -9,9 +9,18 @@ export default Ember.Component.extend(ClickOutsideMixin, {
   currentUser: null,
 
   currentUsersRoleInCurrentTeam: Ember.computed.alias('currentUser.role'),
+
   isCurrentUserMember: Ember.computed.equal('currentUsersRoleInCurrentTeam', 'member'),
   isCurrentUserAdmin: Ember.computed.equal('currentUsersRoleInCurrentTeam', 'admin'),
+  isCurrentUserTeamOwner: Ember.computed.equal('currentUsersRoleInCurrentTeam', 'owner'),
+
   isCurrentUserAllowedToLeaveTeam: Ember.computed.or('isCurrentUserAdmin', 'isCurrentUserMember'),
+
+  hideMenuWhenClickingNavigationLinks: function(event) {
+    if (event.target.classList.contains('navigation')) {
+      this.hideMenu();
+    }
+  }.on('click'),
 
   isMenuVisible: false,
 
