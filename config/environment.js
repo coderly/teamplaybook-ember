@@ -20,12 +20,13 @@ module.exports = function(environment) {
     /*jshint quotmark: false*/
     contentSecurityPolicy: {
       'default-src': "dialog.filepicker.io www.filepicker.io",
-      'script-src': "'self' api.filepicker.io",
+      'script-src': "'self' api.filepicker.io https://js.stripe.com",
       'font-src': "'self'",
       'connect-src': "'self' www.filepicker.io",
       'img-src': "'self' www.filepicker.io",
       'style-src': "'self' 'unsafe-inline'",
-      'media-src': "'self'"
+      'media-src': "'self' https://js.stripe.com",
+      'frame-src': "'self' https://js.stripe.com"
     },
     /*jshint quotmark: true*/
     subdomainMapping: {
@@ -36,7 +37,8 @@ module.exports = function(environment) {
       routeAfterAuthentication: '/',
       authorizer: 'authorizer:custom',
       crossOriginWhitelist: ['*']
-    }
+    },
+    STRIPE_PUBLIC_KEY: 'pk_test_2YDSiQNDW9IlNzdADzleLTvQ'
   };
 
   if (environment === 'development') {

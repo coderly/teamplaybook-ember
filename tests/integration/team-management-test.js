@@ -19,6 +19,7 @@ module('Team management', {
       this.post('accounts/tokens', response(200, loginResponseForSpecificRole('owner')));
       this.get('team', response(200, teamResponseWithOwnerLinkage));
       this.get('pages', response(200, { data: [] }));
+      this.get('plans', response(200, { data: [] }));
     });
     App = startApp({ subdomain: 'test'});
   },
