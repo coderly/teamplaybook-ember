@@ -1,6 +1,9 @@
-<h1>Team management</h1>
-<button class="small button disband-team" {{action 'delete'}}>Disband team</button>
+<div class="team-sidebar"></div>
+<div class="team-main">
+  <h1>Team management</h1>
+  <button class="small button disband-team" {{action 'delete'}}>Disband team</button>
 
-{{#if showError}}
-  <div class="error alert-box alert">{{errorMessage}}</div>
-{{/if}}
+  {{#if showError}}
+    <div class="error alert-box alert">{{errorMessage}}</div>
+  {{/if}}
+</div>

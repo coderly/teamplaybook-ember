@@ -37,7 +37,7 @@ test('Root nodes of the pages tree', function(assert) {
 
   visit('login');
   login();
-  visit('/');
+  visit('/pages');
 
   andThen(function() {
     assert.equal(find('.pages-tree > .page-node:first a:first').text(), "Westeros");
@@ -50,7 +50,7 @@ test('Child nodes', function(assert) {
 
   visit('login');
   login();
-  visit('/');
+  visit('/pages');
 
   andThen(function() {
     assert.equal(find('.pages-tree .page-node:first .page-node').size(), 8);
@@ -66,22 +66,22 @@ test('Navigate to page', function(assert) {
 
   visit('login');
   login();
-  visit('/');
+  visit('/pages');
 
   andThen(function() {
-    click(".pages-tree .page-node:first > a");
+    click(".pages-tree .page-node:first > a:first");
   });
 
   andThen(function() {
     assert.equal(find('.page-expanded .page-title .content').text(), "Westeros");
     assert.equal(find('.page-expanded .page-body .content').text(), "Fake place from a book series for nerds");
-    click(".pages-tree .page-node:first > ul > li > .page-node:first > a");
+    click(".pages-tree .page-node:first > ul > li > .page-node:first > a:first");
   });
 
   andThen(function() {
     assert.equal(find('.page-expanded .page-title .content').text(), "The North");
     assert.equal(find('.page-expanded .page-body .content').text(), "It's really cold");
-    click(".pages-tree .page-node:first > ul > li > .page-node:first > ul > li > .page-node:first a");
+    click(".pages-tree .page-node:first > ul > li > .page-node:first > ul > li > .page-node:first a:first");
   });
 
   andThen(function() {

@@ -1,0 +1,47 @@
+$sidebar-width: 220px;
+$header-height: 40px;
+
+.team-header {
+  top: 0;
+  height: $header-height;
+  left: 0;
+  right: 0;
+  position: absolute;
+  z-index: 1;
+
+  .team-options-menu {
+    width: $sidebar-width;
+    float: left;
+
+    .header {
+      padding: 16px 20px;
+    }
+
+    .menu {
+      width: $sidebar-width - 5px;
+      margin-left: 5px;
+    }
+  }
+}
+
+.team-sidebar {
+  padding: 32px 20px;
+  padding-top: $header-height + 32px;
+  background-color: $sidebar-color;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: $sidebar-width;
+  z-index: 0;
+}
+
+.team-main {
+  padding: 12px 20px;
+  position: absolute;
+  left: $sidebar-width;
+  right: 0;
+  top: 0;
+  height: 100%;
+  z-index: 0;
+}
