@@ -1,4 +1,6 @@
 {{#link-to 'team.pages.page' model}}{{model.title}}{{/link-to}}
+(<a {{action 'addChild'}}>Add Child</a>)
+(<a {{action 'remove'}}>Remove Page</a>)
 {{#if hasChildren}}
   <ul>
     {{#each child in model.children}}

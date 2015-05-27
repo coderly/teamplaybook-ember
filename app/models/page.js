@@ -5,7 +5,8 @@ var Page = DS.Model.extend({
   body: DS.attr('string'),
   children: DS.hasMany('pages', {inverse: 'parent'}),
   parent: DS.belongsTo('page'),
-  rootNode: DS.attr('boolean')
+  rootNode: DS.attr('boolean'),
+  parentId: DS.attr('number')
 });
 
 // Page.reopenClass({

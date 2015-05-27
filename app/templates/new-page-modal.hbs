@@ -1,0 +1,9 @@
+{{#base-modal title="New Page" action="close"}}
+  <form {{action 'save' on='submit' target=view}}>
+    {{input value=model.title}}
+    <button {{action 'save'}}>Save</button>
+    {{#if showError}}
+      {{errorMessage}}
+    {{/if}}
+  </form>
+{{/base-modal}}
