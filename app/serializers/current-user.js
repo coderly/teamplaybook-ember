@@ -1,7 +1,7 @@
 import ApplicationSerializer from 'teamplaybook-ember/serializers/application';
 
 export default ApplicationSerializer.extend({
-  typeForRoot: function() {
+  modelNameFromPayloadKey: function() {
     return 'currentUser';
   }
 });
